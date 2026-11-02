@@ -10,11 +10,14 @@ import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
 import MovieDetailPage from './pages/MovieDetailPage';
 import MovieListPage from './pages/MovieListPage';
-import OAuthFailPage from './pages/OAuthFailPage';
-import OAuthSuccessPage from './pages/OAuthSuccessPage';
 import PostDetailPage from './pages/PostDetailPage';
 import PostListPage from './pages/PostListPage';
 import SupportPage from './pages/SupportPage';
+import LoginScreen from './screens/auth/LoginScreen';
+import OAuthFailScreen from './screens/auth/OAuthFailScreen';
+import OAuthSuccessScreen from './screens/auth/OAuthSuccessScreen';
+import SignupScreen from './screens/auth/SignupScreen';
+import BootSplash from './screens/BootSplash';
 import NotFoundScreen from './screens/NotFoundScreen';
 import PendingScreen from './screens/PendingScreen';
 import { RequireAdmin, RequireAuth } from './ui/Guards';
@@ -34,13 +37,8 @@ const UiGalleryScreen = import.meta.env.DEV ? lazy(() => import('./screens/dev/U
 export default function App() {
   const { booting } = useAuth();
 
-  if (booting) {
-    return (
-      <div className="mp" style={{ display: 'grid', placeItems: 'center' }}>
-        <LoadingState label="로그인 상태 확인 중…" />
-      </div>
-    );
-  }
+  // AuthContext가 CSRF·refresh·내 정보로 로그인 상태를 복구하는 동안 로고 로딩 화면을 보여 준다
+  if (booting) return <BootSplash />;
 
   return (
     <ToastProvider>
@@ -80,10 +78,12 @@ export default function App() {
           <Route path="*" element={<NotFoundScreen />} />
         </Route>
 
-        {/* 인증 화면 */}
+        {/* 인증 화면. /oauth2/success, /oauth2/fail 은 백엔드가 리다이렉트하는 고정 경로 */}
         <Route element={<AuthLayout />}>
-          <Route path="login" element={<PendingScreen title="로그인" stage={2} legacyTo="/legacy/login" />} />
-          <Route path="signup" element={<PendingScreen title="회원가입" stage={2} legacyTo="/legacy/login" />} />
+          <Route path="login" element={<LoginScreen />} />
+          <Route path="signup" element={<SignupScreen />} />
+          <Route path="oauth2/success" element={<OAuthSuccessScreen />} />
+          <Route path="oauth2/fail" element={<OAuthFailScreen />} />
         </Route>
 
         {/* 관리자 화면 */}
@@ -102,10 +102,8 @@ export default function App() {
           <Route path="movies" element={<PendingScreen title="영화 데이터 관리" stage={7} legacyTo="/legacy/admin" padded={false} />} />
         </Route>
 
-        {/* 기존 화면 (새 UI 검증 전까지 유지). 소셜 로그인 결과 화면은 2단계에서 새 화면으로 교체 */}
+        {/* 기존 화면 (새 UI 검증 전까지 유지). 기존 OAuthSuccessPage·OAuthFailPage 파일은 남겨 두되 경로에서는 뺐다 */}
         <Route element={<LegacyLayout />}>
-          <Route path="oauth2/success" element={<OAuthSuccessPage />} />
-          <Route path="oauth2/fail" element={<OAuthFailPage />} />
           <Route path="legacy">
             <Route index element={<Navigate to="/legacy/movies" replace />} />
             <Route path="login" element={<LoginPage />} />

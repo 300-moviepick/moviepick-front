@@ -135,8 +135,7 @@ export const adminApi = {
   blindPost: (postId) => api.patch(`/api/admin/posts/${enc(postId)}/blind`),
   blindReview: (reviewId) => api.patch(`/api/admin/reviews/${enc(reviewId)}/blind`),
   deleteComment: (commentId) => api.delete(`/api/admin/comments/${enc(commentId)}`),
-  // 페이지 지정 즉시 수집 → MovieSyncResponse { requestedPages, savedCount, failedCount, stoppedPage, stopReason }
-  syncMoviesByPages: (pages) => api.post(`/api/admin/movies/sync${qs({ pages })}`),
-  // Batch Job 수집 → MovieBatchRunResponse { executionId, jobName, status } (200 완료 / 202 실행 중 / 409 / 500)
+  // 관리자 영화 수집은 Batch API 하나만 사용한다(C-03 결정). /api/admin/movies/sync?pages 는 쓰지 않는다.
+  // → MovieBatchRunResponse { executionId, jobName, status } (200 완료 / 202 실행 중 / 409 CONCURRENT_REQUEST / 500)
   runMovieSyncBatch: () => api.post('/api/admin/batch/movies/sync'),
 };

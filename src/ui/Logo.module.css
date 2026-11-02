@@ -57,3 +57,21 @@
 .sm .name {
   font-size: 15px;
 }
+
+.lg {
+  gap: 14px;
+}
+
+.lg .mark {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--mp-radius-md);
+}
+
+.lg .name {
+  font-size: 26px;
+}
+
+.lg .sub {
+  font-size: 11px;
+}
