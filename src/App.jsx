@@ -22,6 +22,11 @@ import CommunityListScreen from './screens/community/CommunityListScreen';
 import PostDetailScreen from './screens/community/PostDetailScreen';
 import { PostCreateScreen, PostEditScreen } from './screens/community/PostEditorScreen';
 import HomeScreen from './screens/home/HomeScreen';
+import MyReviewsScreen from './screens/me/MyReviewsScreen';
+import NotificationSettingsScreen from './screens/me/NotificationSettingsScreen';
+import NotificationsScreen from './screens/me/NotificationsScreen';
+import ProfileScreen from './screens/me/ProfileScreen';
+import WishlistScreen from './screens/me/WishlistScreen';
 import MovieDetailScreen from './screens/movies/MovieDetailScreen';
 import MovieExploreScreen from './screens/movies/MovieExploreScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
@@ -61,11 +66,11 @@ export default function App() {
             <Route path="community/:postId/edit" element={<PostEditScreen />} />
             <Route path="me" element={<MyPageLayout />}>
               <Route index element={<Navigate to="/me/profile" replace />} />
-              <Route path="profile" element={<PendingScreen title="프로필 및 계정 설정" stage={5} padded={false} />} />
-              <Route path="wishlist" element={<PendingScreen title="내 찜 목록" stage={5} padded={false} />} />
-              <Route path="reviews" element={<PendingScreen title="작성한 리뷰 관리" stage={5} padded={false} />} />
-              <Route path="notifications" element={<PendingScreen title="알림 센터" stage={5} padded={false} />} />
-              <Route path="notification-settings" element={<PendingScreen title="알림 설정" stage={5} padded={false} />} />
+              <Route path="profile" element={<ProfileScreen />} />
+              <Route path="wishlist" element={<WishlistScreen />} />
+              <Route path="reviews" element={<MyReviewsScreen />} />
+              <Route path="notifications" element={<NotificationsScreen />} />
+              <Route path="notification-settings" element={<NotificationSettingsScreen />} />
             </Route>
           </Route>
           <Route path="ai" element={<PendingScreen title="AI 영화 추천" stage={8} />} />
