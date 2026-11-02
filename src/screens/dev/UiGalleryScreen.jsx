@@ -12,6 +12,8 @@ import { Checkbox, Select, TextArea, TextField, Toggle } from '../../ui/Field';
 import { IconHeart, IconPlus, IconSearch, IconShare, IconTrash, IconUsers } from '../../ui/icons';
 import { ConfirmDialog } from '../../ui/Modal';
 import Pagination from '../../ui/Pagination';
+import RatingInput from '../../ui/RatingInput';
+import ReviewForm from '../movies/ReviewForm';
 import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import Tabs from '../../ui/Tabs';
 import { useToast } from '../../ui/toast/useToast';
@@ -49,6 +51,7 @@ export default function UiGalleryScreen() {
   const [page, setPage] = useState(0);
   const [confirm, setConfirm] = useState(false);
   const [toggle, setToggle] = useState(true);
+  const [rating, setRating] = useState(3.5);
   const toast = useToast();
 
   return (
@@ -113,6 +116,11 @@ export default function UiGalleryScreen() {
             <Toggle label="비활성 스위치" disabled />
           </div>
         </div>
+      </Section>
+
+      <Section title="별점 입력·리뷰 폼">
+        <RatingInput value={rating} onChange={setRating} />
+        <ReviewForm onSubmit={() => Promise.reject(new ApiError(500, { message: '서버 오류 메시지 예시' }))} />
       </Section>
 
       <Section title="탭·페이지">

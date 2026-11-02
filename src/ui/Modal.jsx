@@ -8,13 +8,18 @@ import styles from './Modal.module.css';
 export default function Modal({ open, title, onClose, children, footer, size = 'md' }) {
   const titleId = useId();
   const panelRef = useRef(null);
+  // onClose가 렌더마다 새로 만들어져도 아래 effect가 다시 돌며 포커스를 빼앗지 않도록 ref로 들고 있는다
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) return undefined;
     const previous = document.activeElement;
     panelRef.current?.focus();
     const onKey = (e) => {
-      if (e.key === 'Escape') onClose?.();
+      if (e.key === 'Escape') onCloseRef.current?.();
     };
     document.addEventListener('keydown', onKey);
     const { overflow } = document.body.style;
@@ -24,7 +29,7 @@ export default function Modal({ open, title, onClose, children, footer, size = '
       document.body.style.overflow = overflow;
       previous?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 

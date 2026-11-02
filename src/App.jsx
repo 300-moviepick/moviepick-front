@@ -18,6 +18,9 @@ import OAuthFailScreen from './screens/auth/OAuthFailScreen';
 import OAuthSuccessScreen from './screens/auth/OAuthSuccessScreen';
 import SignupScreen from './screens/auth/SignupScreen';
 import BootSplash from './screens/BootSplash';
+import HomeScreen from './screens/home/HomeScreen';
+import MovieDetailScreen from './screens/movies/MovieDetailScreen';
+import MovieExploreScreen from './screens/movies/MovieExploreScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
 import PendingScreen from './screens/PendingScreen';
 import { RequireAdmin, RequireAuth } from './ui/Guards';
@@ -45,9 +48,9 @@ export default function App() {
       <Routes>
         {/* 사용자 화면 */}
         <Route element={<UserLayout />}>
-          <Route index element={<PendingScreen title="메인 홈" stage={3} legacyTo="/legacy/movies" />} />
-          <Route path="movies" element={<PendingScreen title="영화 탐색·검색" stage={3} legacyTo="/legacy/movies" />} />
-          <Route path="movies/:movieId" element={<PendingScreen title="영화 상세" stage={3} legacyTo="/legacy/movies" />} />
+          <Route index element={<HomeScreen />} />
+          <Route path="movies" element={<MovieExploreScreen />} />
+          <Route path="movies/:movieId" element={<MovieDetailScreen />} />
           <Route path="community" element={<PendingScreen title="커뮤니티" stage={4} legacyTo="/legacy/community" />} />
           <Route path="community/:postId" element={<PendingScreen title="게시글 상세" stage={4} legacyTo="/legacy/community" />} />
           <Route element={<RequireAuth />}>

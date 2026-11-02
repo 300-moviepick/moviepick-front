@@ -1,0 +1,268 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- 히어로 ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--mp-border);
+  background:
+    radial-gradient(900px 420px at 50% -10%, rgba(99, 102, 241, 0.28), transparent 70%),
+    radial-gradient(600px 300px at 90% 110%, rgba(244, 63, 94, 0.12), transparent 70%),
+    linear-gradient(180deg, #11131a, var(--mp-bg));
+}
+
+.heroGlow {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(129, 140, 248, 0.6), transparent);
+}
+
+.heroInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+  padding-top: 72px;
+  padding-bottom: 64px;
+}
+
+.heroTitle {
+  font-size: var(--mp-fs-display);
+  line-height: var(--mp-lh-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.gradient {
+  background: linear-gradient(90deg, var(--mp-primary-soft), var(--mp-tertiary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.heroDesc {
+  max-width: 560px;
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-lg);
+  line-height: var(--mp-lh-body-lg);
+}
+
+.heroSearch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 720px;
+  height: 64px;
+  margin-top: 8px;
+  padding: 0 8px 0 20px;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--mp-text-4);
+  box-shadow: var(--mp-shadow-card);
+  transition: border-color var(--mp-duration) var(--mp-ease), box-shadow var(--mp-duration) var(--mp-ease);
+}
+
+.heroSearch:focus-within {
+  border-color: var(--mp-primary);
+  box-shadow: var(--mp-shadow-card), 0 0 0 1px var(--mp-primary), var(--mp-glow-primary);
+}
+
+.heroSearch input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-body-lg);
+}
+
+.heroSearch input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.heroSearch input::placeholder {
+  color: var(--mp-text-4);
+}
+
+.aiLink {
+  border-radius: var(--mp-radius-full);
+}
+
+/* ---------- 본문 ---------- */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  padding-top: 48px;
+}
+
+.movieRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 32px;
+  align-items: start;
+}
+
+.movies,
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--mp-gutter);
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+}
+
+.ranking {
+  position: sticky;
+  top: calc(var(--mp-header-h) + 24px);
+}
+
+.rankPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.rankPreview li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rankNo {
+  width: 20px;
+  font-family: var(--mp-font-label);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--mp-text-3);
+}
+
+.rankBar {
+  flex: 1;
+  height: 28px;
+  border-radius: var(--mp-radius-xs);
+  background: var(--mp-surface-3);
+}
+
+.postGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* ---------- AI 배너 ---------- */
+
+.aiBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 40px;
+  border-radius: var(--mp-radius-lg);
+  border: 1px solid var(--mp-border);
+  background:
+    radial-gradient(600px 240px at 0% 0%, rgba(56, 189, 248, 0.12), transparent 70%),
+    radial-gradient(600px 240px at 100% 100%, rgba(99, 102, 241, 0.16), transparent 70%),
+    var(--mp-surface-1);
+}
+
+.aiText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 640px;
+}
+
+.aiTitle {
+  font-size: var(--mp-fs-h-lg);
+  line-height: var(--mp-lh-h-lg);
+  font-weight: 800;
+}
+
+.aiDesc {
+  color: var(--mp-text-3);
+}
+
+.aiActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ---------- 반응형 ---------- */
+
+@media (max-width: 1279px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
+  .movieRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ranking {
+    position: static;
+  }
+
+  .postGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .heroInner {
+    padding-top: 48px;
+    padding-bottom: 40px;
+  }
+
+  .heroSearch {
+    height: 56px;
+    padding-left: 14px;
+  }
+
+  .grid,
+  .postGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .postGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aiBanner {
+    padding: 24px;
+  }
+}

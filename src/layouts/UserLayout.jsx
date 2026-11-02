@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { UnreadContext } from '../hooks/unreadContext';
 import { useUnreadCount } from '../hooks/useUnreadCount';
@@ -10,6 +11,12 @@ import styles from './UserLayout.module.css';
 export default function UserLayout() {
   const { user } = useAuth();
   const unread = useUnreadCount(Boolean(user));
+  const { pathname } = useLocation();
+
+  // 다른 화면으로 이동하면 맨 위에서 시작한다(같은 화면의 쿼리·페이지 변경은 각 화면이 처리)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <UnreadContext.Provider value={unread}>
