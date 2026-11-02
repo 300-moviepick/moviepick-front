@@ -18,6 +18,9 @@ import OAuthFailScreen from './screens/auth/OAuthFailScreen';
 import OAuthSuccessScreen from './screens/auth/OAuthSuccessScreen';
 import SignupScreen from './screens/auth/SignupScreen';
 import BootSplash from './screens/BootSplash';
+import CommunityListScreen from './screens/community/CommunityListScreen';
+import PostDetailScreen from './screens/community/PostDetailScreen';
+import { PostCreateScreen, PostEditScreen } from './screens/community/PostEditorScreen';
 import HomeScreen from './screens/home/HomeScreen';
 import MovieDetailScreen from './screens/movies/MovieDetailScreen';
 import MovieExploreScreen from './screens/movies/MovieExploreScreen';
@@ -51,11 +54,11 @@ export default function App() {
           <Route index element={<HomeScreen />} />
           <Route path="movies" element={<MovieExploreScreen />} />
           <Route path="movies/:movieId" element={<MovieDetailScreen />} />
-          <Route path="community" element={<PendingScreen title="커뮤니티" stage={4} legacyTo="/legacy/community" />} />
-          <Route path="community/:postId" element={<PendingScreen title="게시글 상세" stage={4} legacyTo="/legacy/community" />} />
+          <Route path="community" element={<CommunityListScreen />} />
+          <Route path="community/:postId" element={<PostDetailScreen />} />
           <Route element={<RequireAuth />}>
-            <Route path="community/new" element={<PendingScreen title="게시글 작성" stage={4} />} />
-            <Route path="community/:postId/edit" element={<PendingScreen title="게시글 수정" stage={4} />} />
+            <Route path="community/new" element={<PostCreateScreen />} />
+            <Route path="community/:postId/edit" element={<PostEditScreen />} />
             <Route path="me" element={<MyPageLayout />}>
               <Route index element={<Navigate to="/me/profile" replace />} />
               <Route path="profile" element={<PendingScreen title="프로필 및 계정 설정" stage={5} padded={false} />} />
