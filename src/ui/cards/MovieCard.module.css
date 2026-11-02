@@ -1,0 +1,106 @@
+.card {
+  position: relative;
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface-2);
+  border: 1px solid var(--mp-border);
+  transition:
+    transform var(--mp-duration) var(--mp-ease),
+    border-color var(--mp-duration) var(--mp-ease),
+    box-shadow var(--mp-duration) var(--mp-ease);
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: var(--mp-shadow-card), var(--mp-glow-primary);
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.poster {
+  border-radius: var(--mp-radius) var(--mp-radius) 0 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label-sm);
+  color: var(--mp-text-3);
+}
+
+.year {
+  letter-spacing: 0.04em;
+}
+
+.title {
+  font-size: var(--mp-fs-label-lg);
+  line-height: 20px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ratings {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tmdb {
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label-sm);
+  color: var(--mp-text-3);
+}
+
+.wish {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(13, 15, 18, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--mp-border-strong);
+  color: var(--mp-text-1);
+  opacity: 0.85;
+  transition: all var(--mp-duration) var(--mp-ease);
+}
+
+.wish:hover:not(:disabled) {
+  opacity: 1;
+  border-color: var(--mp-secondary);
+  color: var(--mp-secondary);
+}
+
+.wishOn,
+.wishOn:hover:not(:disabled) {
+  background: var(--mp-secondary);
+  border-color: var(--mp-secondary);
+  color: #fff;
+  opacity: 1;
+  box-shadow: var(--mp-glow-secondary);
+}
+
+.wish:disabled {
+  opacity: 0.5;
+}

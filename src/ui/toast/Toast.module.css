@@ -1,0 +1,70 @@
+.region {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 200;
+  min-height: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 260px;
+  max-width: min(420px, calc(100vw - 40px));
+  padding: 12px 12px 12px 14px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-overlay);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: var(--mp-shadow-overlay);
+  color: var(--mp-text-1);
+  pointer-events: auto;
+  animation: slide 240ms var(--mp-ease);
+}
+
+.success {
+  color: var(--mp-success);
+}
+
+.error {
+  color: var(--mp-error);
+}
+
+.info {
+  color: var(--mp-tertiary);
+}
+
+.message {
+  flex: 1;
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-body);
+}
+
+.close {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  color: var(--mp-text-3);
+}
+
+.close:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: transparent;
+  color: var(--mp-text-1);
+}
+
+@keyframes slide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

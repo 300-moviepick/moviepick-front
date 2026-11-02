@@ -1,0 +1,125 @@
+/*
+ * Cinematic Obsidian 디자인 토큰
+ * - 색: Stitch DESIGN 본문 설명 값을 기본으로, YAML의 연보라(#C0C1FF)는 보조 강조로 사용 (D-1)
+ * - 글꼴: Pretendard(한글) + Inter + Space Grotesk(라벨·수치) (D-2)
+ * 새 UI(.mp 아래)에서만 사용한다. 기존 화면의 --bg, --card 등과 이름이 겹치지 않게 --mp- 접두사를 쓴다.
+ */
+:root {
+  /* 바탕·표면 */
+  --mp-bg: #0d0f12;
+  --mp-surface-1: #14171d;
+  --mp-surface-2: #1c212b;
+  --mp-surface-3: #252b37;
+  --mp-overlay: rgba(28, 33, 43, 0.85);
+  --mp-glass: rgba(20, 23, 29, 0.7);
+
+  /* 테두리 */
+  --mp-border-subtle: rgba(255, 255, 255, 0.05);
+  --mp-border: rgba(255, 255, 255, 0.08);
+  --mp-border-strong: rgba(255, 255, 255, 0.16);
+
+  /* 강조색 */
+  --mp-primary: #6366f1;
+  --mp-primary-hover: #818cf8;
+  --mp-primary-soft: #c0c1ff;
+  --mp-primary-tint: rgba(99, 102, 241, 0.15);
+  --mp-secondary: #f43f5e;
+  --mp-secondary-hover: #fb7185;
+  --mp-secondary-tint: rgba(244, 63, 94, 0.12);
+  --mp-tertiary: #38bdf8;
+  --mp-tertiary-tint: rgba(56, 189, 248, 0.12);
+  --mp-gold: #f59e0b;
+  --mp-gold-tint: rgba(245, 158, 11, 0.12);
+  --mp-success: #34d399;
+  --mp-success-tint: rgba(52, 211, 153, 0.12);
+  --mp-error: #ffb4ab;
+  --mp-error-tint: rgba(147, 0, 10, 0.35);
+
+  /* 글자 */
+  --mp-text-1: #ffffff;
+  --mp-text-2: #e2e8f0;
+  --mp-text-3: #94a3b8;
+  --mp-text-4: #64748b;
+  --mp-on-primary: #ffffff;
+  --mp-on-primary-soft: #1000a9;
+
+  /* 글꼴 */
+  --mp-font-body: 'Pretendard Variable', Pretendard, Inter, system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  --mp-font-latin: Inter, 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+  --mp-font-label: 'Space Grotesk', 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+
+  /* 글자 크기 / 줄 높이 */
+  --mp-fs-display: 56px;
+  --mp-lh-display: 64px;
+  --mp-fs-h-xl: 40px;
+  --mp-lh-h-xl: 48px;
+  --mp-fs-h-lg: 28px;
+  --mp-lh-h-lg: 36px;
+  --mp-fs-h-md: 22px;
+  --mp-lh-h-md: 30px;
+  --mp-fs-h-sm: 18px;
+  --mp-lh-h-sm: 26px;
+  --mp-fs-body-lg: 16px;
+  --mp-lh-body-lg: 26px;
+  --mp-fs-body: 14px;
+  --mp-lh-body: 22px;
+  --mp-fs-body-sm: 12px;
+  --mp-lh-body-sm: 18px;
+  --mp-fs-label-lg: 14px;
+  --mp-fs-label: 12px;
+  --mp-fs-label-sm: 11px;
+
+  /* 간격 */
+  --mp-space-xs: 4px;
+  --mp-space-sm: 8px;
+  --mp-space-md: 16px;
+  --mp-space-lg: 24px;
+  --mp-space-xl: 40px;
+  --mp-gutter: 24px;
+  --mp-page-x: 48px;
+  --mp-content-max: 1440px;
+
+  /* 모서리 */
+  --mp-radius-xs: 6px;
+  --mp-radius: 8px;
+  --mp-radius-md: 12px;
+  --mp-radius-lg: 16px;
+  --mp-radius-full: 9999px;
+
+  /* 그림자·빛 */
+  --mp-shadow-card: 0 8px 24px -4px rgba(0, 0, 0, 0.6);
+  --mp-shadow-overlay: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+  --mp-glow-primary: 0 0 20px -2px rgba(99, 102, 241, 0.4);
+  --mp-glow-primary-strong: 0 0 16px rgba(99, 102, 241, 0.45);
+  --mp-glow-secondary: 0 0 20px -2px rgba(244, 63, 94, 0.4);
+  --mp-focus-ring: 0 0 0 2px var(--mp-bg), 0 0 0 4px var(--mp-primary-hover);
+
+  /* 움직임 */
+  --mp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --mp-duration: 240ms;
+
+  /* 레이아웃 */
+  --mp-header-h: 64px;
+  --mp-sidebar-w: 248px;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --mp-page-x: 32px;
+    --mp-fs-display: 44px;
+    --mp-lh-display: 52px;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --mp-page-x: 16px;
+    --mp-gutter: 12px;
+    --mp-fs-display: 36px;
+    --mp-lh-display: 44px;
+    --mp-fs-h-xl: 28px;
+    --mp-lh-h-xl: 36px;
+    --mp-fs-h-lg: 24px;
+    --mp-lh-h-lg: 32px;
+  }
+}

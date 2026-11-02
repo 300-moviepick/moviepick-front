@@ -1,0 +1,66 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(5, 6, 8, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.panel {
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--mp-radius-lg);
+  background: var(--mp-overlay);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: var(--mp-shadow-overlay);
+  outline: none;
+}
+
+.sm {
+  max-width: 420px;
+}
+
+.md {
+  max-width: 560px;
+}
+
+.lg {
+  max-width: 760px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 20px 0 24px;
+}
+
+.title {
+  font-size: var(--mp-fs-h-sm);
+  line-height: var(--mp-lh-h-sm);
+}
+
+.body {
+  padding: 16px 24px;
+  overflow-y: auto;
+}
+
+.foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 24px 24px;
+}
+
+.message {
+  color: var(--mp-text-2);
+  white-space: pre-line;
+}

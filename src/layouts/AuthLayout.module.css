@@ -1,0 +1,86 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(99, 102, 241, 0.14), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(244, 63, 94, 0.08), transparent 60%),
+    var(--mp-bg);
+}
+
+.header {
+  height: var(--mp-header-h);
+}
+
+.inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mp-text-3);
+  font-weight: 500;
+}
+
+.back:hover {
+  color: var(--mp-text-1);
+}
+
+.link {
+  color: var(--mp-text-3);
+  font-weight: 600;
+}
+
+.link:hover {
+  color: var(--mp-text-1);
+}
+
+.active {
+  color: var(--mp-primary-soft);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0 48px;
+}
+
+.footer {
+  border-top: 1px solid var(--mp-border);
+}
+
+.footInner {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label);
+  color: var(--mp-text-4);
+}
+
+.footLinks {
+  display: flex;
+  gap: 18px;
+  font-weight: 600;
+}
+
+@media (max-width: 639px) {
+  .back {
+    display: none;
+  }
+}

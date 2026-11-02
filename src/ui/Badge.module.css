@@ -1,0 +1,130 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--mp-radius-full);
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 16px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.neutral {
+  background: var(--mp-surface-3);
+  color: var(--mp-text-3);
+  border-color: var(--mp-border);
+}
+
+.primary {
+  background: var(--mp-primary-tint);
+  color: var(--mp-primary-soft);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.soft {
+  background: var(--mp-primary-soft);
+  color: var(--mp-on-primary-soft);
+}
+
+.secondary {
+  background: var(--mp-secondary-tint);
+  color: #fda4af;
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+.tertiary {
+  background: var(--mp-tertiary-tint);
+  color: var(--mp-tertiary);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.gold {
+  background: var(--mp-gold-tint);
+  color: var(--mp-gold);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.success {
+  background: var(--mp-success-tint);
+  color: var(--mp-success);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+.danger {
+  background: var(--mp-secondary);
+  color: #fff;
+}
+
+/* ---------- 칩 ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--mp-radius-full);
+  background: var(--mp-surface-2);
+  border: 1px solid var(--mp-border);
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    border-color var(--mp-duration) var(--mp-ease),
+    background-color var(--mp-duration) var(--mp-ease),
+    color var(--mp-duration) var(--mp-ease);
+}
+
+.chip:hover:not(:disabled) {
+  border-color: var(--mp-border-strong);
+  color: var(--mp-text-1);
+}
+
+.chipActive,
+.chipActive:hover:not(:disabled) {
+  border-color: var(--mp-primary);
+  background: var(--mp-primary-tint);
+  color: var(--mp-text-1);
+  box-shadow: var(--mp-glow-primary);
+}
+
+.chip:disabled {
+  opacity: 0.45;
+}
+
+/* ---------- 별점 ---------- */
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--mp-radius-full);
+  background: var(--mp-gold-tint);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--mp-gold);
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label);
+  font-weight: 700;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.ratingSm {
+  padding: 1px 6px;
+  font-size: var(--mp-fs-label-sm);
+}
+
+.ratingValue {
+  color: var(--mp-gold);
+}
+
+.ratingMax {
+  color: var(--mp-text-3);
+  font-weight: 500;
+}
