@@ -1,0 +1,57 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reasons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: 8px;
+  font-size: var(--mp-fs-label-lg);
+  font-weight: 600;
+  color: var(--mp-text-1);
+}
+
+.reason {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+  color: var(--mp-text-2);
+  cursor: pointer;
+  transition: border-color var(--mp-duration) var(--mp-ease);
+}
+
+.reason:hover {
+  border-color: var(--mp-border-strong);
+}
+
+.reason input {
+  accent-color: var(--mp-secondary);
+}
+
+.selected {
+  border-color: var(--mp-secondary);
+  background: var(--mp-secondary-tint);
+  color: var(--mp-text-1);
+}
+
+.error {
+  padding: 10px 12px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-error-tint);
+  color: var(--mp-error);
+  font-size: var(--mp-fs-body);
+}

@@ -1,0 +1,88 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.bg,
+.fg {
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+}
+
+.bg {
+  color: var(--mp-surface-3);
+}
+
+.fg {
+  color: var(--mp-gold);
+  overflow: hidden;
+}
+
+.empty {
+  width: 0;
+}
+
+.half {
+  width: 14px;
+}
+
+.full {
+  width: 28px;
+}
+
+/* 별 절반 크기의 투명 라디오 */
+.leftHalf,
+.rightHalf {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.leftHalf {
+  left: 0;
+}
+
+.rightHalf {
+  right: 0;
+}
+
+.leftHalf:disabled,
+.rightHalf:disabled {
+  cursor: not-allowed;
+}
+
+.star:has(input:focus-visible) {
+  border-radius: var(--mp-radius-xs);
+  box-shadow: var(--mp-focus-ring);
+}
+
+.value {
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label-lg);
+  font-weight: 600;
+  color: var(--mp-text-2);
+}
+
+.error {
+  width: 100%;
+  font-size: var(--mp-fs-body-sm);
+  color: var(--mp-error);
+}

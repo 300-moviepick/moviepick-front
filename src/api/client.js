@@ -203,8 +203,9 @@ export async function request(method, path, body) {
 
   let res = await send(method, path, body, withAuth, null);
 
-  // 403: CSRF를 새로 받아 1회 재시도
-  if (res.status === 403 && method !== 'GET') {
+  // 403 중 CSRF 오류(CustomAccessDeniedHandler가 errorCode CSRF_INVALID로 응답)일 때만 CSRF를 새로 받아 1회 재시도.
+  // 권한 부족(FORBIDDEN)·정지/탈퇴 회원 등 다른 403은 재시도하지 않고 그대로 오류로 돌려준다.
+  if (res.status === 403 && method !== 'GET' && res.body?.errorCode === 'CSRF_INVALID') {
     try {
       await fetchCsrf();
       res = await send(method, path, body, withAuth, 'CSRF 재발급 후 재시도');

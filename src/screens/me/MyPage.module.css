@@ -1,0 +1,356 @@
+/* 마이페이지 화면 공용 (Stitch 4~7번). 사이드바는 MyPageLayout이 그린다. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--mp-fs-h-xl);
+  line-height: var(--mp-lh-h-xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.desc {
+  color: var(--mp-text-3);
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.muted {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body);
+}
+
+.footnote {
+  color: var(--mp-text-4);
+  font-size: var(--mp-fs-body-sm);
+  line-height: var(--mp-lh-body-sm);
+}
+
+.stale {
+  opacity: 0.5;
+  transition: opacity var(--mp-duration) var(--mp-ease);
+}
+
+.rowEnd {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+/* 탭 줄 + "준비 중" 배지: 배지가 다음 줄로 떨어지지 않도록 탭 쪽이 줄어들며 가로로 넘긴다 */
+.toolbarTabs {
+  flex-wrap: nowrap;
+}
+
+.toolbarTabs > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ---------- 패널 ---------- */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: var(--mp-radius-lg);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+.panelTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--mp-fs-h-sm);
+  line-height: var(--mp-lh-h-sm);
+}
+
+.panelHeadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* ---------- 프로필 ---------- */
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.profileCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 20px;
+  border-radius: var(--mp-radius-lg);
+  border: 1px solid var(--mp-border);
+  background:
+    radial-gradient(240px 160px at 50% 0%, rgba(99, 102, 241, 0.2), transparent 70%),
+    var(--mp-surface-1);
+  text-align: center;
+}
+
+.profileName {
+  margin-top: 8px;
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-h-sm);
+  word-break: break-all;
+}
+
+.profileEmail {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+  word-break: break-all;
+}
+
+.badgeRow {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.inlineForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.readonlyRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface-2);
+  border: 1px solid var(--mp-border);
+}
+
+.readonlyLabel {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.readonlyValue {
+  color: var(--mp-text-1);
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.dangerZone {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  border-color: rgba(244, 63, 94, 0.25);
+}
+
+.withdraw {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.withdrawList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px 14px 32px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-secondary-tint);
+  color: var(--mp-text-2);
+  list-style: disc;
+}
+
+.formError {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-error-tint);
+  border: 1px solid rgba(255, 180, 171, 0.25);
+  color: var(--mp-error);
+}
+
+.formError svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-tertiary-tint);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--mp-tertiary);
+}
+
+.notice svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* ---------- 찜 ---------- */
+
+.movieGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(172px, 1fr));
+  gap: var(--mp-gutter);
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+  border-radius: var(--mp-radius-lg);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+.ctaIcon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-primary-tint);
+  color: var(--mp-primary-soft);
+}
+
+.ctaText {
+  flex: 1;
+  min-width: 200px;
+}
+
+.ctaText strong {
+  color: var(--mp-text-1);
+}
+
+.ctaText p {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.ctaActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ---------- 리뷰·알림 ---------- */
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.reviewList,
+.notiList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settingsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.settingItem {
+  padding: 16px 18px;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-surface-2);
+  border: 1px solid var(--mp-border);
+}
+
+/* ---------- 반응형 ---------- */
+
+@media (max-width: 767px) {
+  .profileGrid,
+  .twoCol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* 카드는 축약형(StatCard dense)으로 3열을 유지해 화면 하나를 다 차지하지 않게 한다 */
+  .statGrid {
+    gap: 8px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .movieGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}

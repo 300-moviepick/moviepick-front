@@ -1,0 +1,638 @@
+/* 관리자 화면 공용 (Stitch 15~19번). 사이드바·헤더는 AdminLayout이 그린다. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1440px;
+}
+
+/* ---------- 제목 ---------- */
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.crumb {
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label-sm);
+  letter-spacing: 0.08em;
+  color: var(--mp-text-4);
+}
+
+.crumb span {
+  margin: 0 4px;
+}
+
+.crumb strong {
+  color: var(--mp-primary-soft);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--mp-fs-h-lg);
+  line-height: var(--mp-lh-h-lg);
+  font-weight: 800;
+}
+
+.subtitle {
+  padding: 2px 10px;
+  border-radius: var(--mp-radius-full);
+  background: var(--mp-surface-2);
+  border: 1px solid var(--mp-border);
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.desc {
+  color: var(--mp-text-3);
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ---------- 패널·레이아웃 ---------- */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: var(--mp-radius-lg);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+  min-width: 0;
+}
+
+.panelCompact {
+  padding: 18px;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.panelTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--mp-fs-h-sm);
+  line-height: var(--mp-lh-h-sm);
+}
+
+.muted {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body);
+}
+
+.footnote {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mp-text-4);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+/* 대시보드 통계 카드 4장: 넓은 화면 4열, 1279px 이하 2×2 (한 장만 다음 줄에 남지 않게) */
+.statGrid4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.masterDetail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.masterDetail > aside {
+  position: sticky;
+  top: calc(var(--mp-header-h) + 20px);
+}
+
+.moviesLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.searchBox,
+.searchSoon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  min-width: 220px;
+  padding: 0 12px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  color: var(--mp-text-4);
+}
+
+.searchBox:focus-within {
+  border-color: var(--mp-primary);
+}
+
+.searchBox input,
+.searchSoon input {
+  flex: 1;
+  min-width: 0;
+  color: var(--mp-text-1);
+}
+
+.searchBox input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.contextBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--mp-text-3);
+}
+
+.contextBar strong {
+  color: var(--mp-text-1);
+}
+
+/* ---------- 표 ---------- */
+
+/* 표가 칸보다 넓을 때는 표 영역 안에서만 가로로 스크롤한다 */
+.tableWrap {
+  overflow-x: auto;
+  margin: 0 -4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mp-border-strong) transparent;
+}
+
+.tableWrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tableWrap::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--mp-border-strong);
+}
+
+/* 1280px에서 상세 패널과 나란히 둘 때 열이 잘리지 않는 폭 */
+.table {
+  min-width: 520px;
+  font-size: var(--mp-fs-body);
+}
+
+.table th {
+  padding: 10px;
+  border-bottom: 1px solid var(--mp-border);
+  color: var(--mp-text-4);
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--mp-border-subtle);
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  cursor: pointer;
+  transition: background-color var(--mp-duration) var(--mp-ease);
+}
+
+.table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.table tbody tr.rowSelected,
+.table tbody tr.rowSelected:hover {
+  background: var(--mp-primary-tint);
+  box-shadow: inset 3px 0 0 var(--mp-primary);
+}
+
+.stale {
+  opacity: 0.5;
+}
+
+.mono {
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label);
+  color: var(--mp-text-3);
+  white-space: nowrap;
+}
+
+.ellipsis {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipsisCell {
+  max-width: 360px;
+}
+
+.ellipsisCell > * {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipsisCell strong,
+.ellipsisCell span {
+  color: var(--mp-text-1);
+}
+
+.ellipsisCell small {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.titleLink {
+  color: var(--mp-text-1);
+  font-weight: 600;
+}
+
+.titleLink:hover {
+  color: var(--mp-primary-soft);
+  text-decoration: underline;
+}
+
+.actionsCell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.actionsCell > * + * {
+  margin-left: 6px;
+}
+
+.member,
+.movieCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.member > span,
+.movieCell > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.member strong,
+.movieCell strong {
+  color: var(--mp-text-1);
+}
+
+.member small,
+.movieCell small {
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label-sm);
+  color: var(--mp-text-4);
+}
+
+.thumb {
+  width: 36px;
+  flex-shrink: 0;
+  border-radius: var(--mp-radius-xs);
+}
+
+/* 36px 썸네일에는 "포스터 없음" 글자가 들어가지 않으므로 작은 아이콘만 남긴다 (글자는 aria-label로 남아 있다) */
+.thumb span {
+  display: none;
+}
+
+.thumb svg {
+  width: 16px;
+  height: 16px;
+}
+
+.iconLink {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--mp-radius);
+  color: var(--mp-text-3);
+}
+
+.iconLink:hover {
+  background: var(--mp-surface-3);
+  color: var(--mp-text-1);
+}
+
+/* ---------- 상세 패널 ---------- */
+
+.detailHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.push {
+  margin-left: auto;
+}
+
+.detailHead > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detailTitle {
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-h-sm);
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px 16px;
+  margin: 0;
+  padding: 14px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface-2);
+  border: 1px solid var(--mp-border);
+}
+
+.kv dt {
+  color: var(--mp-text-4);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.kv dd {
+  margin: 0;
+  color: var(--mp-text-1);
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+}
+
+.preview strong {
+  color: var(--mp-text-1);
+}
+
+.preview p {
+  color: var(--mp-text-2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.previewLabel {
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label-sm);
+  letter-spacing: 0.06em;
+  color: var(--mp-text-4);
+}
+
+.actionRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* ---------- 대시보드 ---------- */
+
+.miniList {
+  display: flex;
+  flex-direction: column;
+}
+
+.miniRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--mp-border-subtle);
+}
+
+.miniRow:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.miniText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--mp-text-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.miniText small {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.bigNumber {
+  font-family: var(--mp-font-label);
+  font-size: 24px;
+  color: var(--mp-text-1);
+}
+
+/* ---------- 수집 결과 ---------- */
+
+.runningNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-tertiary-tint);
+  color: var(--mp-tertiary);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.runningNote svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.result {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--mp-radius-md);
+  border: 1px solid var(--mp-border);
+}
+
+.result > svg {
+  flex-shrink: 0;
+}
+
+.resultBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resultBody strong {
+  color: var(--mp-text-1);
+}
+
+.resultBody p {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.result_success {
+  background: var(--mp-success-tint);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: var(--mp-success);
+}
+
+.result_pending {
+  background: var(--mp-gold-tint);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--mp-gold);
+}
+
+.result_error {
+  background: var(--mp-error-tint);
+  border-color: rgba(255, 180, 171, 0.3);
+  color: var(--mp-error);
+}
+
+.result .kv {
+  background: rgba(13, 15, 18, 0.5);
+}
+
+/* ---------- 반응형 ---------- */
+
+@media (max-width: 1279px) {
+  .masterDetail,
+  .moviesLayout,
+  .twoCol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .masterDetail > aside {
+    position: static;
+  }
+
+  .statGrid4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* 한 단일 때 영화 수집 패널(이 화면의 핵심 동작)을 영화 목록 표보다 위에 둔다 */
+  .moviesLayout > .stack {
+    display: contents;
+  }
+
+  .moviesLayout > .stack > :first-child {
+    order: -1;
+  }
+
+  /* 768px에서 콘텐츠 표가 칸 안에 들어가도록 제목·내용 열 말줄임 폭을 줄이고,
+     조치 버튼은 칸이 모자랄 때만 두 줄로 쌓이게 한다 */
+  .ellipsisCell {
+    max-width: 200px;
+  }
+
+  .reactions {
+    white-space: normal;
+    word-break: keep-all;
+    min-width: 120px;
+  }
+
+  .actionsCell {
+    white-space: normal;
+  }
+
+  .actionsCell > * {
+    margin: 2px 0 2px 6px;
+  }
+}
+
+@media (max-width: 639px) {
+  .searchBox,
+  .searchSoon {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .actionRow {
+    grid-template-columns: 1fr;
+  }
+}

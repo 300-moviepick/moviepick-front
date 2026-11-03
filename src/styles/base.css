@@ -1,0 +1,140 @@
+/*
+ * 새 UI 기본 스타일. .mp(화면 루트)와 .mp-portal(모달·토스트처럼 body에 붙는 영역) 아래에서만 적용한다.
+ *
+ * 구체성 설계
+ * - 기존 src/styles.css는 요소 선택자(button, a, input, table, h1~h3 …, 구체성 0,0,1)를 쓴다.
+ * - 여기 초기화 규칙은 :where(.mp, .mp-portal)(구체성 0)과 요소를 두 번 쓴 형태(0,0,2)라서
+ *   기존 요소 스타일은 이기고, 컴포넌트의 CSS Module 클래스(0,1,0)에는 진다.
+ * - 기존 button:hover:not(:disabled)(0,2,1)는 border-color를 바꾸므로,
+ *   새 버튼 컴포넌트는 :hover:not(:disabled)에서 border-color까지 직접 지정한다.
+ * 기존 styles.css는 수정하지 않는다.
+ */
+
+.mp {
+  min-height: 100vh;
+  background: var(--mp-bg);
+}
+
+.mp,
+.mp-portal {
+  color: var(--mp-text-2);
+  font-family: var(--mp-font-body);
+  font-size: var(--mp-fs-body);
+  line-height: var(--mp-lh-body);
+  -webkit-font-smoothing: antialiased;
+  color-scheme: dark;
+}
+
+:where(.mp, .mp-portal) *,
+:where(.mp, .mp-portal) *::before,
+:where(.mp, .mp-portal) *::after {
+  box-sizing: border-box;
+}
+
+:where(.mp, .mp-portal) a:is(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(.mp, .mp-portal) :is(h1, h2, h3, h4, p):is(h1, h2, h3, h4, p) {
+  margin: 0;
+}
+
+:where(.mp, .mp-portal) :is(h1, h2, h3, h4) {
+  color: var(--mp-text-1);
+  letter-spacing: -0.02em;
+}
+
+:where(.mp, .mp-portal) :is(input, select, textarea, button):is(input, select, textarea, button) {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  width: auto;
+}
+
+:where(.mp, .mp-portal) button {
+  cursor: pointer;
+}
+
+:where(.mp, .mp-portal) button:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+:where(.mp, .mp-portal) textarea:is(textarea) {
+  resize: vertical;
+  min-height: 0;
+}
+
+:where(.mp, .mp-portal) table:is(table) {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+:where(.mp, .mp-portal) :is(th, td):is(th, td) {
+  padding: 0;
+  border: 0;
+  text-align: left;
+}
+
+:where(.mp, .mp-portal) pre:is(pre) {
+  margin: 0;
+}
+
+:where(.mp, .mp-portal) img {
+  display: block;
+  max-width: 100%;
+}
+
+:where(.mp, .mp-portal) :is(ul, ol) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:where(.mp, .mp-portal) :focus-visible {
+  outline: none;
+  box-shadow: var(--mp-focus-ring);
+}
+
+:where(.mp, .mp-portal) ::selection {
+  background: rgba(99, 102, 241, 0.45);
+  color: var(--mp-text-1);
+}
+
+/* 화면 읽기 프로그램 전용 텍스트 */
+.mp-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 페이지 본문 폭. 화면 모듈이 함께 붙여 쓰는 위·아래 여백을 지우지 않도록 좌우 여백만 지정한다 */
+.mp-container {
+  width: 100%;
+  max-width: var(--mp-content-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--mp-page-x);
+  padding-right: var(--mp-page-x);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.mp, .mp-portal) *,
+  :where(.mp, .mp-portal) *::before,
+  :where(.mp, .mp-portal) *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}

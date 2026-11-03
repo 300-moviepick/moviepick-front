@@ -1,0 +1,512 @@
+/* 영화 상세 (Stitch 3번) */
+
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.statePage {
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+/* ---------- 히어로 ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 460px;
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--mp-border);
+  background: linear-gradient(180deg, #151822, var(--mp-bg));
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 25%;
+  opacity: 0.45;
+  transform: scale(1.04);
+}
+
+.heroShade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(13, 15, 18, 0.92) 0%, rgba(13, 15, 18, 0.55) 55%, rgba(13, 15, 18, 0.3) 100%),
+    linear-gradient(0deg, var(--mp-bg) 0%, transparent 55%);
+}
+
+.heroInner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 36px;
+  padding-top: 56px;
+  padding-bottom: 36px;
+}
+
+.poster {
+  width: 240px;
+  flex-shrink: 0;
+  box-shadow: var(--mp-shadow-overlay);
+  border: 1px solid var(--mp-border-strong);
+}
+
+.heroInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label);
+  color: var(--mp-text-3);
+}
+
+.title {
+  font-size: var(--mp-fs-h-xl);
+  line-height: var(--mp-lh-h-xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  word-break: keep-all;
+}
+
+.original {
+  margin-top: -8px;
+  color: var(--mp-text-3);
+  font-family: var(--mp-font-latin);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 220px));
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: var(--mp-radius);
+  background: rgba(20, 23, 29, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--mp-border);
+}
+
+.statLabel {
+  font-size: var(--mp-fs-body-sm);
+  color: var(--mp-text-3);
+}
+
+.statValue {
+  font-family: var(--mp-font-label);
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 700;
+  color: var(--mp-gold);
+}
+
+.statValue small {
+  margin-left: 4px;
+  font-size: var(--mp-fs-body-sm);
+  font-weight: 500;
+  color: var(--mp-text-3);
+}
+
+.statSub {
+  font-size: var(--mp-fs-body-sm);
+  color: var(--mp-text-4);
+}
+
+/* ---------- 탭·본문 ---------- */
+
+.tabsBar {
+  position: sticky;
+  top: var(--mp-header-h);
+  z-index: 20;
+  background: rgba(13, 15, 18, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 32px;
+  align-items: start;
+  padding-top: 32px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-width: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  scroll-margin-top: calc(var(--mp-header-h) + 64px);
+}
+
+.overview {
+  padding: 20px 24px;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+  color: var(--mp-text-2);
+  font-size: var(--mp-fs-body-lg);
+  line-height: 28px;
+  white-space: pre-line;
+}
+
+.side {
+  position: sticky;
+  top: calc(var(--mp-header-h) + 72px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sideCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: var(--mp-radius-lg);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+.sideTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--mp-fs-h-sm);
+  line-height: var(--mp-lh-h-sm);
+}
+
+.muted {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body);
+}
+
+/* ---------- 확장 정보 ---------- */
+
+.extrasSkeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.extrasSkeleton span {
+  height: 72px;
+  border-radius: var(--mp-radius);
+  background: linear-gradient(90deg, var(--mp-surface-2), var(--mp-surface-3), var(--mp-surface-2));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.extrasNotice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface-2);
+  border: 1px dashed var(--mp-border-strong);
+  color: var(--mp-text-3);
+}
+
+.extrasNotice p {
+  flex: 1;
+  min-width: 180px;
+  font-size: var(--mp-fs-body);
+}
+
+.people {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  gap: 14px;
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.personPhoto {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--mp-radius);
+  overflow: hidden;
+  background: var(--mp-surface-2);
+  color: var(--mp-text-4);
+  margin-bottom: 6px;
+}
+
+.personPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.person strong {
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-label-lg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.person span {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ott {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.ottGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.ottLabel {
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-label-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--mp-text-4);
+}
+
+.ottList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ottItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface-2);
+  border: 1px solid var(--mp-border);
+  font-size: var(--mp-fs-body-sm);
+  font-weight: 600;
+  color: var(--mp-text-1);
+  min-width: 0;
+}
+
+.ottItem img,
+.ottLogoFallback {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--mp-radius-xs);
+  background: var(--mp-surface-3);
+}
+
+/* 긴 이름("Netflix Standard with Ads")은 두 줄까지 보이고 그 뒤만 말줄임 */
+.ottItem > span:last-child {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  line-height: var(--mp-lh-body-sm);
+  overflow-wrap: anywhere;
+}
+
+.attribution {
+  font-size: var(--mp-fs-label-sm);
+  color: var(--mp-text-4);
+}
+
+/* ---------- 리뷰 ---------- */
+
+.writeBox {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+.writePrompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: var(--mp-text-3);
+}
+
+.writeHead {
+  display: flex;
+  gap: 4px;
+  color: var(--mp-text-3);
+}
+
+.writeHead strong {
+  color: var(--mp-text-1);
+}
+
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: opacity var(--mp-duration) var(--mp-ease);
+}
+
+.stale {
+  opacity: 0.5;
+}
+
+.reviewForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.formFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+}
+
+.formError {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-error-tint);
+  border: 1px solid rgba(255, 180, 171, 0.25);
+  color: var(--mp-error);
+}
+
+.formError svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* ---------- 예고편 ---------- */
+
+.trailer {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--mp-radius);
+  overflow: hidden;
+  background: #000;
+}
+
+.trailer iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- 반응형 ---------- */
+
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .side {
+    position: static;
+  }
+
+  .poster {
+    width: 180px;
+  }
+}
+
+@media (max-width: 639px) {
+  .hero {
+    min-height: 0;
+  }
+
+  .heroInner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding-top: 32px;
+  }
+
+  .poster {
+    width: 140px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .overview {
+    padding: 16px;
+  }
+
+  /* 2열이면 사진이 너무 커서 출연진이 화면 몇 장을 차지한다 */
+  .people {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 10px;
+  }
+}

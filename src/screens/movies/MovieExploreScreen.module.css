@@ -1,0 +1,243 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 32px;
+  padding-bottom: 24px;
+}
+
+/* ---------- 검색 ---------- */
+
+.searchPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: var(--mp-radius-lg);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+.searchRow {
+  display: flex;
+  gap: 12px;
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  color: var(--mp-text-4);
+  transition: border-color var(--mp-duration) var(--mp-ease), box-shadow var(--mp-duration) var(--mp-ease);
+}
+
+.searchBox:focus-within {
+  border-color: var(--mp-primary);
+  box-shadow: 0 0 0 1px var(--mp-primary);
+}
+
+.searchBox input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-body-lg);
+}
+
+.searchBox input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.searchBox input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.clear {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: var(--mp-surface-3);
+  color: var(--mp-text-3);
+}
+
+.clear:hover:not(:disabled) {
+  border-color: transparent;
+  color: var(--mp-text-1);
+}
+
+.searchMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: var(--mp-fs-body);
+  color: var(--mp-text-3);
+}
+
+.searchMeta strong {
+  color: var(--mp-text-1);
+}
+
+.keyword {
+  color: var(--mp-primary-soft) !important;
+}
+
+/* ---------- AI 안내 ---------- */
+
+.aiNav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: var(--mp-radius-md);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.06));
+}
+
+.aiIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-tertiary-tint);
+  color: var(--mp-tertiary);
+}
+
+.aiText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aiText strong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mp-text-1);
+}
+
+.aiText p {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+}
+
+/* ---------- 본문 ---------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.filters {
+  position: sticky;
+  top: calc(var(--mp-header-h) + 24px);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.filterLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--mp-text-1);
+}
+
+.chipWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.sortSoon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--mp-fs-body-sm);
+  color: var(--mp-text-3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+  gap: var(--mp-gutter);
+  transition: opacity var(--mp-duration) var(--mp-ease);
+}
+
+.stale {
+  opacity: 0.5;
+}
+
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .filters {
+    position: static;
+    order: 2;
+  }
+}
+
+@media (max-width: 639px) {
+  .page {
+    padding-top: 20px;
+  }
+
+  .searchPanel {
+    padding: 14px;
+  }
+
+  .searchRow {
+    flex-direction: column;
+  }
+
+  /* 버튼을 아래 줄 전체 폭으로 내려 제목이 쪼개지지 않게 한다 */
+  .aiNav {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 14px 16px;
+  }
+
+  .aiText {
+    flex-basis: calc(100% - 54px);
+  }
+
+  .aiCta {
+    width: 100%;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}

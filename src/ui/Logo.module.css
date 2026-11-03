@@ -1,0 +1,77 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--mp-text-1);
+  flex-shrink: 0;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--mp-radius);
+  background: linear-gradient(135deg, var(--mp-primary), #4338ca);
+  color: #fff;
+  box-shadow: var(--mp-glow-primary);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.name {
+  font-family: var(--mp-font-latin);
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.sub {
+  font-family: var(--mp-font-label);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--mp-text-3);
+}
+
+.admin {
+  font-family: var(--mp-font-label);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: var(--mp-radius-xs);
+  background: var(--mp-secondary);
+  color: #fff;
+}
+
+.sm .mark {
+  width: 28px;
+  height: 28px;
+}
+
+.sm .name {
+  font-size: 15px;
+}
+
+.lg {
+  gap: 14px;
+}
+
+.lg .mark {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--mp-radius-md);
+}
+
+.lg .name {
+  font-size: 26px;
+}
+
+.lg .sub {
+  font-size: 11px;
+}

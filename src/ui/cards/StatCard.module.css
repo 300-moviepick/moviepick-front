@@ -1,0 +1,113 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-surface-2);
+  border: 1px solid var(--mp-border);
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.label {
+  font-size: var(--mp-fs-body-sm);
+  font-weight: 600;
+  color: var(--mp-text-3);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface-3);
+  color: var(--mp-text-3);
+}
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.value {
+  font-family: var(--mp-font-label);
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 700;
+  color: var(--mp-text-1);
+  letter-spacing: -0.02em;
+}
+
+.loading {
+  display: inline-block;
+  min-width: 80px;
+  border-radius: var(--mp-radius-xs);
+  background: var(--mp-surface-3);
+}
+
+.unit {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body);
+}
+
+.hint {
+  font-size: var(--mp-fs-body-sm);
+  color: var(--mp-text-4);
+}
+
+.soon {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.primary .icon {
+  background: var(--mp-primary-tint);
+  color: var(--mp-primary-soft);
+}
+
+.danger .value {
+  color: #fda4af;
+}
+
+.danger .icon {
+  background: var(--mp-secondary-tint);
+  color: var(--mp-secondary);
+}
+
+@media (max-width: 767px) {
+  .dense {
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .dense .icon,
+  .dense .hint {
+    display: none;
+  }
+
+  .dense .label {
+    font-size: var(--mp-fs-label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dense .value {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  .dense .soon {
+    height: 28px;
+  }
+}

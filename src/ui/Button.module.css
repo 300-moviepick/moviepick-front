@@ -1,0 +1,172 @@
+/* 기존 전역 button:hover:not(:disabled)(구체성 0,2,1)보다 높게 :hover:not(:disabled)를 함께 쓴다 */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--mp-radius);
+  font-family: var(--mp-font-body);
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    background-color var(--mp-duration) var(--mp-ease),
+    border-color var(--mp-duration) var(--mp-ease),
+    box-shadow var(--mp-duration) var(--mp-ease),
+    color var(--mp-duration) var(--mp-ease);
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.45;
+}
+
+.sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: var(--mp-fs-body-sm);
+}
+
+.md {
+  height: 40px;
+  padding: 0 16px;
+  font-size: var(--mp-fs-label-lg);
+}
+
+.lg {
+  height: 48px;
+  padding: 0 22px;
+  font-size: var(--mp-fs-body-lg);
+}
+
+.block {
+  display: flex;
+  width: 100%;
+}
+
+.primary {
+  background: var(--mp-primary);
+  color: var(--mp-on-primary);
+  border-color: var(--mp-primary);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--mp-primary-hover);
+  border-color: var(--mp-primary-hover);
+  box-shadow: var(--mp-glow-primary-strong);
+}
+
+.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mp-text-2);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--mp-surface-3);
+  border-color: var(--mp-border-strong);
+  color: var(--mp-text-1);
+}
+
+.danger {
+  background: var(--mp-secondary);
+  color: #fff;
+  border-color: var(--mp-secondary);
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--mp-secondary-hover);
+  border-color: var(--mp-secondary-hover);
+  box-shadow: var(--mp-glow-secondary);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--mp-text-3);
+  border-color: transparent;
+}
+
+.ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: transparent;
+  color: var(--mp-text-1);
+}
+
+/* 연보라 보조 강조 (YAML primary #C0C1FF) */
+.soft {
+  background: var(--mp-primary-soft);
+  color: var(--mp-on-primary-soft);
+  border-color: var(--mp-primary-soft);
+}
+
+.soft:hover:not(:disabled) {
+  background: #d6d6ff;
+  border-color: #d6d6ff;
+  box-shadow: var(--mp-glow-primary);
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- 아이콘 버튼 ---------- */
+
+.iconBtn {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: var(--mp-radius-full);
+  border: 1px solid transparent;
+  color: var(--mp-text-3);
+  transition:
+    background-color var(--mp-duration) var(--mp-ease),
+    color var(--mp-duration) var(--mp-ease),
+    border-color var(--mp-duration) var(--mp-ease);
+}
+
+.icon_sm {
+  width: 32px;
+  height: 32px;
+}
+
+.icon_md {
+  width: 40px;
+  height: 40px;
+}
+
+.icon_plain {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.icon_plain:hover:not(:disabled) {
+  background: var(--mp-surface-3);
+  border-color: transparent;
+  color: var(--mp-text-1);
+}
+
+.icon_danger {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.icon_danger:hover:not(:disabled) {
+  background: var(--mp-secondary-tint);
+  border-color: transparent;
+  color: var(--mp-secondary);
+}
+
+.iconBtn:disabled {
+  opacity: 0.45;
+}

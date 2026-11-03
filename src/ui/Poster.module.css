@@ -1,0 +1,41 @@
+.frame {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--mp-surface-2);
+}
+
+.rounded {
+  border-radius: var(--mp-radius);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--mp-text-4);
+  font-size: var(--mp-fs-body-sm);
+  background: linear-gradient(160deg, var(--mp-surface-2), var(--mp-surface-1));
+}
+
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--mp-primary), var(--mp-tertiary));
+  color: #fff;
+  font-family: var(--mp-font-label);
+  font-weight: 700;
+  line-height: 1;
+}
