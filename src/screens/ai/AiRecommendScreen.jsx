@@ -88,7 +88,10 @@ export default function AiRecommendScreen() {
         </section>
 
         {/* 결과 자리 미리보기: 샘플 영화 없이 빈 카드만 */}
-        <section className={styles.section} aria-label="추천 결과 자리 (준비 중)">
+        <section className={styles.section} aria-labelledby="ai-preview">
+          <h3 id="ai-preview" className={styles.previewLabel}>
+            추천 결과는 이렇게 표시돼요 <ComingSoon variant="badge" />
+          </h3>
           <div className={styles.resultPreview} inert aria-hidden="true">
             {[0, 1].map((i) => (
               <div key={i} className={styles.resultCard}>

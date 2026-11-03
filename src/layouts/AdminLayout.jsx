@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { IconButton } from '../ui/Button';
 import {
@@ -61,6 +61,12 @@ export default function AdminLayout() {
     await logout().catch(() => {});
   };
 
+  // 모바일 상단 바에 보여 줄 현재 메뉴 이름 (사이드바가 서랍으로 숨는 폭에서만 보인다)
+  const { pathname } = useLocation();
+  const current = SECTIONS.flatMap((s) => s.items)
+    .filter((item) => item.to)
+    .find((item) => (item.end ? pathname === item.to : pathname.startsWith(item.to)));
+
   return (
     <div className={`mp ${styles.shell}`}>
       <aside className={`${styles.sidebar} ${open ? styles.sidebarOpen : ''}`} aria-label="관리자 메뉴">
@@ -115,6 +121,7 @@ export default function AdminLayout() {
           <IconButton label="메뉴 열기" className={styles.menuBtn} onClick={() => setOpen(true)}>
             <IconMenu size={20} />
           </IconButton>
+          {current && <span className={styles.currentMenu}>{current.label}</span>}
           <div className={styles.search} title="관리자 통합 검색은 준비 중입니다">
             <IconSearch size={18} />
             <input type="search" placeholder="관리자 통합 검색" disabled aria-label="관리자 통합 검색 (준비 중)" />

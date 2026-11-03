@@ -1,6 +1,6 @@
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
-import { IconAlert, IconArrowLeft, IconClock, IconCoffee, IconLock, IconSparkles } from '../../ui/icons';
+import { IconArrowLeft, IconClock, IconCoffee, IconInfo, IconLock, IconSparkles } from '../../ui/icons';
 import { ComingSoon, EmptyState } from '../../ui/StateViews';
 import styles from './Ai.module.css';
 
@@ -29,7 +29,7 @@ export default function AiCreditsScreen() {
       <div className={`mp-container ${styles.body}`}>
         <section className={styles.policy} aria-labelledby="credit-policy">
           <span className={styles.policyIcon}>
-            <IconAlert size={20} />
+            <IconInfo size={20} />
           </span>
           <div>
             <h2 id="credit-policy" className={styles.policyTitle}>

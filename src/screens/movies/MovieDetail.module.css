@@ -356,10 +356,14 @@
   background: var(--mp-surface-3);
 }
 
-.ottItem span {
+/* 긴 이름("Netflix Standard with Ads")은 두 줄까지 보이고 그 뒤만 말줄임 */
+.ottItem > span:last-child {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: var(--mp-lh-body-sm);
+  overflow-wrap: anywhere;
 }
 
 .attribution {

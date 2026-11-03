@@ -46,7 +46,7 @@ export default function AdminDashboardScreen() {
         description="회원·신고·콘텐츠·영화 데이터 현황을 한눈에 확인합니다."
       />
 
-      <div className={styles.statGrid}>
+      <div className={`${styles.statGrid} ${styles.statGrid4}`}>
         <StatCard
           label="전체 회원"
           value={c ? shown(c.members) : undefined}

@@ -210,6 +210,15 @@
 
 /* ---------- 결과 자리 ---------- */
 
+.previewLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body);
+  font-weight: 600;
+}
+
 .resultPreview {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -264,8 +273,9 @@
   gap: 14px;
   padding: 20px 24px;
   border-radius: var(--mp-radius-lg);
-  background: linear-gradient(90deg, rgba(244, 63, 94, 0.1), rgba(20, 23, 29, 0.6));
-  border: 1px solid rgba(244, 63, 94, 0.25);
+  /* 오류가 아닌 안내이므로 빨간 경고색 대신 금색(주의)을 쓴다 */
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.08), rgba(20, 23, 29, 0.6));
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .policyIcon {
@@ -275,8 +285,8 @@
   width: 40px;
   height: 40px;
   border-radius: var(--mp-radius);
-  background: var(--mp-secondary-tint);
-  color: var(--mp-secondary);
+  background: var(--mp-gold-tint);
+  color: var(--mp-gold);
 }
 
 .policyTitle {

@@ -128,6 +128,11 @@
   gap: 14px;
 }
 
+/* 대시보드 통계 카드 4장: 넓은 화면 4열, 1279px 이하 2×2 (한 장만 다음 줄에 남지 않게) */
+.statGrid4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .twoCol {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -584,6 +589,10 @@
 
   .masterDetail > aside {
     position: static;
+  }
+
+  .statGrid4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   /* 한 단일 때 영화 수집 패널(이 화면의 핵심 동작)을 영화 목록 표보다 위에 둔다 */

@@ -127,6 +127,16 @@ a.active:hover {
   display: none;
 }
 
+.currentMenu {
+  display: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--mp-text-1);
+  font-weight: 700;
+}
+
 .search {
   display: flex;
   align-items: center;
@@ -223,5 +233,14 @@ a.active:hover {
   .search,
   .accountText {
     display: none;
+  }
+
+  /* 검색창이 숨는 폭에서는 햄버거 옆에 현재 메뉴 이름을 둔다 */
+  .header {
+    gap: 10px;
+  }
+
+  .currentMenu {
+    display: block;
   }
 }

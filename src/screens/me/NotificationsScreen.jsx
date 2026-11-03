@@ -7,7 +7,7 @@ import { messageOf } from '../../lib/apiErrors';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import NotificationCard from '../../ui/cards/NotificationCard';
-import { IconBell, IconCheck, IconSliders } from '../../ui/icons';
+import { IconArrowRight, IconBell, IconCheck, IconSliders } from '../../ui/icons';
 import Pagination from '../../ui/Pagination';
 import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import Tabs from '../../ui/Tabs';
@@ -114,7 +114,7 @@ export default function NotificationsScreen() {
           title="받은 알림이 없습니다"
           description="영화를 찜해 두면 개봉일에 이곳으로 알림이 도착합니다."
           action={
-            <Button to="/movies" variant="secondary" size="sm">
+            <Button to="/movies" iconRight={<IconArrowRight size={16} />}>
               영화 찜하러 가기
             </Button>
           }

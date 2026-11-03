@@ -148,10 +148,13 @@
     display: none;
   }
 
+  /* 오른쪽 끝을 옅게 흐려 더 넘길 메뉴가 있음을 알린다. 끝까지 넘기면 마지막 메뉴가 흐림 밖으로 나오도록 오른쪽 여백을 둔다 */
   .nav {
     flex-direction: row;
     overflow-x: auto;
     scrollbar-width: none;
+    padding-right: 40px;
+    mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
   }
 
   .nav::-webkit-scrollbar {
