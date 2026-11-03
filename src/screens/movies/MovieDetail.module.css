@@ -499,4 +499,10 @@
   .overview {
     padding: 16px;
   }
+
+  /* 2열이면 사진이 너무 커서 출연진이 화면 몇 장을 차지한다 */
+  .people {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 10px;
+  }
 }

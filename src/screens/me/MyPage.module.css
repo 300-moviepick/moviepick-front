@@ -79,6 +79,16 @@
   border: 1px solid var(--mp-border);
 }
 
+/* 탭 줄 + "준비 중" 배지: 배지가 다음 줄로 떨어지지 않도록 탭 쪽이 줄어들며 가로로 넘긴다 */
+.toolbarTabs {
+  flex-wrap: nowrap;
+}
+
+.toolbarTabs > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .chips {
   display: flex;
   align-items: center;
@@ -330,8 +340,9 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* 카드는 축약형(StatCard dense)으로 3열을 유지해 화면 하나를 다 차지하지 않게 한다 */
   .statGrid {
-    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 
   .panel {

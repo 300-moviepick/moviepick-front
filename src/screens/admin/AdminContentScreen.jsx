@@ -141,7 +141,7 @@ export default function AdminContentScreen() {
                   </Link>
                 </td>
                 <td>{p.author?.nickname}</td>
-                <td className={styles.mono}>
+                <td className={`${styles.mono} ${styles.reactions}`}>
                   좋아요 {formatCount(p.likeCount)} · 댓글 {formatCount(p.commentCount)} · 조회 {formatCount(p.viewCount)}
                 </td>
                 <td className={styles.mono}>{formatDateTime(p.createdAt)}</td>

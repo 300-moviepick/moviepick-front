@@ -68,9 +68,10 @@ export default function MyReviewsScreen() {
           icon={<IconMessage size={18} />}
           tone="primary"
           loading={list.loading && !data}
+          dense
         />
-        <StatCard label="평균 평점" icon={<IconStar size={18} />} hint="전체 집계 기능 준비 중" />
-        <StatCard label="받은 공감" hint="전체 집계 기능 준비 중" />
+        <StatCard label="평균 평점" icon={<IconStar size={18} />} hint="전체 집계 기능 준비 중" dense />
+        <StatCard label="받은 공감" hint="전체 집계 기능 준비 중" dense />
       </div>
 
       <div className={styles.toolbar}>

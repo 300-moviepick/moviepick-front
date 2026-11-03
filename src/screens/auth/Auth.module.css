@@ -384,9 +384,11 @@
 /* ---------- 반응형 ---------- */
 
 @media (max-width: 1023px) {
+  /* 한 단일 때 카드를 화면 높이만큼 늘리지 않고 내용 높이로 세로 가운데에 둔다 */
   .page {
     grid-template-columns: minmax(0, 1fr);
     max-width: 600px;
+    align-items: center;
   }
 
   .visual {

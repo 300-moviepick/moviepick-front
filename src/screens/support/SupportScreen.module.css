@@ -477,7 +477,9 @@
     gap: 10px;
   }
 
+  /* 커피 아이콘 수와 관계없이 제목 시작 위치를 맞춘다 (아이콘 3개 = 64px) */
   .cups {
-    min-width: 0;
+    flex: 0 0 64px;
+    justify-content: center;
   }
 }

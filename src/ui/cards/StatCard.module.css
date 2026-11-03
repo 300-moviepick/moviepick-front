@@ -83,3 +83,31 @@
   background: var(--mp-secondary-tint);
   color: var(--mp-secondary);
 }
+
+@media (max-width: 767px) {
+  .dense {
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .dense .icon,
+  .dense .hint {
+    display: none;
+  }
+
+  .dense .label {
+    font-size: var(--mp-fs-label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dense .value {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  .dense .soon {
+    height: 28px;
+  }
+}

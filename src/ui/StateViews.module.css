@@ -199,3 +199,24 @@
   pointer-events: none;
   user-select: none;
 }
+
+/* 좁은 화면에서는 배지를 아이콘 옆 첫 줄로 올리고, 제목·설명은 아래 줄 전체 폭을 쓴다 */
+@media (max-width: 639px) {
+  .soonBanner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 8px 10px;
+  }
+
+  .soonBanner > .soonBadge {
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .soonBanner > div {
+    grid-column: 1 / -1;
+    word-break: keep-all;
+  }
+}

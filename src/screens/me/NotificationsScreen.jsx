@@ -99,7 +99,7 @@ export default function NotificationsScreen() {
         }
       />
 
-      <div className={styles.toolbar}>
+      <div className={`${styles.toolbar} ${styles.toolbarTabs}`}>
         <Tabs ariaLabel="알림 분류" items={TABS} value="all" />
         <ComingSoon variant="badge" />
       </div>

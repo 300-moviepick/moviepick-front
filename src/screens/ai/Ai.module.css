@@ -151,6 +151,17 @@
   flex-wrap: wrap;
 }
 
+/* 문장이 두 줄로 꺾여도 아이콘은 첫 줄에 둔다 (14px 아이콘, 22px 줄) */
+.askActions .muted {
+  align-items: flex-start;
+  word-break: keep-all;
+}
+
+.askActions .muted svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
 /* ---------- 동작 방식 ---------- */
 
 .steps {

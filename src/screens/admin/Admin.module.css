@@ -360,6 +360,16 @@
   border-radius: var(--mp-radius-xs);
 }
 
+/* 36px 썸네일에는 "포스터 없음" 글자가 들어가지 않으므로 작은 아이콘만 남긴다 (글자는 aria-label로 남아 있다) */
+.thumb span {
+  display: none;
+}
+
+.thumb svg {
+  width: 16px;
+  height: 16px;
+}
+
 .iconLink {
   display: inline-grid;
   place-items: center;
@@ -583,6 +593,26 @@
 
   .moviesLayout > .stack > :first-child {
     order: -1;
+  }
+
+  /* 768px에서 콘텐츠 표가 칸 안에 들어가도록 제목·내용 열 말줄임 폭을 줄이고,
+     조치 버튼은 칸이 모자랄 때만 두 줄로 쌓이게 한다 */
+  .ellipsisCell {
+    max-width: 200px;
+  }
+
+  .reactions {
+    white-space: normal;
+    word-break: keep-all;
+    min-width: 120px;
+  }
+
+  .actionsCell {
+    white-space: normal;
+  }
+
+  .actionsCell > * {
+    margin: 2px 0 2px 6px;
   }
 }
 

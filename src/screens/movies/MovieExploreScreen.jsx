@@ -109,7 +109,7 @@ export default function MovieExploreScreen() {
           </strong>
           <p>“비 오는 밤에 볼 잔잔한 영화”처럼 물어보는 AI 추천 기능을 준비하고 있습니다.</p>
         </div>
-        <Button to="/ai" variant="secondary" size="sm" iconRight={<IconArrowRight size={14} />}>
+        <Button to="/ai" variant="secondary" size="sm" iconRight={<IconArrowRight size={14} />} className={styles.aiCta}>
           AI 추천 보기
         </Button>
       </section>
