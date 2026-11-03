@@ -12,7 +12,7 @@ export default function Poster({ src, alt, className = '', rounded = true }) {
       {broken ? (
         <div className={styles.fallback} role="img" aria-label={`${alt} 포스터 없음`}>
           <IconImageOff size={28} />
-          <span>포스터 준비 중</span>
+          <span>포스터 없음</span>
         </div>
       ) : (
         <img src={src} alt={alt} loading="lazy" onError={() => setFailedSrc(src)} className={styles.img} />

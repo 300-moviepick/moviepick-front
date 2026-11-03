@@ -35,8 +35,9 @@ import WishlistScreen from './screens/me/WishlistScreen';
 import SupportScreen from './screens/support/SupportScreen';
 import MovieDetailScreen from './screens/movies/MovieDetailScreen';
 import MovieExploreScreen from './screens/movies/MovieExploreScreen';
+import AiCreditsScreen from './screens/ai/AiCreditsScreen';
+import AiRecommendScreen from './screens/ai/AiRecommendScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
-import PendingScreen from './screens/PendingScreen';
 import { RequireAdmin, RequireAuth } from './ui/Guards';
 import { LoadingState } from './ui/StateViews';
 import ToastProvider from './ui/toast/ToastProvider';
@@ -49,7 +50,7 @@ const UiGalleryScreen = import.meta.env.DEV ? lazy(() => import('./screens/dev/U
 /*
  * 새 UI는 기본 경로에, 기존 화면은 /legacy/* 에 둔다(새 화면 검증 전까지 삭제하지 않음).
  * /oauth2/success, /oauth2/fail 은 백엔드가 리다이렉트하는 고정 경로라 바꾸지 않는다.
- * 아직 구현하지 않은 새 화면은 PendingScreen으로 자리만 잡아 둔다(단계별로 교체).
+ * 백엔드 기능이 없는 화면(AI 추천·크레딧, 알림 설정)은 각 화면이 "준비 중"으로 표시한다.
  */
 export default function App() {
   const { booting } = useAuth();
@@ -79,8 +80,8 @@ export default function App() {
               <Route path="notification-settings" element={<NotificationSettingsScreen />} />
             </Route>
           </Route>
-          <Route path="ai" element={<PendingScreen title="AI 영화 추천" stage={8} />} />
-          <Route path="ai/credits" element={<PendingScreen title="AI 크레딧" stage={8} />} />
+          <Route path="ai" element={<AiRecommendScreen />} />
+          <Route path="ai/credits" element={<AiCreditsScreen />} />
           <Route path="support" element={<SupportScreen />} />
           {UiGalleryScreen && (
             <Route

@@ -1,4 +1,5 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useUnread } from '../hooks/unreadContext';
 import { ComingSoon } from '../ui/StateViews';
@@ -11,6 +12,19 @@ export default function MyPageLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const unread = useUnread();
+  const { pathname } = useLocation();
+  const navRef = useRef(null);
+
+  // 좁은 화면에서는 메뉴가 가로 스크롤이 되므로, 현재 메뉴가 보이도록 메뉴 안에서만 가운데로 옮긴다
+  // (페이지 전체 스크롤은 건드리지 않는다)
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav || nav.scrollWidth <= nav.clientWidth) return;
+    const active = nav.querySelector('[aria-current="page"]');
+    if (!active) return;
+    const left = active.offsetLeft - (nav.clientWidth - active.offsetWidth) / 2;
+    nav.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+  }, [pathname]);
 
   const link = ({ isActive }) => `${styles.item} ${isActive ? styles.active : ''}`;
 
@@ -31,7 +45,7 @@ export default function MyPageLayout() {
           </div>
         </div>
 
-        <nav className={styles.nav}>
+        <nav className={styles.nav} ref={navRef}>
           <p className={styles.group}>마이페이지</p>
           <NavLink to="/me/profile" className={link}>
             <IconUser size={18} /> 시네필 프로필
