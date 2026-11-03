@@ -27,6 +27,7 @@ import NotificationSettingsScreen from './screens/me/NotificationSettingsScreen'
 import NotificationsScreen from './screens/me/NotificationsScreen';
 import ProfileScreen from './screens/me/ProfileScreen';
 import WishlistScreen from './screens/me/WishlistScreen';
+import SupportScreen from './screens/support/SupportScreen';
 import MovieDetailScreen from './screens/movies/MovieDetailScreen';
 import MovieExploreScreen from './screens/movies/MovieExploreScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
@@ -75,7 +76,7 @@ export default function App() {
           </Route>
           <Route path="ai" element={<PendingScreen title="AI 영화 추천" stage={8} />} />
           <Route path="ai/credits" element={<PendingScreen title="AI 크레딧" stage={8} />} />
-          <Route path="support" element={<PendingScreen title="개발자 후원" stage={6} legacyTo="/legacy/support" />} />
+          <Route path="support" element={<SupportScreen />} />
           {UiGalleryScreen && (
             <Route
               path="__ui"

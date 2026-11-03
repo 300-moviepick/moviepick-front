@@ -55,9 +55,10 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
+  // 관리자 가드가 /login으로 보내기 전에 메인으로 먼저 이동한다(UserHeader와 같은 이유)
   const onLogout = async () => {
+    navigate('/', { replace: true });
     await logout().catch(() => {});
-    navigate('/');
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { memberApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/AuthContext';
 import { errorCodeOf, fieldErrorOf, messageOf } from '../../lib/apiErrors';
@@ -68,20 +69,42 @@ function NicknameForm({ current, onSaved }) {
 }
 
 /**
- * 회원 탈퇴 확인 대화상자.
- * 요청에 따라 이번 단계에서는 확인을 눌러도 DELETE /api/members/me를 보내지 않는다(memberApi.withdraw는 준비만 해 둠).
+ * 회원 탈퇴 확인 대화상자. DELETE /api/members/me
+ * 백엔드가 회원을 탈퇴 처리하고 모든 refresh 토큰을 무효화한다. 성공하면 화면도 로그아웃 상태로 바꾸고 메인으로 보낸다.
  */
 function WithdrawDialog({ open, onClose }) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const toast = useToast();
   const [agree, setAgree] = useState(false);
   const [phrase, setPhrase] = useState('');
-  const [notice, setNotice] = useState(false);
+  const [error, setError] = useState(null);
+  const [busy, setBusy] = useState(false);
   const ready = agree && phrase.trim() === WITHDRAW_PHRASE;
 
   const close = () => {
+    if (busy) return;
     setAgree(false);
     setPhrase('');
-    setNotice(false);
+    setError(null);
     onClose();
+  };
+
+  const withdraw = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await memberApi.withdraw();
+    } catch (err) {
+      setError(messageOf(err));
+      setBusy(false);
+      return;
+    }
+    // 서버에서는 이미 탈퇴·토큰 무효화가 끝났다. 로그인 가드가 /login으로 보내기 전에 메인으로 먼저 이동한 뒤,
+    // 로그아웃 요청이 실패해도 화면은 로그아웃 상태로 만든다(AuthContext.logout의 finally)
+    navigate('/', { replace: true });
+    await logout().catch(() => {});
+    toast.success('회원 탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.');
   };
 
   return (
@@ -91,10 +114,10 @@ function WithdrawDialog({ open, onClose }) {
       onClose={close}
       footer={
         <>
-          <Button variant="secondary" onClick={close}>
+          <Button variant="secondary" onClick={close} disabled={busy}>
             취소
           </Button>
-          <Button variant="danger" disabled={!ready} onClick={() => setNotice(true)}>
+          <Button variant="danger" disabled={!ready} loading={busy} onClick={withdraw}>
             탈퇴하기
           </Button>
         </>
@@ -114,10 +137,10 @@ function WithdrawDialog({ open, onClose }) {
           placeholder={WITHDRAW_PHRASE}
           autoComplete="off"
         />
-        {notice && (
-          <p className={styles.notice} role="status">
+        {error && (
+          <p className={styles.formError} role="alert">
             <IconAlert size={16} />
-            현재 개발 단계에서는 탈퇴 요청을 보내지 않습니다. 실제 탈퇴는 검증 후 활성화됩니다.
+            {error}
           </p>
         )}
       </div>
