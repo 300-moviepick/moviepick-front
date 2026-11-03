@@ -72,7 +72,7 @@ export default function AiCreditsScreen() {
             <span className={styles.muted}>
               <IconLock size={14} /> 결제 수단과 환불 정책은 출시 시 안내합니다.
             </span>
-            <Button variant="soft" disabled icon={<IconSparkles size={16} />}>
+            <Button variant="primary" disabled icon={<IconSparkles size={16} />}>
               크레딧 충전하기 (준비 중)
             </Button>
           </div>

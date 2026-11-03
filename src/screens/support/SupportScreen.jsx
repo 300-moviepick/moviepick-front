@@ -251,7 +251,7 @@ export default function SupportScreen() {
               <span>최종 결제 예정 금액</span>
               <strong>{won(amount)}</strong>
             </div>
-            <Button variant="soft" size="lg" block onClick={pay} loading={flow.busy} icon={<IconCoffee size={18} />}>
+            <Button variant="primary" size="lg" block onClick={pay} loading={flow.busy} icon={<IconCoffee size={18} />}>
               {user ? `${won(amount)} 후원하고 응원 보내기` : '로그인하고 후원하기'}
             </Button>
             {!user && <p className={styles.help}>후원은 로그인 후 이용할 수 있습니다.</p>}

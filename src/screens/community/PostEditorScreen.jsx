@@ -114,7 +114,7 @@ function PostForm({ initial, onSubmit }) {
               {formError}
             </p>
           )}
-          <Button type="submit" variant="soft" size="lg" block loading={busy} iconRight={<IconArrowRight size={18} />}>
+          <Button type="submit" variant="primary" size="lg" block loading={busy} iconRight={<IconArrowRight size={18} />}>
             {editing ? '수정 완료' : '게시글 등록하기'}
           </Button>
           <Button variant="ghost" block onClick={() => navigate(-1)} disabled={busy}>

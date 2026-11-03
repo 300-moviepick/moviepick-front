@@ -87,7 +87,7 @@ export default function MovieSyncPanel({ compact = false, onFinished }) {
       </p>
 
       <Button
-        variant="soft"
+        variant="primary"
         icon={<IconRefresh size={16} />}
         loading={Boolean(running)}
         disabled={Boolean(running)}

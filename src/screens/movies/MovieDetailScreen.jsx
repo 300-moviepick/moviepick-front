@@ -125,7 +125,7 @@ export default function MovieDetailScreen() {
 
             <div className={styles.actions}>
               <Button
-                variant={wishlisted ? 'danger' : 'soft'}
+                variant={wishlisted ? 'danger' : 'primary'}
                 icon={<IconBookmark size={18} filled={wishlisted} />}
                 onClick={onWish}
                 disabled={wish.isBusy(movie.movieId)}

@@ -85,12 +85,12 @@
   color: var(--mp-text-1);
 }
 
+/* 선택 상태는 Tabs(pill)의 선택 탭과 같은 모양으로 맞춘다 */
 .chipActive,
 .chipActive:hover:not(:disabled) {
   border-color: var(--mp-primary);
-  background: var(--mp-primary-tint);
-  color: var(--mp-text-1);
-  box-shadow: var(--mp-glow-primary);
+  background: var(--mp-primary);
+  color: #fff;
 }
 
 .chip:disabled {

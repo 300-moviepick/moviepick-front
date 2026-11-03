@@ -137,7 +137,7 @@
 
 .masterDetail {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) 320px;
   gap: 16px;
   align-items: start;
 }
@@ -149,7 +149,7 @@
 
 .moviesLayout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) 320px;
   gap: 16px;
   align-items: start;
 }
@@ -216,18 +216,31 @@
 
 /* ---------- 표 ---------- */
 
+/* 표가 칸보다 넓을 때는 표 영역 안에서만 가로로 스크롤한다 */
 .tableWrap {
   overflow-x: auto;
   margin: 0 -4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mp-border-strong) transparent;
 }
 
+.tableWrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tableWrap::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--mp-border-strong);
+}
+
+/* 1280px에서 상세 패널과 나란히 둘 때 열이 잘리지 않는 폭 */
 .table {
-  min-width: 640px;
+  min-width: 520px;
   font-size: var(--mp-fs-body);
 }
 
 .table th {
-  padding: 10px 12px;
+  padding: 10px;
   border-bottom: 1px solid var(--mp-border);
   color: var(--mp-text-4);
   font-family: var(--mp-font-label);
@@ -237,7 +250,7 @@
 }
 
 .table td {
-  padding: 12px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--mp-border-subtle);
   vertical-align: middle;
 }
@@ -269,7 +282,7 @@
 }
 
 .ellipsis {
-  max-width: 240px;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -561,6 +574,15 @@
 
   .masterDetail > aside {
     position: static;
+  }
+
+  /* 한 단일 때 영화 수집 패널(이 화면의 핵심 동작)을 영화 목록 표보다 위에 둔다 */
+  .moviesLayout > .stack {
+    display: contents;
+  }
+
+  .moviesLayout > .stack > :first-child {
+    order: -1;
   }
 }
 

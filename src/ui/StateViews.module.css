@@ -135,14 +135,17 @@
 
 /* ---------- 준비 중 ---------- */
 
+/* 누를 수 있는 알약 칩과 헷갈리지 않도록 각진 모서리·점선 테두리·배경 없음으로 그린다 */
 .soonBadge {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  padding: 2px 8px;
-  border-radius: var(--mp-radius-full);
-  background: rgba(148, 163, 184, 0.14);
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: transparent;
+  border: 1px dashed rgba(148, 163, 184, 0.45);
+  cursor: default;
+  user-select: none;
   color: var(--mp-text-3);
   font-family: var(--mp-font-label);
   font-size: var(--mp-fs-label-sm);

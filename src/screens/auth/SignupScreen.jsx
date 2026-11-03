@@ -187,7 +187,7 @@ export default function SignupScreen() {
             </p>
           )}
 
-          <Button type="submit" variant="soft" size="lg" block loading={busy} iconRight={<IconArrowRight size={18} />}>
+          <Button type="submit" variant="primary" size="lg" block loading={busy} iconRight={<IconArrowRight size={18} />}>
             회원가입 완료하기
           </Button>
         </form>

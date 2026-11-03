@@ -276,7 +276,7 @@ export default function PostDetailScreen() {
               disabled={commentBusy}
             />
             <div className={styles.rowEnd}>
-              <Button type="submit" variant="soft" loading={commentBusy}>
+              <Button type="submit" variant="primary" loading={commentBusy}>
                 댓글 등록
               </Button>
             </div>

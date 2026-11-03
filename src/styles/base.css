@@ -120,12 +120,14 @@
   border: 0;
 }
 
-/* 페이지 본문 폭 */
+/* 페이지 본문 폭. 화면 모듈이 함께 붙여 쓰는 위·아래 여백을 지우지 않도록 좌우 여백만 지정한다 */
 .mp-container {
   width: 100%;
   max-width: var(--mp-content-max);
-  margin: 0 auto;
-  padding: 0 var(--mp-page-x);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--mp-page-x);
+  padding-right: var(--mp-page-x);
 }
 
 @media (prefers-reduced-motion: reduce) {

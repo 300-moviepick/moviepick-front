@@ -76,7 +76,7 @@ export default function ReviewForm({ initial, submitLabel = '리뷰 등록하기
               취소
             </Button>
           )}
-          <Button type="submit" variant="soft" loading={busy}>
+          <Button type="submit" variant="primary" loading={busy}>
             {submitLabel}
           </Button>
         </div>

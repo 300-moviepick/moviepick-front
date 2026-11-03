@@ -142,7 +142,7 @@ export default function LoginScreen() {
             </p>
           )}
 
-          <Button type="submit" variant="soft" size="lg" block loading={busy} iconRight={<IconArrowRight size={18} />}>
+          <Button type="submit" variant="primary" size="lg" block loading={busy} iconRight={<IconArrowRight size={18} />}>
             로그인
           </Button>
         </form>

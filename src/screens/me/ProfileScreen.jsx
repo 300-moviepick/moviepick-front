@@ -60,7 +60,7 @@ function NicknameForm({ current, onSaved }) {
         disabled={busy}
       />
       <div className={styles.rowEnd}>
-        <Button type="submit" variant="soft" loading={busy} disabled={value.trim() === current}>
+        <Button type="submit" variant="primary" loading={busy} disabled={value.trim() === current}>
           닉네임 저장
         </Button>
       </div>

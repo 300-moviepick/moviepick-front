@@ -62,7 +62,7 @@ export default function AiRecommendScreen() {
             <span className={styles.muted}>
               <IconBookmark size={14} /> 내 찜 목록 취향 반영 · 답변 길이 선택도 함께 준비하고 있습니다.
             </span>
-            <Button variant="soft" icon={<IconSparkles size={16} />} disabled>
+            <Button variant="primary" icon={<IconSparkles size={16} />} disabled>
               AI 맞춤 추천받기 (준비 중)
             </Button>
           </div>
