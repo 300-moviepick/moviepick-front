@@ -3,14 +3,30 @@
 // - 댓글 수정은 PATCH /api/community/comments/{commentId}.
 // - 모든 응답은 client.request가 ApiResponse.data로 풀어서 돌려준다. 목록은 PageResponse
 //   { content, page, size, totalElements, totalPages }.
-// 기존 화면은 ./endpoints.js를 계속 쓴다(수정하지 않음).
-import { API_BASE_URL, api, qs } from './client';
+import { API_BASE_URL, api, fetchCsrf, qs, refreshAccessToken, setAccessToken } from './client';
 
 const enc = encodeURIComponent;
 
 // ---------- 인증·회원 ----------
 
 export const authApi = {
+  csrf: fetchCsrf,
+  refresh: refreshAccessToken,
+  // LoginRequest { email, password } → LoginResponse { memberId, nickname, role, accessToken, tokenType, expiresIn }
+  login: async (body) => {
+    const data = await api.post('/api/auth/login', body);
+    setAccessToken(data?.accessToken);
+    return data;
+  },
+  logout: async () => {
+    try {
+      await api.post('/api/auth/logout');
+    } finally {
+      setAccessToken(null);
+    }
+  },
+  // MemberResponse { memberId, email, nickname, role, status } (memberApi.me와 같은 요청)
+  me: () => api.get('/api/members/me'),
   // SignupRequest { email, password, nickname } → MemberResponse
   signup: (body) => api.post('/api/auth/members', body),
   // 소셜 로그인 시작 주소 (provider: 'kakao' | 'google')

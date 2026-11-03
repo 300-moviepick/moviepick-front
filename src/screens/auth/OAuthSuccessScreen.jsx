@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchCsrf, refreshAccessToken } from '../../api/client';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { messageOf } from '../../lib/apiErrors';
 import { consumeRedirect } from '../../lib/authRedirect';
 import Button from '../../ui/Button';
@@ -13,7 +13,7 @@ const STEPS = ['보안 토큰 준비', '로그인 세션 확인', '회원 정보
 /**
  * 소셜 로그인 성공 후 백엔드가 보내는 고정 경로(/oauth2/success).
  * 백엔드가 refresh 쿠키를 심어 두었으므로 CSRF → refresh → 내 정보 순서로 로그인 상태를 만든다.
- * (기존 OAuthSuccessPage와 같은 순서. AuthContext는 이 경로에서 refresh를 건너뛴다.)
+ * (AuthProvider는 이 경로에서 refresh를 건너뛴다.)
  */
 export default function OAuthSuccessScreen() {
   const { loadMe } = useAuth();

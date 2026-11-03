@@ -2,13 +2,24 @@
  * 새 UI 기본 스타일. .mp(화면 루트)와 .mp-portal(모달·토스트처럼 body에 붙는 영역) 아래에서만 적용한다.
  *
  * 구체성 설계
- * - 기존 src/styles.css는 요소 선택자(button, a, input, table, h1~h3 …, 구체성 0,0,1)를 쓴다.
- * - 여기 초기화 규칙은 :where(.mp, .mp-portal)(구체성 0)과 요소를 두 번 쓴 형태(0,0,2)라서
- *   기존 요소 스타일은 이기고, 컴포넌트의 CSS Module 클래스(0,1,0)에는 진다.
- * - 기존 button:hover:not(:disabled)(0,2,1)는 border-color를 바꾸므로,
- *   새 버튼 컴포넌트는 :hover:not(:disabled)에서 border-color까지 직접 지정한다.
- * 기존 styles.css는 수정하지 않는다.
+ * - 초기화 규칙은 :where(.mp, .mp-portal)(구체성 0)과 요소를 두 번 쓴 형태(0,0,2)라서
+ *   브라우저 기본 요소 스타일은 이기고, 컴포넌트의 CSS Module 클래스(0,1,0)에는 진다.
  */
+
+/* 문서 전체: 다크 스크롤바·바탕, 브라우저 기본 body 여백 제거 */
+:root {
+  color-scheme: dark;
+  background: var(--mp-bg);
+}
+
+body {
+  margin: 0;
+}
+
+.mp,
+.mp-portal {
+  box-sizing: border-box;
+}
 
 .mp {
   min-height: 100vh;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { memberApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { errorCodeOf, fieldErrorOf, messageOf } from '../../lib/apiErrors';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
@@ -18,7 +18,7 @@ const ROLE_LABEL = { ADMIN: '관리자', USER: '일반 회원' };
 const STATUS_LABEL = { ACTIVE: '정상', SUSPENDED: '이용 정지', WITHDRAWN: '탈퇴' };
 const WITHDRAW_PHRASE = '탈퇴합니다';
 
-// 닉네임 변경. PATCH /api/members/me { nickname } → 성공하면 AuthContext의 내 정보도 다시 불러온다
+// 닉네임 변경. PATCH /api/members/me { nickname } → 성공하면 AuthProvider의 내 정보도 다시 불러온다
 function NicknameForm({ current, onSaved }) {
   const [value, setValue] = useState(current ?? '');
   const [error, setError] = useState(null);
@@ -101,7 +101,7 @@ function WithdrawDialog({ open, onClose }) {
       return;
     }
     // 서버에서는 이미 탈퇴·토큰 무효화가 끝났다. 로그인 가드가 /login으로 보내기 전에 메인으로 먼저 이동한 뒤,
-    // 로그아웃 요청이 실패해도 화면은 로그아웃 상태로 만든다(AuthContext.logout의 finally)
+    // 로그아웃 요청이 실패해도 화면은 로그아웃 상태로 만든다(AuthProvider logout의 finally)
     navigate('/', { replace: true });
     await logout().catch(() => {});
     toast.success('회원 탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.');

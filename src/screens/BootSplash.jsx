@@ -1,7 +1,7 @@
 import Logo from '../ui/Logo';
 import styles from './BootSplash.module.css';
 
-// 앱 시작 시 로그인 상태 확인(AuthContext booting) 동안 보여 주는 화면
+// 앱 시작 시 로그인 상태 확인(AuthProvider booting) 동안 보여 주는 화면
 export default function BootSplash() {
   return (
     <div className={`mp ${styles.splash}`} role="status" aria-live="polite">

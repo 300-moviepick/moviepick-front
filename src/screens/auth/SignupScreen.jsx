@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { authApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { errorCodeOf, fieldErrorOf, messageOf } from '../../lib/apiErrors';
 import { safeRedirect } from '../../lib/authRedirect';
 import { Badge } from '../../ui/Badge';

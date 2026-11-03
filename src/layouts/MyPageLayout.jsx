@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/useAuth';
 import { useUnread } from '../hooks/unreadContext';
 import { ComingSoon } from '../ui/StateViews';
 import { IconBell, IconBookmark, IconLogout, IconMessage, IconSliders, IconUser } from '../ui/icons';

@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { postApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useGoLogin } from '../../hooks/useGoLogin';
 import { Badge, Chip } from '../../ui/Badge';

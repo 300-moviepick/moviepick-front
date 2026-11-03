@@ -1,8 +1,7 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { onAuthExpired, setAccessToken } from '../api/client';
-import { authApi } from '../api/endpoints';
-
-const AuthContext = createContext(null);
+import { authApi } from '../api/moviepick';
+import { AuthContext } from './authContext';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -57,8 +56,4 @@ export function AuthProvider({ children }) {
 
   const value = { user, booting, isAdmin: user?.role === 'ADMIN', login, logout, loadMe };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

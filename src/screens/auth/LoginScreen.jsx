@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { fieldErrorOf, messageOf } from '../../lib/apiErrors';
 import { safeRedirect } from '../../lib/authRedirect';
 import { Badge } from '../../ui/Badge';
@@ -22,7 +22,7 @@ function validate({ email, password }) {
   return errors;
 }
 
-// 로그인 (Stitch 2번). POST /api/auth/login → AuthContext.login이 내 정보까지 불러온다.
+// 로그인 (Stitch 2번). POST /api/auth/login → AuthProvider의 login이 내 정보까지 불러온다.
 export default function LoginScreen() {
   const { user, login } = useAuth();
   const navigate = useNavigate();
