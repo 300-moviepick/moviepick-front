@@ -17,6 +17,11 @@ import LoginScreen from './screens/auth/LoginScreen';
 import OAuthFailScreen from './screens/auth/OAuthFailScreen';
 import OAuthSuccessScreen from './screens/auth/OAuthSuccessScreen';
 import SignupScreen from './screens/auth/SignupScreen';
+import AdminContentScreen from './screens/admin/AdminContentScreen';
+import AdminDashboardScreen from './screens/admin/AdminDashboardScreen';
+import AdminMembersScreen from './screens/admin/AdminMembersScreen';
+import AdminMoviesScreen from './screens/admin/AdminMoviesScreen';
+import AdminReportsScreen from './screens/admin/AdminReportsScreen';
 import BootSplash from './screens/BootSplash';
 import CommunityListScreen from './screens/community/CommunityListScreen';
 import PostDetailScreen from './screens/community/PostDetailScreen';
@@ -107,11 +112,11 @@ export default function App() {
             </RequireAdmin>
           }
         >
-          <Route index element={<PendingScreen title="관리자 대시보드" stage={7} legacyTo="/legacy/admin" padded={false} />} />
-          <Route path="members" element={<PendingScreen title="회원 관리" stage={7} legacyTo="/legacy/admin" padded={false} />} />
-          <Route path="reports" element={<PendingScreen title="신고 관리" stage={7} legacyTo="/legacy/admin" padded={false} />} />
-          <Route path="content" element={<PendingScreen title="콘텐츠 관리" stage={7} padded={false} />} />
-          <Route path="movies" element={<PendingScreen title="영화 데이터 관리" stage={7} legacyTo="/legacy/admin" padded={false} />} />
+          <Route index element={<AdminDashboardScreen />} />
+          <Route path="members" element={<AdminMembersScreen />} />
+          <Route path="reports" element={<AdminReportsScreen />} />
+          <Route path="content" element={<AdminContentScreen />} />
+          <Route path="movies" element={<AdminMoviesScreen />} />
         </Route>
 
         {/* 기존 화면 (새 UI 검증 전까지 유지). 기존 OAuthSuccessPage·OAuthFailPage 파일은 남겨 두되 경로에서는 뺐다 */}
