@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import * as PortOne from '@portone/browser-sdk/v2';
 import { supportApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { useGoLogin } from '../../hooks/useGoLogin';
 import { messageOf } from '../../lib/apiErrors';
 import { Badge } from '../../ui/Badge';

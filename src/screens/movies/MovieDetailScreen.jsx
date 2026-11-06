@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApiError } from '../../api/client';
 import { movieApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useGoLogin } from '../../hooks/useGoLogin';
 import { useWishlistSet } from '../../hooks/useWishlistSet';

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/useAuth';
 import { useUnread } from '../hooks/unreadContext';
 import { Badge } from '../ui/Badge';
 import Button, { IconButton } from '../ui/Button';

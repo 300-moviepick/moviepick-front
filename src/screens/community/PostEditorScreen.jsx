@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ApiError } from '../../api/client';
 import { postApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { messageOf } from '../../lib/apiErrors';
 import { Badge, Chip } from '../../ui/Badge';

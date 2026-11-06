@@ -2,7 +2,7 @@
  * Cinematic Obsidian 디자인 토큰
  * - 색: Stitch DESIGN 본문 설명 값을 기본으로, YAML의 연보라(#C0C1FF)는 보조 강조로 사용 (D-1)
  * - 글꼴: Pretendard(한글) + Inter + Space Grotesk(라벨·수치) (D-2)
- * 새 UI(.mp 아래)에서만 사용한다. 기존 화면의 --bg, --card 등과 이름이 겹치지 않게 --mp- 접두사를 쓴다.
+ * 새 UI(.mp 아래)에서 사용한다. 모든 변수에 --mp- 접두사를 쓴다.
  */
 :root {
   /* 바탕·표면 */

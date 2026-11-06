@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ApiError } from '../../api/client';
 import { commentApi, postApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useGoLogin } from '../../hooks/useGoLogin';
 import { messageOf } from '../../lib/apiErrors';
@@ -26,7 +26,7 @@ const COMMENT_PAGE_SIZE = 20;
 /*
  * 게시글 상세 (Stitch 11번).
  * 주의: GET /api/community/posts/{postId}는 조회수를 올리므로, 댓글 작성·삭제 뒤에 게시글을 다시 부르지 않고
- * 화면의 댓글 수만 직접 맞춘다(기존 화면의 댓글 수 미갱신 문제 BUG-006도 함께 해결).
+ * 화면의 댓글 수만 직접 맞춘다(댓글 수 미갱신 문제 BUG-006 대응).
  */
 export default function PostDetailScreen() {
   const { postId } = useParams();

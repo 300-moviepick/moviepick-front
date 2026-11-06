@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { reviewApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { messageOf } from '../../lib/apiErrors';
 import Button from '../../ui/Button';

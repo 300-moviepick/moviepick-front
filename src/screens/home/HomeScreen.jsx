@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { movieApi, postApi } from '../../api/moviepick';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useWishlistSet } from '../../hooks/useWishlistSet';
 import { Badge, Chip } from '../../ui/Badge';

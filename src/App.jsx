@@ -1,18 +1,10 @@
 import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useAuth } from './auth/AuthContext';
+import { useAuth } from './auth/useAuth';
 import AdminLayout from './layouts/AdminLayout';
 import AuthLayout from './layouts/AuthLayout';
-import LegacyLayout from './layouts/LegacyLayout';
 import MyPageLayout from './layouts/MyPageLayout';
 import UserLayout from './layouts/UserLayout';
-import AdminPage from './pages/AdminPage';
-import LoginPage from './pages/LoginPage';
-import MovieDetailPage from './pages/MovieDetailPage';
-import MovieListPage from './pages/MovieListPage';
-import PostDetailPage from './pages/PostDetailPage';
-import PostListPage from './pages/PostListPage';
-import SupportPage from './pages/SupportPage';
 import LoginScreen from './screens/auth/LoginScreen';
 import OAuthFailScreen from './screens/auth/OAuthFailScreen';
 import OAuthSuccessScreen from './screens/auth/OAuthSuccessScreen';
@@ -48,14 +40,13 @@ import './styles/base.css';
 const UiGalleryScreen = import.meta.env.DEV ? lazy(() => import('./screens/dev/UiGalleryScreen')) : null;
 
 /*
- * 새 UI는 기본 경로에, 기존 화면은 /legacy/* 에 둔다(새 화면 검증 전까지 삭제하지 않음).
  * /oauth2/success, /oauth2/fail 은 백엔드가 리다이렉트하는 고정 경로라 바꾸지 않는다.
  * 백엔드 기능이 없는 화면(AI 추천·크레딧, 알림 설정)은 각 화면이 "준비 중"으로 표시한다.
  */
 export default function App() {
   const { booting } = useAuth();
 
-  // AuthContext가 CSRF·refresh·내 정보로 로그인 상태를 복구하는 동안 로고 로딩 화면을 보여 준다
+  // AuthProvider가 CSRF·refresh·내 정보로 로그인 상태를 복구하는 동안 로고 로딩 화면을 보여 준다
   if (booting) return <BootSplash />;
 
   return (
@@ -118,20 +109,6 @@ export default function App() {
           <Route path="reports" element={<AdminReportsScreen />} />
           <Route path="content" element={<AdminContentScreen />} />
           <Route path="movies" element={<AdminMoviesScreen />} />
-        </Route>
-
-        {/* 기존 화면 (새 UI 검증 전까지 유지). 기존 OAuthSuccessPage·OAuthFailPage 파일은 남겨 두되 경로에서는 뺐다 */}
-        <Route element={<LegacyLayout />}>
-          <Route path="legacy">
-            <Route index element={<Navigate to="/legacy/movies" replace />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="movies" element={<MovieListPage />} />
-            <Route path="movies/:id" element={<MovieDetailPage />} />
-            <Route path="community" element={<PostListPage />} />
-            <Route path="community/:id" element={<PostDetailPage />} />
-            <Route path="admin" element={<AdminPage />} />
-            <Route path="support" element={<SupportPage />} />
-          </Route>
         </Route>
       </Routes>
     </ToastProvider>

@@ -2,7 +2,6 @@
 // - 모든 요청에 credentials: 'include' (refreshToken 쿠키, XSRF-TOKEN 쿠키 전송)
 // - 응답 본문에 data가 있으면 data, 없으면 본문 전체를 결과로 사용
 // - CSRF / JWT / refresh / 재시도 규칙은 README의 "API 연결부" 참고
-// - 모든 요청·응답을 개발 로그 패널로 보낸다
 
 export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080').replace(/\/$/, '');
 
@@ -12,10 +11,6 @@ let accessToken = null;
 let csrfToken = null;
 let csrfPromise = null;
 let refreshPromise = null;
-
-export function getAccessToken() {
-  return accessToken;
-}
 
 export function setAccessToken(token) {
   accessToken = token || null;
@@ -34,21 +29,6 @@ function expireAuth() {
   authExpiredListeners.forEach((listener) => listener());
 }
 
-// ---------- 개발 로그 ----------
-
-const logListeners = new Set();
-let logSeq = 0;
-
-export function onLog(listener) {
-  logListeners.add(listener);
-  return () => logListeners.delete(listener);
-}
-
-function emitLog(entry) {
-  const full = { id: ++logSeq, time: new Date(), ...entry };
-  logListeners.forEach((listener) => listener(full));
-}
-
 // ---------- 오류 ----------
 
 export class ApiError extends Error {
@@ -61,11 +41,6 @@ export class ApiError extends Error {
     this.status = status;
     this.body = body;
   }
-}
-
-export function errorMessage(e) {
-  if (e instanceof ApiError) return `[${e.status}] ${e.message}`;
-  return e?.message || String(e);
 }
 
 // ---------- 경로 규칙 ----------
@@ -107,7 +82,7 @@ export function unwrap(body) {
 
 // ---------- 저수준 전송 ----------
 
-async function send(method, path, body, withAuth, retry) {
+async function send(method, path, body, withAuth) {
   const headers = {};
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   if (method !== 'GET' && csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
@@ -115,10 +90,8 @@ async function send(method, path, body, withAuth, retry) {
   if (sentAuth) headers.Authorization = `Bearer ${accessToken}`;
 
   const url = API_BASE_URL + path;
-  const started = performance.now();
   let status = 0;
   let resBody = null;
-  let networkError = null;
 
   try {
     const res = await fetch(url, {
@@ -136,20 +109,9 @@ async function send(method, path, body, withAuth, retry) {
         resBody = text;
       }
     }
-  } catch (e) {
-    networkError = e.message || String(e);
+  } catch {
+    // 네트워크 오류는 status 0으로 돌려준다 (ApiError가 "서버에 연결할 수 없습니다"로 표시)
   }
-
-  emitLog({
-    method,
-    url,
-    status,
-    requestBody: body,
-    responseBody: networkError ? { networkError } : resBody,
-    retry,
-    auth: sentAuth,
-    durationMs: Math.round(performance.now() - started),
-  });
 
   return { status, ok: status >= 200 && status < 300, body: resBody, sentAuth };
 }
@@ -159,7 +121,7 @@ async function send(method, path, body, withAuth, retry) {
 export function fetchCsrf() {
   if (!csrfPromise) {
     csrfPromise = (async () => {
-      const res = await send('GET', '/api/auth/csrf', undefined, false, null);
+      const res = await send('GET', '/api/auth/csrf', undefined, false);
       if (!res.ok) throw new ApiError(res.status, res.body);
       const token = res.body?.token ?? res.body?.data?.token;
       if (!token) throw new Error('CSRF 응답에 token이 없습니다.');
@@ -201,14 +163,14 @@ export async function request(method, path, body) {
     await fetchCsrf().catch(() => {});
   }
 
-  let res = await send(method, path, body, withAuth, null);
+  let res = await send(method, path, body, withAuth);
 
   // 403 중 CSRF 오류(CustomAccessDeniedHandler가 errorCode CSRF_INVALID로 응답)일 때만 CSRF를 새로 받아 1회 재시도.
   // 권한 부족(FORBIDDEN)·정지/탈퇴 회원 등 다른 403은 재시도하지 않고 그대로 오류로 돌려준다.
   if (res.status === 403 && method !== 'GET' && res.body?.errorCode === 'CSRF_INVALID') {
     try {
       await fetchCsrf();
-      res = await send(method, path, body, withAuth, 'CSRF 재발급 후 재시도');
+      res = await send(method, path, body, withAuth);
     } catch {
       // CSRF 발급 실패 시 원래 응답을 그대로 사용
     }
@@ -218,11 +180,11 @@ export async function request(method, path, body) {
   if (res.status === 401 && withAuth && res.sentAuth) {
     if (isPublicGet(method, path)) {
       // 만료 토큰으로 공개 GET이 401이 되는 문제 우회: Authorization 없이 재시도
-      res = await send(method, path, body, false, '공개 GET: Authorization 없이 재시도');
+      res = await send(method, path, body, false);
       // 다음 요청을 위해 토큰은 뒤에서 갱신
       refreshAccessToken();
     } else if (await refreshAccessToken()) {
-      res = await send(method, path, body, true, 'refresh 후 재시도');
+      res = await send(method, path, body, true);
     }
   }
 
