@@ -12,6 +12,14 @@ export function tmdbImage(path, size = 'w500') {
   return `${TMDB_IMAGE_BASE}/${size}${path.startsWith('/') ? '' : '/'}${path}`;
 }
 
+/**
+ * 화면에 보여 줄 개봉일: 한국 개봉일이 있으면 그 값, 없으면 원래 개봉일.
+ * (GET /api/movies?sort=releaseDate의 정렬 기준과 같다. 상세·랭킹 응답에는 releaseDateKr이 없어 releaseDate가 쓰인다)
+ */
+export function releaseDateOf(movie) {
+  return movie?.releaseDateKr ?? movie?.releaseDate ?? null;
+}
+
 export function yearOf(date) {
   if (!date) return '';
   return String(date).slice(0, 4);

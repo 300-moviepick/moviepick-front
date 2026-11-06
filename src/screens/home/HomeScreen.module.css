@@ -144,32 +144,93 @@
   top: calc(var(--mp-header-h) + 24px);
 }
 
-.rankPreview {
+.rankPanel {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 10px;
+  padding: 20px;
+  border-radius: var(--mp-radius-lg);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
 }
 
-.rankPreview li {
+.rankTitle {
+  margin: 0;
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-h-sm);
+  line-height: var(--mp-lh-h-sm);
+  font-weight: 700;
+}
+
+.rankDesc {
+  margin: 0;
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
+  line-height: var(--mp-lh-body-sm);
+}
+
+.rankList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rankItem {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 6px;
+  border-radius: var(--mp-radius);
+  color: inherit;
+  text-decoration: none;
+}
+
+.rankItem:hover,
+.rankItem:focus-visible {
+  background: var(--mp-surface-2);
 }
 
 .rankNo {
-  width: 20px;
+  width: 24px;
+  flex-shrink: 0;
+  text-align: center;
   font-family: var(--mp-font-label);
   font-size: 18px;
   font-weight: 700;
   color: var(--mp-text-3);
 }
 
-.rankBar {
-  flex: 1;
-  height: 28px;
-  border-radius: var(--mp-radius-xs);
-  background: var(--mp-surface-3);
+.rankPoster {
+  width: 40px;
+  flex-shrink: 0;
+  aspect-ratio: 2 / 3;
+}
+
+.rankBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.rankMovieTitle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-body);
+  font-weight: 600;
+}
+
+.rankMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
 }
 
 .postGrid {

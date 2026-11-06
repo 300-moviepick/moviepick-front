@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { yearOf } from '../../lib/format';
+import { releaseDateOf, yearOf } from '../../lib/format';
 import { RatingBadge } from '../Badge';
 import { IconHeart } from '../icons';
 import Poster from '../Poster';
@@ -7,7 +7,8 @@ import styles from './MovieCard.module.css';
 
 /**
  * 영화 카드. MovieListResponse / WishlistMovieResponse 모양을 받는다.
- * movie: { movieId, title, posterUrl, releaseDate, voteAverage?, averageRating? }
+ * movie: { movieId, title, posterUrl, releaseDate, releaseDateKr?, voteAverage?, averageRating? }
+ * 개봉 연도는 releaseDateKr ?? releaseDate 기준.
  * wishlisted가 boolean이면 찜 버튼을 보여 준다(undefined면 숨김).
  */
 export default function MovieCard({ movie, wishlisted, onToggleWishlist, wishlistBusy = false, meta }) {
@@ -18,7 +19,7 @@ export default function MovieCard({ movie, wishlisted, onToggleWishlist, wishlis
         <Poster src={movie.posterUrl} alt={movie.title} className={styles.poster} />
         <div className={styles.body}>
           <div className={styles.row}>
-            <span className={styles.year}>{yearOf(movie.releaseDate)}</span>
+            <span className={styles.year}>{yearOf(releaseDateOf(movie))}</span>
             {meta}
           </div>
           <h3 className={styles.title}>{movie.title}</h3>

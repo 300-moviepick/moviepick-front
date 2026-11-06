@@ -1,13 +1,15 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { movieApi, postApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useWishlistSet } from '../../hooks/useWishlistSet';
-import { Badge, Chip } from '../../ui/Badge';
+import { formatCount } from '../../lib/format';
+import { Badge, Chip, RatingBadge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import MovieCard from '../../ui/cards/MovieCard';
 import PostCard from '../../ui/cards/PostCard';
-import { IconArrowRight, IconBell, IconMessage, IconSearch, IconSparkles } from '../../ui/icons';
+import { IconArrowRight, IconBell, IconMessage, IconSearch, IconSparkles, IconStar } from '../../ui/icons';
+import Poster from '../../ui/Poster';
 import SectionHeader from '../../ui/SectionHeader';
 import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import { useToast } from '../../ui/toast/useToast';
@@ -21,7 +23,9 @@ export default function HomeScreen() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
-  const movies = useAsync(() => movieApi.list({ page: 0, size: 8 }), []);
+  // 최근 개봉작: 한국 개봉일(없으면 원래 개봉일) 최신순, 미개봉 제외
+  const movies = useAsync(() => movieApi.list({ page: 0, size: 8, sort: 'releaseDate' }), []);
+  const ranking = useAsync(() => movieApi.ranking({ page: 0, size: 10 }), []);
   const posts = useAsync(() => postApi.list({ sort: 'popular', page: 0, size: 4 }), []);
   const wish = useWishlistSet(Boolean(user), { onError: toast.error });
 
@@ -32,6 +36,7 @@ export default function HomeScreen() {
   };
 
   const movieList = movies.data?.content ?? [];
+  const rankingList = ranking.data?.content ?? [];
   const postList = posts.data?.content ?? [];
 
   return (
@@ -67,8 +72,7 @@ export default function HomeScreen() {
           <section className={styles.movies} aria-labelledby="home-movies">
             <SectionHeader
               id="home-movies"
-              title="새로 들어온 영화"
-              badge={<Badge tone="secondary">NEW</Badge>}
+              title="최근 개봉작"
               action={
                 <div className={styles.chips}>
                   <Chip active>전체</Chip>
@@ -107,20 +111,44 @@ export default function HomeScreen() {
             </div>
           </section>
 
-          <aside className={styles.ranking} aria-label="실시간 영화 랭킹">
-            <ComingSoon
-              title="실시간 영화 랭킹 TOP 10"
-              description="평점·관심도 기준 랭킹은 아직 제공되지 않습니다. 데이터가 준비되면 이곳에 표시됩니다."
-            >
-              <ol className={styles.rankPreview}>
-                {Array.from({ length: 6 }, (_, i) => (
-                  <li key={i}>
-                    <span className={styles.rankNo}>{i + 1}</span>
-                    <span className={styles.rankBar} />
-                  </li>
-                ))}
-              </ol>
-            </ComingSoon>
+          {/* GET /api/movies/ranking: 리뷰가 1개 이상인 영화만 대상(평점·리뷰 수 기반 점수) */}
+          <aside className={styles.ranking} aria-labelledby="home-ranking">
+            <div className={styles.rankPanel}>
+              <h2 id="home-ranking" className={styles.rankTitle}>
+                영화 랭킹 TOP 10
+              </h2>
+              <p className={styles.rankDesc}>MoviePick 리뷰 평점과 리뷰 수 기준</p>
+              {ranking.loading && !ranking.data ? (
+                <LoadingState variant="list" count={3} />
+              ) : ranking.error ? (
+                <ErrorState error={ranking.error} onRetry={ranking.reload} compact />
+              ) : rankingList.length === 0 ? (
+                <EmptyState
+                  icon={<IconStar size={20} />}
+                  title="아직 랭킹이 없습니다"
+                  description="리뷰가 쌓이면 이곳에 랭킹이 표시됩니다."
+                  compact
+                />
+              ) : (
+                <ol className={styles.rankList}>
+                  {rankingList.map((r) => (
+                    <li key={r.movieId}>
+                      <Link to={`/movies/${r.movieId}`} className={styles.rankItem}>
+                        <span className={styles.rankNo}>{r.rank}</span>
+                        <Poster src={r.posterUrl} alt={r.title} className={styles.rankPoster} />
+                        <span className={styles.rankBody}>
+                          <span className={styles.rankMovieTitle}>{r.title}</span>
+                          <span className={styles.rankMeta}>
+                            <RatingBadge value={r.averageRating} size="sm" label="MoviePick 평점" />
+                            <span>리뷰 {formatCount(r.reviewCount)}</span>
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </div>
           </aside>
         </div>
 

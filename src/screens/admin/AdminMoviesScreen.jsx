@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { movieApi } from '../../api/moviepick';
 import { useAsync } from '../../hooks/useAsync';
-import { formatCount, formatDate } from '../../lib/format';
+import { formatCount, formatDate, releaseDateOf } from '../../lib/format';
 import { RatingBadge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import { IconExternal, IconFilm, IconRefresh, IconSearch } from '../../ui/icons';
@@ -92,7 +92,7 @@ export default function AdminMoviesScreen() {
                             </span>
                           </span>
                         </td>
-                        <td className={styles.mono}>{formatDate(m.releaseDate) || '-'}</td>
+                        <td className={styles.mono}>{formatDate(releaseDateOf(m)) || '-'}</td>
                         <td className={styles.mono}>{m.voteAverage != null ? Number(m.voteAverage).toFixed(1) : '-'}</td>
                         <td>
                           <RatingBadge value={m.averageRating} size="sm" emptyText="없음" />
