@@ -17,6 +17,14 @@ import styles from './Admin.module.css';
 
 const PAGE_SIZE = 20;
 
+// 상태 탭. value가 없으면 전체(status 생략). 서버 허용 값: PENDING | ACCEPTED | REJECTED
+const STATUS_TABS = [
+  { value: undefined, label: '전체' },
+  { value: 'PENDING', label: '처리 대기' },
+  { value: 'ACCEPTED', label: '승인' },
+  { value: 'REJECTED', label: '반려' },
+];
+
 // 신고 대상으로 이동할 주소. 댓글 신고에는 부모 게시글 ID가 응답에 없어 이동할 수 없다.
 function targetLink(r) {
   if (r.targetType === 'POST') return `/community/${r.targetId}`;
@@ -40,26 +48,34 @@ const ACTION_TEXT = {
 };
 
 /**
- * 신고 관리 (Stitch 16번). GET /api/admin/reports?page&size, PATCH /api/admin/reports/{reportId} { status }
- * 상태·유형 필터와 검색은 서버 기능이 없어 준비 중으로 둔다(현재 페이지만 거르면 결과가 틀리므로 하지 않음).
+ * 신고 관리 (Stitch 16번). GET /api/admin/reports?status&page&size (최신순), PATCH /api/admin/reports/{reportId} { status }
+ * 상태 탭은 서버 status 파라미터로 거른다. 유형 필터와 검색은 서버 기능이 없어 준비 중으로 둔다.
  */
 export default function AdminReportsScreen() {
   const toast = useToast();
   const [params] = useSearchParams();
+  const [status, setStatus] = useState(undefined);
   const [page, setPage] = useState(0);
   const [selectedId, setSelectedId] = useState(() => Number(params.get('focus')) || null);
   const [action, setAction] = useState(null); // { report, status }
   const [busy, setBusy] = useState(false);
 
-  const list = useAsync(() => adminApi.reports({ page, size: PAGE_SIZE }), [page]);
+  const list = useAsync(() => adminApi.reports({ status, page, size: PAGE_SIZE }), [status, page]);
   const reports = list.data?.content ?? [];
   const selected = reports.find((r) => r.reportId === selectedId) ?? null;
+
+  const changeStatus = (next) => {
+    setStatus(next);
+    setPage(0);
+  };
 
   const process = async () => {
     setBusy(true);
     try {
       const updated = await adminApi.processReport(action.report.reportId, action.status);
       list.setData((d) => d && { ...d, content: d.content.map((r) => (r.reportId === updated.reportId ? updated : r)) });
+      // 처리 대기 탭 등에서 처리한 신고는 현재 탭 조건에서 빠지므로 목록을 다시 받는다
+      if (status && updated.status !== status) list.reload();
       toast.success(ACTION_TEXT[action.status].done);
       setAction(null);
     } catch (err) {
@@ -82,13 +98,18 @@ export default function AdminReportsScreen() {
 
       <div className={styles.toolbar}>
         <div className={styles.chips}>
-          <Chip active>전체 {list.data ? formatCount(list.data.totalElements) : ''}</Chip>
-          <Chip disabled>처리 대기</Chip>
-          <Chip disabled>처리 완료</Chip>
+          {STATUS_TABS.map((t) => {
+            const active = t.value === status;
+            return (
+              <Chip key={t.label} active={active} onClick={() => changeStatus(t.value)}>
+                {t.label} {active && list.data ? formatCount(list.data.totalElements) : ''}
+              </Chip>
+            );
+          })}
           <Chip disabled>게시글 · 댓글 · 리뷰</Chip>
           <ComingSoon variant="badge" />
         </div>
-        <span className={styles.muted}>서버가 정렬 없이 돌려주므로 최신순이 아닐 수 있습니다</span>
+        <span className={styles.muted}>최신 신고순</span>
       </div>
 
       <div className={styles.masterDetail}>

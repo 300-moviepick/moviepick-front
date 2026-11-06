@@ -6,7 +6,7 @@ import { messageOf } from '../../lib/apiErrors';
 import { formatCount, formatDateTime } from '../../lib/format';
 import { Badge, RatingBadge } from '../../ui/Badge';
 import Button from '../../ui/Button';
-import { IconArrowLeft, IconEyeOff, IconFileText, IconMessage, IconSearch, IconTrash } from '../../ui/icons';
+import { IconArrowLeft, IconEyeOff, IconFileText, IconMessage, IconSearch } from '../../ui/icons';
 import { ConfirmDialog } from '../../ui/Modal';
 import Pagination from '../../ui/Pagination';
 import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
@@ -38,12 +38,12 @@ const ACTIONS = {
     run: (t) => adminApi.blindReview(t.reviewId),
     done: '리뷰를 숨김 처리했습니다.',
   },
-  deleteComment: {
-    title: '댓글을 삭제할까요?',
-    message: (t) => `#${t.commentId} 댓글을 삭제합니다. 되돌릴 수 없습니다.`,
-    confirm: '삭제',
-    run: (t) => adminApi.deleteComment(t.commentId),
-    done: '댓글을 삭제했습니다.',
+  blindComment: {
+    title: '댓글을 숨길까요?',
+    message: (t) => `#${t.commentId} 댓글의 내용이 가려지고 ‘관리자에 의해 가려진 댓글’로 표시됩니다.`,
+    confirm: '숨김 처리',
+    run: (t) => adminApi.blindComment(t.commentId),
+    done: '댓글을 숨김 처리했습니다.',
   },
 };
 
@@ -52,7 +52,8 @@ const ACTIONS = {
  * 관리자 전용 목록 API가 없어 공개 목록을 사용한다:
  * - 게시글: GET /api/community/posts (숨김·삭제 글은 목록에 없음) → PATCH /api/admin/posts/{postId}/blind
  * - 리뷰: GET /api/movies/reviews (공개 영화의 공개·숨김 리뷰) → PATCH /api/admin/reviews/{reviewId}/blind
- * - 댓글: 게시글별 GET /api/community/posts/{postId}/comments → DELETE /api/admin/comments/{commentId}
+ * - 댓글: 게시글별 GET /api/community/posts/{postId}/comments (숨긴 댓글은 blinded=true, 안내 문구로 남음)
+ *   → PATCH /api/admin/comments/{commentId}/blind
  */
 export default function AdminContentScreen() {
   const toast = useToast();
@@ -220,14 +221,20 @@ export default function AdminContentScreen() {
             <tr key={c.commentId}>
               <td className={styles.mono}>#{c.commentId}</td>
               <td className={styles.ellipsisCell}>
-                <span>{c.content}</span>
-                {c.blinded && <small>숨김 처리된 댓글</small>}
+                {/* 숨긴 댓글은 서버가 원문 대신 안내 문구를 보낸다 */}
+                {c.blinded ? <small>{c.content}</small> : <span>{c.content}</span>}
               </td>
               <td>{c.author?.nickname}</td>
               <td className={styles.mono}>{formatDateTime(c.createdAt)}</td>
               <td className={styles.actionsCell}>
-                <Button size="sm" variant="secondary" icon={<IconTrash size={14} />} onClick={() => setPending({ type: 'deleteComment', target: c })}>
-                  삭제
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  icon={<IconEyeOff size={14} />}
+                  disabled={c.blinded}
+                  onClick={() => setPending({ type: 'blindComment', target: c })}
+                >
+                  {c.blinded ? '숨김됨' : '숨김'}
                 </Button>
               </td>
             </tr>
@@ -245,7 +252,7 @@ export default function AdminContentScreen() {
         crumb="CONTENT CONTROL"
         title="콘텐츠 관리"
         subtitle="Content Moderation Hub"
-        description="게시글·리뷰를 숨기거나 댓글을 삭제합니다. 신고 기반 처리는 ‘신고 관리’에서 하세요."
+        description="게시글·리뷰·댓글을 숨깁니다. 신고 기반 처리는 ‘신고 관리’에서 하세요."
       />
 
       <div className={styles.statGrid}>

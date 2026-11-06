@@ -44,13 +44,18 @@ export const memberApi = {
 // ---------- 영화 ----------
 
 export const movieApi = {
-  // PageResponse<MovieListResponse { movieId, title, releaseDate, voteAverage, posterUrl, averageRating, reviewCount }>
-  // 정렬은 서버에서 id 내림차순 고정
-  list: ({ keyword, page = 0, size = 20 } = {}) => api.get(`/api/movies${qs({ keyword, page, size })}`),
-  // MovieDetailResponse { movieId, tmdbId, title, …, genres[{genreId,name}], averageRating, reviewCount, myReviewId }
+  // PageResponse<MovieListResponse { movieId, title, releaseDate, releaseDateKr(null 가능), voteAverage, posterUrl, averageRating, reviewCount }>
+  // sort 생략: id 내림차순. sort='releaseDate': (releaseDateKr ?? releaseDate) 내림차순, 미개봉·날짜 없는 영화 제외.
+  // 그 밖의 sort 값은 400이므로 보내지 않는다.
+  list: ({ keyword, page = 0, size = 20, sort } = {}) => api.get(`/api/movies${qs({ keyword, page, size, sort })}`),
+  // PageResponse<MovieRankingResponse { rank, movieId, title, posterUrl, releaseDate, averageRating, reviewCount, rankingScore }>
+  // 리뷰가 1개 이상인 영화만 대상(리뷰가 없으면 빈 목록). releaseDateKr 없음.
+  ranking: ({ page = 0, size = 10 } = {}) => api.get(`/api/movies/ranking${qs({ page, size })}`),
+  // MovieDetailResponse { movieId, tmdbId, title, …, releaseDate, genres[{genreId,name}], averageRating, reviewCount, myReviewId }
+  // releaseDateKr 없음 → 개봉일은 releaseDateOf()로 표시
   detail: (movieId) => api.get(`/api/movies/${enc(movieId)}`),
   // MovieExtraResponse { movieId, trailer, cast[], directors[], streaming[], rent[], buy[], watchLink }
-  // 비로그인 접근이 막혀 있을 수 있음(401). TMDB 장애 시 502.
+  // 비로그인도 조회 가능(공개). TMDB 장애 시 502.
   extras: (movieId) => api.get(`/api/movies/${enc(movieId)}/extras`),
 };
 
@@ -145,12 +150,14 @@ export const adminApi = {
   members: ({ status, page = 0, size = 20 } = {}) => api.get(`/api/admin/members${qs({ status, page, size })}`),
   releaseSuspension: (memberId) => api.patch(`/api/admin/members/${enc(memberId)}/status`),
   // PageResponse<AdminReportResponse { reportId, reporterId, targetType, targetId, reason, detail, status, … , movieId }>
-  reports: ({ page = 0, size = 20 } = {}) => api.get(`/api/admin/reports${qs({ page, size })}`),
+  // status(선택): PENDING | ACCEPTED | REJECTED, 생략하면 전체. 최신순(createdAt DESC, id DESC)
+  reports: ({ status, page = 0, size = 20 } = {}) => api.get(`/api/admin/reports${qs({ status, page, size })}`),
   // { status: ACCEPTED | REJECTED }
   processReport: (reportId, status) => api.patch(`/api/admin/reports/${enc(reportId)}`, { status }),
   blindPost: (postId) => api.patch(`/api/admin/posts/${enc(postId)}/blind`),
   blindReview: (reviewId) => api.patch(`/api/admin/reviews/${enc(reviewId)}/blind`),
-  deleteComment: (commentId) => api.delete(`/api/admin/comments/${enc(commentId)}`),
+  // 본문 없음 → 200. 이미 숨김·삭제된 댓글도 200 (DELETE /api/admin/comments/{id}는 백엔드에서 삭제됨)
+  blindComment: (commentId) => api.patch(`/api/admin/comments/${enc(commentId)}/blind`),
   // 관리자 영화 수집은 Batch API 하나만 사용한다(C-03 결정). /api/admin/movies/sync?pages 는 쓰지 않는다.
   // → MovieBatchRunResponse { executionId, jobName, status } (200 완료 / 202 실행 중 / 409 CONCURRENT_REQUEST / 500)
   runMovieSyncBatch: () => api.post('/api/admin/batch/movies/sync'),

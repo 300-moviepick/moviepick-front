@@ -54,15 +54,16 @@ const NO_AUTH_PATHS = new Set([
   '/api/auth/refresh',
 ]);
 
-// SecurityConfig에서 permitAll인 GET 경로
+// 백엔드 PublicEndpoints(permitAll)에 등록된 GET 경로
+// - /api/movies/[^/]+ 는 영화 상세와 함께 /api/movies/ranking, /api/movies/reviews(전체 리뷰)도 포함한다
 const PUBLIC_GET_PATTERNS = [
   /^\/api\/movies$/,
   /^\/api\/movies\/[^/]+$/,
   /^\/api\/movies\/[^/]+\/reviews$/,
+  /^\/api\/movies\/[^/]+\/extras$/,
   /^\/api\/community\/posts$/,
   /^\/api\/community\/posts\/[^/]+$/,
   /^\/api\/community\/posts\/[^/]+\/comments$/,
-  /^\/api\/community\/posts\/[^/]+\/likes$/,
 ];
 
 function pathOnly(path) {
@@ -135,9 +136,14 @@ export function fetchCsrf() {
 }
 
 // 성공하면 새 accessToken 저장 후 true. 실패하면 로그아웃 상태로 전환하고 false.
+// [F] 여러 탭 순서 맞추기: 서버는 refresh 때마다 refreshToken을 새로 발급하고, 이미 쓴 토큰이 다시 오면
+//     회원의 모든 토큰을 무효화한다. 탭 여러 개가 같은 쿠키로 동시에 refresh하면 전체 로그아웃이 될 수 있어,
+//     Web Locks API를 지원하는 브라우저에서는 탭 사이에서 refresh를 한 번에 하나씩 실행한다.
+//     (앞 탭이 끝나면 브라우저 쿠키가 새 토큰으로 바뀌어 있으므로 뒤 탭은 새 토큰으로 refresh한다)
+//     미지원 브라우저나 락 요청이 실패한 경우는 기존처럼 탭 안 중복 제거(refreshPromise)만 적용한다.
 export function refreshAccessToken() {
   if (!refreshPromise) {
-    refreshPromise = (async () => {
+    const runRefresh = async () => {
       try {
         const data = await request('POST', '/api/auth/refresh');
         if (!data?.accessToken) throw new Error('refresh 응답에 accessToken이 없습니다.');
@@ -147,7 +153,23 @@ export function refreshAccessToken() {
         expireAuth();
         return false;
       }
-    })().finally(() => {
+    };
+    const locks = typeof navigator !== 'undefined' ? navigator.locks : undefined;
+    const run = locks?.request
+      ? (async () => {
+          let started = false;
+          try {
+            return await locks.request('moviepick-auth-refresh', () => {
+              started = true;
+              return runRefresh();
+            });
+          } catch {
+            // 락을 얻지 못한 경우에만 락 없이 실행 (runRefresh 자체는 예외를 던지지 않는다)
+            return started ? false : runRefresh();
+          }
+        })()
+      : runRefresh();
+    refreshPromise = run.finally(() => {
       refreshPromise = null;
     });
   }

@@ -6,7 +6,7 @@ import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useGoLogin } from '../../hooks/useGoLogin';
 import { useWishlistSet } from '../../hooks/useWishlistSet';
-import { formatCount, formatDate, formatRuntime, tmdbImage, yearOf } from '../../lib/format';
+import { formatCount, formatDate, formatRuntime, releaseDateOf, tmdbImage, yearOf } from '../../lib/format';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import { IconArrowLeft, IconBookmark, IconClock, IconFilm, IconPlay, IconShare, IconSparkles, IconStar } from '../../ui/icons';
@@ -113,13 +113,14 @@ export default function MovieDetailScreen() {
                   <IconClock size={14} /> {formatRuntime(movie.runtimeMinutes)}
                 </span>
               ) : null}
-              {movie.releaseDate && <span className={styles.meta}>{formatDate(movie.releaseDate)} 개봉</span>}
+              {/* 상세 응답에는 releaseDateKr이 없어 지금은 releaseDate가 표시된다 (백엔드 추가 시 자동 반영) */}
+              {releaseDateOf(movie) && <span className={styles.meta}>{formatDate(releaseDateOf(movie))} 개봉</span>}
             </div>
             <h1 className={styles.title}>{movie.title}</h1>
             {movie.originalTitle && movie.originalTitle !== movie.title && (
               <p className={styles.original}>
                 {movie.originalTitle}
-                {movie.releaseDate && ` (${yearOf(movie.releaseDate)})`}
+                {releaseDateOf(movie) && ` (${yearOf(releaseDateOf(movie))})`}
               </p>
             )}
 
@@ -183,7 +184,7 @@ export default function MovieDetailScreen() {
 
           <section className={styles.section} id="md-cast" aria-labelledby="md-cast-title">
             <SectionHeader id="md-cast-title" title="감독 및 주요 출연진" />
-            <CastSection extras={extras} onLogin={goLogin} />
+            <CastSection extras={extras} />
           </section>
 
           <section className={styles.section} id="md-ai" aria-labelledby="md-ai-title">
@@ -210,7 +211,7 @@ export default function MovieDetailScreen() {
             <h2 id="md-ott-title" className={styles.sideTitle}>
               시청 가능 OTT 플랫폼
             </h2>
-            <OttSection extras={extras} onLogin={goLogin} />
+            <OttSection extras={extras} />
           </section>
           <section className={styles.sideCard} aria-labelledby="md-similar-title">
             <h2 id="md-similar-title" className={styles.sideTitle}>

@@ -1,16 +1,16 @@
 import { ApiError } from '../../api/client';
 import { tmdbImage } from '../../lib/format';
 import Button from '../../ui/Button';
-import { IconExternal, IconLock, IconRefresh, IconUser } from '../../ui/icons';
+import { IconExternal, IconRefresh, IconUser } from '../../ui/icons';
 import styles from './MovieDetail.module.css';
 
 /**
  * /api/movies/{movieId}/extras 결과를 그리는 영역들.
- * - 비로그인 접근이 막혀 있을 수 있어(401) 그 경우 이 영역만 로그인 안내를 보여 주고 상세 화면 나머지는 그대로 둔다.
+ * - 비로그인도 조회할 수 있는 공개 API다. 오류가 나도 이 영역만 안내를 보여 주고 상세 화면 나머지는 그대로 둔다.
  * - TMDB를 실시간으로 부르므로 느리거나 502일 수 있다.
  * - cast[].id, directors[].id는 TMDB 인물 ID라 링크에 쓰지 않는다.
  */
-function ExtrasState({ extras, onLogin, compact }) {
+function ExtrasState({ extras, compact }) {
   if (extras.loading && !extras.data) {
     return (
       <div className={styles.extrasSkeleton} aria-busy="true" aria-label="불러오는 중">
@@ -21,17 +21,6 @@ function ExtrasState({ extras, onLogin, compact }) {
     );
   }
   const err = extras.error;
-  if (err instanceof ApiError && err.status === 401) {
-    return (
-      <div className={styles.extrasNotice}>
-        <IconLock size={18} />
-        <p>로그인하면 출연진과 시청 가능한 OTT 정보를 볼 수 있습니다.</p>
-        <Button size="sm" variant="secondary" onClick={onLogin}>
-          로그인
-        </Button>
-      </div>
-    );
-  }
   return (
     <div className={styles.extrasNotice}>
       <p>{err instanceof ApiError && err.status === 502 ? '영화 정보 제공처(TMDB)에서 정보를 가져오지 못했습니다.' : err?.message || '정보를 불러오지 못했습니다.'}</p>
@@ -42,9 +31,9 @@ function ExtrasState({ extras, onLogin, compact }) {
   );
 }
 
-export function CastSection({ extras, onLogin }) {
+export function CastSection({ extras }) {
   const data = extras.data;
-  if (!data || extras.error) return <ExtrasState extras={extras} onLogin={onLogin} />;
+  if (!data || extras.error) return <ExtrasState extras={extras} />;
 
   const people = [
     ...data.directors.map((d) => ({ key: `d-${d.id}`, name: d.name, role: '감독', profilePath: null })),
@@ -76,9 +65,9 @@ const OTT_GROUPS = [
   { key: 'buy', label: '구매' },
 ];
 
-export function OttSection({ extras, onLogin }) {
+export function OttSection({ extras }) {
   const data = extras.data;
-  if (!data || extras.error) return <ExtrasState extras={extras} onLogin={onLogin} compact />;
+  if (!data || extras.error) return <ExtrasState extras={extras} compact />;
 
   const groups = OTT_GROUPS.map((g) => ({ ...g, items: data[g.key] ?? [] })).filter((g) => g.items.length > 0);
   if (groups.length === 0) return <p className={styles.muted}>국내에서 시청 가능한 OTT 정보가 없습니다.</p>;
