@@ -74,15 +74,6 @@ a.active:hover {
   color: var(--mp-on-primary-soft);
 }
 
-.disabled {
-  color: var(--mp-text-4);
-  cursor: default;
-}
-
-.soonTag {
-  margin-left: auto;
-}
-
 .serviceLink {
   display: flex;
   align-items: center;
@@ -135,29 +126,6 @@ a.active:hover {
   white-space: nowrap;
   color: var(--mp-text-1);
   font-weight: 700;
-}
-
-.search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  max-width: 480px;
-  height: 40px;
-  padding: 0 12px;
-  border-radius: var(--mp-radius);
-  background: var(--mp-surface-1);
-  border: 1px solid var(--mp-border);
-  color: var(--mp-text-4);
-}
-
-.search input {
-  flex: 1;
-  min-width: 0;
-}
-
-.search input::placeholder {
-  color: var(--mp-text-4);
 }
 
 .account {
@@ -230,12 +198,11 @@ a.active:hover {
 }
 
 @media (max-width: 639px) {
-  .search,
   .accountText {
     display: none;
   }
 
-  /* 검색창이 숨는 폭에서는 햄버거 옆에 현재 메뉴 이름을 둔다 */
+  /* 좁은 폭에서는 햄버거 옆에 현재 메뉴 이름을 둔다 */
   .header {
     gap: 10px;
   }

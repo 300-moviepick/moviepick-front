@@ -49,7 +49,7 @@ const ACTION_TEXT = {
 
 /**
  * 신고 관리 (Stitch 16번). GET /api/admin/reports?status&page&size (최신순), PATCH /api/admin/reports/{reportId} { status }
- * 상태 탭은 서버 status 파라미터로 거른다. 유형 필터와 검색은 서버 기능이 없어 준비 중으로 둔다.
+ * 상태 탭은 서버 status 파라미터로 거른다. 유형 필터와 검색은 서버 기능이 없어 두지 않는다.
  */
 export default function AdminReportsScreen() {
   const toast = useToast();
@@ -106,8 +106,6 @@ export default function AdminReportsScreen() {
               </Chip>
             );
           })}
-          <Chip disabled>게시글 · 댓글 · 리뷰</Chip>
-          <ComingSoon variant="badge" />
         </div>
         <span className={styles.muted}>최신 신고순</span>
       </div>

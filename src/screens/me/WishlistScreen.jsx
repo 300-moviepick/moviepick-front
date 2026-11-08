@@ -3,18 +3,17 @@ import { wishlistApi } from '../../api/moviepick';
 import { useAsync } from '../../hooks/useAsync';
 import { errorCodeOf, messageOf } from '../../lib/apiErrors';
 import { formatDate } from '../../lib/format';
-import { Badge, Chip } from '../../ui/Badge';
+import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import MovieCard from '../../ui/cards/MovieCard';
 import { IconArrowRight, IconBookmark, IconSparkles } from '../../ui/icons';
 import Pagination from '../../ui/Pagination';
-import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
+import { EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import { useToast } from '../../ui/toast/useToast';
 import MyPageHeader from './MyPageHeader';
 import styles from './MyPage.module.css';
 
 const PAGE_SIZE = 20;
-const FILTERS = ['개봉 예정작', 'OTT 시청 가능', '극장 상영 중'];
 
 // 내 찜 목록 (Stitch 5번). GET /api/members/me/wishlist (최근 찜한 순, 활성 영화만)
 export default function WishlistScreen() {
@@ -52,15 +51,6 @@ export default function WishlistScreen() {
       />
 
       <div className={styles.toolbar}>
-        <div className={styles.chips}>
-          <Chip active>전체 {total > 0 && total}</Chip>
-          {FILTERS.map((f) => (
-            <Chip key={f} disabled>
-              {f}
-            </Chip>
-          ))}
-          <ComingSoon variant="badge" />
-        </div>
         <span className={styles.muted}>최근 찜한 순</span>
       </div>
 

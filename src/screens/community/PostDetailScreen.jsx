@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ApiError } from '../../api/client';
 import { commentApi, postApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useGoLogin } from '../../hooks/useGoLogin';
-import { messageOf } from '../../lib/apiErrors';
+import { isNotFound, messageOf } from '../../lib/apiErrors';
 import { formatCount, formatDateTime } from '../../lib/format';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
@@ -53,7 +52,7 @@ export default function PostDetailScreen() {
 
   if (!data) {
     if (post.error) {
-      const notFound = post.error instanceof ApiError && (post.error.status === 404 || post.error.status === 400);
+      const notFound = isNotFound(post.error);
       return (
         <div className={`mp-container ${styles.page}`}>
           {notFound ? (

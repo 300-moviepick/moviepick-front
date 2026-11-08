@@ -6,7 +6,7 @@ import { errorCodeOf, fieldErrorOf, messageOf } from '../../lib/apiErrors';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import { Checkbox, TextField } from '../../ui/Field';
-import { IconAlert, IconArrowRight, IconLock, IconSliders, IconUser } from '../../ui/icons';
+import { IconAlert, IconLock, IconUser } from '../../ui/icons';
 import Modal from '../../ui/Modal';
 import { Avatar } from '../../ui/Poster';
 import { ComingSoon } from '../../ui/StateViews';
@@ -180,7 +180,7 @@ export default function ProfileScreen() {
 
         <div className={styles.panel}>
           <h2 id="profile-title" className={styles.panelTitle}>
-            <IconUser size={18} /> 시네필 프로필 정보
+            <IconUser size={18} /> 프로필 정보
           </h2>
           {/* key: 내 정보가 바뀌면 폼 초기값을 새로 잡는다 */}
           <NicknameForm key={user?.nickname} current={user?.nickname} onSaved={onSaved} />
@@ -189,21 +189,6 @@ export default function ProfileScreen() {
             <span className={styles.readonlyValue}>{user?.email}</span>
           </div>
           <ComingSoon variant="banner" title="한줄 소개 · 취향 태그 · 프로필 사진" description="프로필 꾸미기 기능은 준비 중입니다." />
-        </div>
-      </section>
-
-      <section className={styles.panel} aria-labelledby="noti-title">
-        <div className={styles.panelHeadRow}>
-          <h2 id="noti-title" className={styles.panelTitle}>
-            <IconSliders size={18} /> 알림 수신 설정
-          </h2>
-          <ComingSoon variant="badge" />
-        </div>
-        <p className={styles.muted}>찜한 영화가 개봉하면 알림 센터로 개봉 알림이 자동 발송됩니다. 종류별 수신 설정은 준비 중입니다.</p>
-        <div>
-          <Button to="/me/notification-settings" variant="secondary" size="sm" iconRight={<IconArrowRight size={14} />}>
-            알림 설정 보기
-          </Button>
         </div>
       </section>
 

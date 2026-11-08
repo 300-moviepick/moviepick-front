@@ -79,23 +79,6 @@
   border: 1px solid var(--mp-border);
 }
 
-/* 탭 줄 + "준비 중" 배지: 배지가 다음 줄로 떨어지지 않도록 탭 쪽이 줄어들며 가로로 넘긴다 */
-.toolbarTabs {
-  flex-wrap: nowrap;
-}
-
-.toolbarTabs > :first-child {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.chips {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
 /* ---------- 패널 ---------- */
 
 .panel {
@@ -305,31 +288,11 @@
 
 /* ---------- 리뷰·알림 ---------- */
 
-.statGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
 .reviewList,
 .notiList {
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.settingsList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.settingItem {
-  padding: 16px 18px;
-  border-radius: var(--mp-radius-md);
-  background: var(--mp-surface-2);
-  border: 1px solid var(--mp-border);
 }
 
 /* ---------- 반응형 ---------- */
@@ -338,11 +301,6 @@
   .profileGrid,
   .twoCol {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  /* 카드는 축약형(StatCard dense)으로 3열을 유지해 화면 하나를 다 차지하지 않게 한다 */
-  .statGrid {
-    gap: 8px;
   }
 
   .panel {

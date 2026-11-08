@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { notificationApi } from '../api/moviepick';
 
 // 알림 읽음 처리 후 화면에서 dispatch하면 헤더·사이드바의 안 읽은 수가 다시 조회된다.
-export const NOTIFICATIONS_CHANGED = 'mp:notifications-changed';
+const NOTIFICATIONS_CHANGED = 'mp:notifications-changed';
 
 export function notifyNotificationsChanged() {
   window.dispatchEvent(new Event(NOTIFICATIONS_CHANGED));

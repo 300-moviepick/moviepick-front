@@ -4,19 +4,16 @@ import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useWishlistSet } from '../../hooks/useWishlistSet';
 import { formatCount } from '../../lib/format';
-import { Badge, Chip, RatingBadge } from '../../ui/Badge';
+import { Badge, RatingBadge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import MovieCard from '../../ui/cards/MovieCard';
 import PostCard from '../../ui/cards/PostCard';
-import { IconArrowRight, IconBell, IconMessage, IconSearch, IconSparkles, IconStar } from '../../ui/icons';
+import { IconArrowRight, IconMessage, IconSearch, IconSparkles, IconStar } from '../../ui/icons';
 import Poster from '../../ui/Poster';
 import SectionHeader from '../../ui/SectionHeader';
 import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import { useToast } from '../../ui/toast/useToast';
 import styles from './HomeScreen.module.css';
-
-// 백엔드에 정렬·필터가 없어 "전체"만 동작한다(나머지는 준비 중)
-const MOVIE_TABS = ['현재 상영작', 'OTT 공개작', '평점 높은 순', '신규 개봉'];
 
 // 메인 홈 (Stitch 0번)
 export default function HomeScreen() {
@@ -70,21 +67,7 @@ export default function HomeScreen() {
         {/* 영화 + 랭킹 */}
         <div className={styles.movieRow}>
           <section className={styles.movies} aria-labelledby="home-movies">
-            <SectionHeader
-              id="home-movies"
-              title="최근 개봉작"
-              action={
-                <div className={styles.chips}>
-                  <Chip active>전체</Chip>
-                  {MOVIE_TABS.map((t) => (
-                    <Chip key={t} disabled title="준비 중인 기능입니다">
-                      {t}
-                    </Chip>
-                  ))}
-                  <ComingSoon variant="badge" />
-                </div>
-              }
-            />
+            <SectionHeader id="home-movies" title="최근 개봉작" />
             {movies.loading && !movies.data ? (
               <LoadingState variant="grid" count={8} />
             ) : movies.error ? (
@@ -201,7 +184,7 @@ export default function HomeScreen() {
           </div>
           <div className={styles.aiActions}>
             <ComingSoon variant="badge" />
-            <Button to="/ai" variant="secondary" icon={<IconBell size={16} />}>
+            <Button to="/ai" variant="secondary" iconRight={<IconArrowRight size={16} />}>
               자세히 보기
             </Button>
           </div>

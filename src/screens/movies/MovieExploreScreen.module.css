@@ -138,39 +138,6 @@
 
 /* ---------- 본문 ---------- */
 
-.layout {
-  display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
-}
-
-.filters {
-  position: sticky;
-  top: calc(var(--mp-header-h) + 24px);
-}
-
-.filterGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.filterLabel {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  color: var(--mp-text-1);
-}
-
-.chipWrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
 .results {
   display: flex;
   flex-direction: column;
@@ -195,17 +162,6 @@
 
 .stale {
   opacity: 0.5;
-}
-
-@media (max-width: 1023px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .filters {
-    position: static;
-    order: 2;
-  }
 }
 
 @media (max-width: 639px) {

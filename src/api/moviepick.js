@@ -1,4 +1,4 @@
-// 새 UI 전용 API 함수 모음 (백엔드 dev f3226ed 기준 계약).
+// 백엔드 API 함수 모음. 화면은 이 파일의 도메인 객체(movieApi 등)만 호출한다.
 // - 식별자는 movieId·memberId·reportId·genreId 등 이름 붙은 키를 쓴다(응답에 id 없음).
 // - 댓글 수정은 PATCH /api/community/comments/{commentId}.
 // - 모든 응답은 client.request가 ApiResponse.data로 풀어서 돌려준다. 목록은 PageResponse
@@ -25,7 +25,7 @@ export const authApi = {
       setAccessToken(null);
     }
   },
-  // MemberResponse { memberId, email, nickname, role, status } (memberApi.me와 같은 요청)
+  // MemberResponse { memberId, email, nickname, role, status }
   me: () => api.get('/api/members/me'),
   // SignupRequest { email, password, nickname } → MemberResponse
   signup: (body) => api.post('/api/auth/members', body),
@@ -34,8 +34,7 @@ export const authApi = {
 };
 
 export const memberApi = {
-  // MemberResponse { memberId, email, nickname, role, status }
-  me: () => api.get('/api/members/me'),
+  // 내 정보 조회는 authApi.me를 쓴다
   // MemberUpdateRequest { nickname }
   updateMe: (body) => api.patch('/api/members/me', body),
   withdraw: () => api.delete('/api/members/me'),

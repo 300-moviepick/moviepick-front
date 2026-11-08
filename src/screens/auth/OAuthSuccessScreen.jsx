@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchCsrf, refreshAccessToken } from '../../api/client';
+import { authApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/useAuth';
 import { messageOf } from '../../lib/apiErrors';
 import { consumeRedirect } from '../../lib/authRedirect';
@@ -30,11 +30,11 @@ export default function OAuthSuccessScreen() {
     (async () => {
       let step = 0;
       try {
-        await fetchCsrf();
+        await authApi.csrf();
         step = 1;
         setState({ current: 1, failed: false, error: null });
 
-        if (!(await refreshAccessToken())) {
+        if (!(await authApi.refresh())) {
           throw new Error('로그인 세션을 확인하지 못했습니다. 다시 로그인해 주세요.');
         }
         step = 2;

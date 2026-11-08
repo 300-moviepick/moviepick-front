@@ -3,11 +3,11 @@ import { movieApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useWishlistSet } from '../../hooks/useWishlistSet';
-import { Badge, Chip } from '../../ui/Badge';
+import { toPageNumber } from '../../lib/format';
+import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import MovieCard from '../../ui/cards/MovieCard';
-import { Checkbox } from '../../ui/Field';
-import { IconArrowRight, IconClose, IconFilm, IconSearch, IconSliders, IconSparkles } from '../../ui/icons';
+import { IconArrowRight, IconClose, IconFilm, IconSearch, IconSparkles } from '../../ui/icons';
 import Pagination from '../../ui/Pagination';
 import SectionHeader from '../../ui/SectionHeader';
 import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
@@ -15,15 +15,6 @@ import { useToast } from '../../ui/toast/useToast';
 import styles from './MovieExploreScreen.module.css';
 
 const PAGE_SIZE = 20;
-
-// 고급 필터 미리보기(백엔드 필터 API가 없어 동작하지 않음)
-const GENRES = ['SF', '액션', '드라마', '스릴러', '로맨스', '애니메이션', '공포', '코미디'];
-const YEARS = ['2020년대', '2010년대', '2000년대', '1990년대'];
-
-function toPageNumber(value) {
-  const n = Number.parseInt(value ?? '0', 10);
-  return Number.isFinite(n) && n >= 0 ? n : 0;
-}
 
 // 영화 탐색·검색 (Stitch 9번). GET /api/movies?keyword&page&size — 제목 검색만 지원, 정렬은 서버 고정(id 내림차순)
 export default function MovieExploreScreen() {
@@ -114,91 +105,57 @@ export default function MovieExploreScreen() {
         </Button>
       </section>
 
-      <div className={styles.layout}>
-        {/* 고급 필터: 준비 중 */}
-        <aside className={styles.filters} aria-label="정밀 탐색 필터">
-          <ComingSoon title="정밀 탐색 필터" description="장르·연도·평점·OTT 필터는 아직 제공되지 않습니다.">
-            <div className={styles.filterGroup}>
-              <span className={styles.filterLabel}>
-                <IconSliders size={16} /> 장르
-              </span>
-              <div className={styles.chipWrap}>
-                {GENRES.map((g) => (
-                  <Chip key={g} disabled>
-                    {g}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-            <div className={styles.filterGroup}>
-              <span className={styles.filterLabel}>개봉 연도</span>
-              <div className={styles.chipWrap}>
-                {YEARS.map((y) => (
-                  <Chip key={y} disabled>
-                    {y}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-            <div className={styles.filterGroup}>
-              <span className={styles.filterLabel}>시청 가능 OTT</span>
-              <Checkbox label="스트리밍 중인 영화만" disabled />
-            </div>
-          </ComingSoon>
-        </aside>
+      {/* 결과 */}
+      <section className={styles.results} aria-labelledby="explore-results">
+        <SectionHeader
+          id="explore-results"
+          title={keyword ? '검색 결과' : '새로 들어온 영화'}
+          action={
+            <span className={styles.sortSoon} title="정렬 기능은 준비 중입니다">
+              정렬: 최근 등록순 <ComingSoon variant="badge" />
+            </span>
+          }
+        />
 
-        {/* 결과 */}
-        <section className={styles.results} aria-labelledby="explore-results">
-          <SectionHeader
-            id="explore-results"
-            title={keyword ? '검색 결과' : '새로 들어온 영화'}
+        {result.loading && !data ? (
+          <LoadingState variant="grid" count={10} />
+        ) : result.error ? (
+          <ErrorState error={result.error} onRetry={result.reload} />
+        ) : movies.length === 0 ? (
+          <EmptyState
+            icon={<IconFilm size={22} />}
+            title={keyword ? '검색어와 일치하는 영화가 없습니다' : '아직 등록된 영화가 없습니다'}
+            description={keyword ? '철자를 확인하거나 다른 제목으로 검색해 보세요.' : '영화 데이터가 수집되면 이곳에 표시됩니다.'}
             action={
-              <span className={styles.sortSoon} title="정렬 기능은 준비 중입니다">
-                정렬: 최근 등록순 <ComingSoon variant="badge" />
-              </span>
+              keyword && (
+                <Button variant="secondary" size="sm" onClick={() => setQuery({ keyword: '', page: 0 })}>
+                  전체 영화 보기
+                </Button>
+              )
             }
           />
-
-          {result.loading && !data ? (
-            <LoadingState variant="grid" count={10} />
-          ) : result.error ? (
-            <ErrorState error={result.error} onRetry={result.reload} />
-          ) : movies.length === 0 ? (
-            <EmptyState
-              icon={<IconFilm size={22} />}
-              title={keyword ? '검색어와 일치하는 영화가 없습니다' : '아직 등록된 영화가 없습니다'}
-              description={keyword ? '철자를 확인하거나 다른 제목으로 검색해 보세요.' : '영화 데이터가 수집되면 이곳에 표시됩니다.'}
-              action={
-                keyword && (
-                  <Button variant="secondary" size="sm" onClick={() => setQuery({ keyword: '', page: 0 })}>
-                    전체 영화 보기
-                  </Button>
-                )
-              }
+        ) : (
+          <>
+            <div className={`${styles.grid} ${result.loading ? styles.stale : ''}`} aria-busy={result.loading}>
+              {movies.map((m) => (
+                <MovieCard
+                  key={m.movieId}
+                  movie={m}
+                  wishlisted={wish.isWishlisted(m.movieId)}
+                  wishlistBusy={wish.isBusy(m.movieId)}
+                  onToggleWishlist={() => wish.toggle(m.movieId)}
+                />
+              ))}
+            </div>
+            <Pagination
+              page={data.page}
+              totalPages={data.totalPages}
+              onChange={(p) => setQuery({ keyword, page: p })}
+              summary={`총 ${total.toLocaleString('ko-KR')}편 중 ${data.page * PAGE_SIZE + 1}–${data.page * PAGE_SIZE + movies.length}`}
             />
-          ) : (
-            <>
-              <div className={`${styles.grid} ${result.loading ? styles.stale : ''}`} aria-busy={result.loading}>
-                {movies.map((m) => (
-                  <MovieCard
-                    key={m.movieId}
-                    movie={m}
-                    wishlisted={wish.isWishlisted(m.movieId)}
-                    wishlistBusy={wish.isBusy(m.movieId)}
-                    onToggleWishlist={() => wish.toggle(m.movieId)}
-                  />
-                ))}
-              </div>
-              <Pagination
-                page={data.page}
-                totalPages={data.totalPages}
-                onChange={(p) => setQuery({ keyword, page: p })}
-                summary={`총 ${total.toLocaleString('ko-KR')}편 중 ${data.page * PAGE_SIZE + 1}–${data.page * PAGE_SIZE + movies.length}`}
-              />
-            </>
-          )}
-        </section>
-      </div>
+          </>
+        )}
+      </section>
     </div>
   );
 }

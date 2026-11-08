@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { reviewApi } from '../../api/moviepick';
 import { useAsync } from '../../hooks/useAsync';
 import { messageOf } from '../../lib/apiErrors';
-import { Chip } from '../../ui/Badge';
+import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import ReviewCard from '../../ui/cards/ReviewCard';
-import StatCard from '../../ui/cards/StatCard';
-import { IconArrowRight, IconMessage, IconStar } from '../../ui/icons';
+import { IconArrowRight, IconMessage } from '../../ui/icons';
 import Modal, { ConfirmDialog } from '../../ui/Modal';
 import Pagination from '../../ui/Pagination';
-import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
+import { EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import { useToast } from '../../ui/toast/useToast';
 import ReviewForm from '../movies/ReviewForm';
 import MyPageHeader from './MyPageHeader';
@@ -32,7 +31,7 @@ export default function MyReviewsScreen() {
 
   const data = list.data;
   const reviews = data?.content ?? [];
-  const total = data?.totalElements;
+  const total = data?.totalElements ?? 0;
 
   const update = async (body) => {
     await reviewApi.update(editing.reviewId, body);
@@ -58,28 +57,14 @@ export default function MyReviewsScreen() {
 
   return (
     <div className={styles.page}>
-      <MyPageHeader eyebrow="ARCHIVE & CRITIQUES" title="작성한 리뷰 관리" description="내가 남긴 별점과 감상평을 한곳에서 관리하세요." />
-
-      <div className={styles.statGrid}>
-        <StatCard
-          label="작성한 리뷰"
-          value={total !== undefined ? total.toLocaleString('ko-KR') : list.error ? '-' : undefined}
-          unit="편"
-          icon={<IconMessage size={18} />}
-          tone="primary"
-          loading={list.loading && !data}
-          dense
-        />
-        <StatCard label="평균 평점" icon={<IconStar size={18} />} hint="전체 집계 기능 준비 중" dense />
-        <StatCard label="받은 공감" hint="전체 집계 기능 준비 중" dense />
-      </div>
+      <MyPageHeader
+        eyebrow="ARCHIVE & CRITIQUES"
+        title="작성한 리뷰 관리"
+        badge={!list.loading && !list.error && <Badge tone="soft">{total.toLocaleString('ko-KR')}편</Badge>}
+        description="내가 남긴 별점과 감상평을 한곳에서 관리하세요."
+      />
 
       <div className={styles.toolbar}>
-        <div className={styles.chips}>
-          <Chip active>전체</Chip>
-          <Chip disabled>스포일러 포함</Chip>
-          <ComingSoon variant="badge" />
-        </div>
         <span className={styles.muted}>최신 작성순</span>
       </div>
 

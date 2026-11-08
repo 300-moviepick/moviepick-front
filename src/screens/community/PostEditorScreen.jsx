@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ApiError } from '../../api/client';
 import { postApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
-import { messageOf } from '../../lib/apiErrors';
-import { Badge, Chip } from '../../ui/Badge';
+import { isNotFound, messageOf } from '../../lib/apiErrors';
+import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import { TextArea, TextField } from '../../ui/Field';
 import { IconAlert, IconArrowLeft, IconArrowRight, IconLock } from '../../ui/icons';
-import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
+import { EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import { useToast } from '../../ui/toast/useToast';
 import styles from './Community.module.css';
 
@@ -57,20 +56,6 @@ function PostForm({ initial, onSubmit }) {
   return (
     <form className={styles.editorLayout} onSubmit={submit} noValidate>
       <div className={styles.editorMain}>
-        <section className={styles.panel}>
-          <div className={styles.panelHead}>
-            <strong>카테고리</strong>
-            <ComingSoon variant="badge" />
-          </div>
-          <div className={styles.categoryRow}>
-            {['심층 비평·해석', '자유 수다·관람 후기', '개봉 예정·영화제 소식', '영화 추천 질문'].map((c) => (
-              <Chip key={c} disabled>
-                {c}
-              </Chip>
-            ))}
-          </div>
-        </section>
-
         <section className={styles.panel}>
           <TextField
             label="게시글 제목"
@@ -121,10 +106,6 @@ function PostForm({ initial, onSubmit }) {
             작성 취소
           </Button>
         </section>
-        <ComingSoon
-          title="게시 옵션"
-          description="관련 영화 연결, 이미지 첨부, 스포일러 가림 표시, 임시 저장은 아직 제공되지 않습니다."
-        />
       </aside>
     </form>
   );
@@ -166,7 +147,7 @@ export function PostEditScreen() {
   if (post.loading && !post.data) {
     content = <LoadingState label="게시글을 불러오는 중…" />;
   } else if (post.error) {
-    const notFound = post.error instanceof ApiError && post.error.status === 404;
+    const notFound = isNotFound(post.error);
     content = notFound ? (
       <EmptyState title="게시글을 찾을 수 없습니다" description="삭제되었거나 숨김 처리된 게시글입니다." action={<Button to="/community">목록으로</Button>} />
     ) : (

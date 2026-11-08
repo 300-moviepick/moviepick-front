@@ -5,7 +5,7 @@ import { messageOf } from '../../lib/apiErrors';
 import { formatCount } from '../../lib/format';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
-import { IconSearch, IconUsers } from '../../ui/icons';
+import { IconUsers } from '../../ui/icons';
 import { ConfirmDialog } from '../../ui/Modal';
 import Pagination from '../../ui/Pagination';
 import { Avatar } from '../../ui/Poster';
@@ -85,11 +85,6 @@ export default function AdminMembersScreen() {
             setSelectedId(null);
           }}
         />
-        <div className={styles.searchSoon} title="회원 검색은 준비 중입니다">
-          <IconSearch size={16} />
-          <input type="search" placeholder="닉네임·이메일 검색" disabled aria-label="회원 검색 (준비 중)" />
-          <ComingSoon variant="badge" />
-        </div>
       </div>
 
       <div className={styles.masterDetail}>
