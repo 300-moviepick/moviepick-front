@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import * as PortOne from '@portone/browser-sdk/v2';
+import { useState } from 'react';
 import { supportApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/useAuth';
 import { useGoLogin } from '../../hooks/useGoLogin';
-import { messageOf } from '../../lib/apiErrors';
+import { usePortonePayment } from '../../hooks/usePortonePayment';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
-import { IconAlert, IconArrowRight, IconCheck, IconCheckCircle, IconClock, IconCoffee, IconInfo, IconLock, IconRefresh } from '../../ui/icons';
+import { IconAlert, IconArrowRight, IconCheck, IconCheckCircle, IconClock, IconCoffee, IconInfo, IconLock } from '../../ui/icons';
+import PaymentStatusPanel from '../../ui/PaymentStatusPanel';
 import styles from './SupportScreen.module.css';
 
 // 백엔드 SupportService가 허용하는 금액만 (그 외 금액은 400 INVALID_SUPPORT_AMOUNT)
@@ -28,104 +27,27 @@ const RESULT_VIEW = {
 const won = (n) => `${Number(n).toLocaleString('ko-KR')}원`;
 
 /**
- * 개발자 후원 (Stitch 12번). 기존 SupportPage와 같은 흐름:
- * 1) POST /api/supports {amount} → { paymentId, amount, orderName, storeId, channelKey }
- * 2) PortOne.requestPayment (카드). 모바일 등은 redirectUrl(/support?paymentId=…&code=…&message=…)로 돌아온다
- * 3) POST /api/supports/{paymentId}/confirm → { status, result: COMPLETED|FAILED|PENDING, message }
- * 브라우저가 보낸 결제 결과는 믿지 않고 서버가 PortOne에 직접 조회해 판단한다(confirm).
+ * 개발자 후원 (Stitch 12번). 결제 흐름(생성 → PortOne 결제창 → confirm, 모바일 복귀 처리)은 usePortonePayment가 맡는다.
+ * - 생성: POST /api/supports {amount}, 확인: POST /api/supports/{paymentId}/confirm
+ * - 모바일 복귀 주소: /support?paymentId=…&code=…&message=…
  * AI 크레딧과는 무관하다(크레딧 지급 없음).
  */
 export default function SupportScreen() {
   const { user } = useAuth();
   const goLogin = useGoLogin();
-  const [params, setParams] = useSearchParams();
   const [amount, setAmount] = useState(OPTIONS[0].amount);
-  // step: 진행 중인 단계 번호(0~2), done이면 끝
-  const [flow, setFlow] = useState({ step: null, busy: false, error: null, notice: null, result: null, paymentId: null });
-  const redirectHandledRef = useRef(false);
+  const { flow, start, recheck } = usePortonePayment({
+    create: supportApi.create,
+    confirm: supportApi.confirm,
+    redirectUrl: `${window.location.origin}/support`,
+  });
 
   const selected = OPTIONS.find((o) => o.amount === amount);
 
-  const confirm = async (paymentId) => {
-    setFlow((f) => ({ ...f, step: 2, busy: true, error: null, paymentId }));
-    try {
-      const result = await supportApi.confirm(paymentId);
-      setFlow((f) => ({ ...f, step: 3, busy: false, result }));
-    } catch (err) {
-      setFlow((f) => ({ ...f, busy: false, error: messageOf(err) }));
-    }
-  };
-
-  // 리다이렉트 복귀: ?paymentId=…(&code=…&message=…). 쿼리는 한 번만 처리하고 지운다.
-  useEffect(() => {
-    const paymentId = params.get('paymentId');
-    if (!paymentId || redirectHandledRef.current) return;
-    const code = params.get('code');
-    const message = params.get('message');
-    // 결과 확인은 로그인(본인 결제 확인)이 필요하므로, 성공 복귀는 로그인 상태에서만 처리한다
-    if (!code && !user) return;
-    redirectHandledRef.current = true;
-    setParams({}, { replace: true });
-
-    Promise.resolve().then(() => {
-      if (code) {
-        setFlow({ step: 1, busy: false, error: `결제가 취소되었거나 실패했습니다. (${code}) ${message || ''}`.trim(), notice: null, result: null, paymentId });
-      } else {
-        confirm(paymentId);
-      }
-    });
-    // 쿼리 처리는 redirectHandledRef로 한 번만 실행된다
-  }, [params, setParams, user]);
-
-  const pay = async () => {
+  const pay = () => {
     if (!user) return goLogin();
-    setFlow({ step: 0, busy: true, error: null, notice: null, result: null, paymentId: null });
-
-    let support;
-    try {
-      support = await supportApi.create(amount);
-    } catch (err) {
-      return setFlow((f) => ({ ...f, busy: false, error: messageOf(err) }));
-    }
-
-    if (!support?.storeId || !support?.channelKey) {
-      return setFlow((f) => ({
-        ...f,
-        busy: false,
-        notice: '결제 설정(storeId·channelKey)이 비어 있어 결제창을 열 수 없습니다. 운영자에게 문의해 주세요.',
-      }));
-    }
-
-    setFlow((f) => ({ ...f, step: 1, paymentId: support.paymentId }));
-    let response;
-    try {
-      response = await PortOne.requestPayment({
-        storeId: support.storeId,
-        channelKey: support.channelKey,
-        paymentId: support.paymentId,
-        orderName: support.orderName,
-        totalAmount: support.amount,
-        currency: 'KRW',
-        payMethod: 'CARD',
-        redirectUrl: `${window.location.origin}/support`,
-      });
-    } catch (err) {
-      return setFlow((f) => ({ ...f, busy: false, error: messageOf(err) }));
-    }
-
-    if (!response) {
-      // 리다이렉트 방식으로 진행된 경우 이 화면으로 돌아와 위 effect가 처리한다
-      return setFlow((f) => ({ ...f, busy: false, notice: '결제창 응답이 없습니다. 결제가 다른 창에서 진행되었다면 완료 후 이 화면으로 돌아옵니다.' }));
-    }
-    if (response.code !== undefined) {
-      return setFlow((f) => ({ ...f, busy: false, error: `결제가 취소되었거나 실패했습니다. (${response.code}) ${response.message || ''}`.trim() }));
-    }
-
-    await confirm(response.paymentId || support.paymentId);
+    start(amount);
   };
-
-  const view = flow.result ? RESULT_VIEW[flow.result.result] ?? RESULT_VIEW.PENDING : null;
-  const ResultIcon = view?.icon;
 
   return (
     <div className={styles.page}>
@@ -210,7 +132,7 @@ export default function SupportScreen() {
             </h2>
             <details className={styles.faq} open>
               <summary>후원하면 AI 추천 크레딧이 충전되나요?</summary>
-              <p>아니요. 개발자 후원과 AI 크레딧은 완전히 별개입니다. AI 크레딧 충전 기능은 준비 중입니다.</p>
+              <p>아니요. 개발자 후원과 AI 크레딧은 완전히 별개입니다. AI 크레딧은 AI 크레딧 충전소에서 따로 충전할 수 있습니다.</p>
             </details>
             <details className={styles.faq}>
               <summary>정기 후원도 가능한가요?</summary>
@@ -221,7 +143,7 @@ export default function SupportScreen() {
               <p>결제가 끝나지 않았다면 다시 후원을 진행해 주세요. 결제 중 화면이 바뀌었다면 이 페이지로 돌아왔을 때 결과를 다시 확인합니다.</p>
             </details>
             <Button to="/ai/credits" variant="ghost" size="sm" iconRight={<IconArrowRight size={14} />}>
-              AI 크레딧 충전소 바로가기 (준비 중)
+              AI 크레딧 충전소 바로가기
             </Button>
           </section>
         </div>
@@ -266,50 +188,13 @@ export default function SupportScreen() {
               <h2 id="support-status" className={styles.panelTitle}>
                 결제 진행 상태
               </h2>
-              <ol className={styles.steps}>
-                {STEPS.map((label, i) => {
-                  const failed = (flow.error || flow.notice) && i === flow.step;
-                  const status = failed ? 'fail' : flow.step > i ? 'done' : flow.step === i ? (flow.busy ? 'run' : 'wait') : 'wait';
-                  return (
-                    <li key={label} className={styles[`step_${status}`]}>
-                      <span className={styles.stepMark} aria-hidden="true">
-                        {status === 'done' && <IconCheck size={14} />}
-                        {status === 'run' && <span className={styles.spinner} />}
-                        {status === 'fail' && <IconAlert size={14} />}
-                      </span>
-                      {label}
-                    </li>
-                  );
-                })}
-              </ol>
-
-              {flow.notice && (
-                <p className={styles.noticeMsg} role="status">
-                  <IconInfo size={16} /> {flow.notice}
-                </p>
-              )}
-              {flow.error && (
-                <p className={styles.errorMsg} role="alert">
-                  <IconAlert size={16} /> {flow.error}
-                </p>
-              )}
-
-              {view && (
-                <div className={`${styles.result} ${styles[`result_${view.tone}`]}`}>
-                  <ResultIcon size={22} />
-                  <div>
-                    <strong>{view.title}</strong>
-                    <p>{flow.result.message}</p>
-                    {flow.result.result === 'COMPLETED' && <p>개발자에게 따뜻한 응원이 전달되었습니다. 고맙습니다!</p>}
-                  </div>
-                </div>
-              )}
-
-              {flow.paymentId && (flow.result?.result === 'PENDING' || (flow.error && flow.step === 2)) && (
-                <Button variant="secondary" icon={<IconRefresh size={16} />} onClick={() => confirm(flow.paymentId)} loading={flow.busy}>
-                  결제 결과 다시 확인
-                </Button>
-              )}
+              <PaymentStatusPanel
+                flow={flow}
+                steps={STEPS}
+                resultView={RESULT_VIEW}
+                successNote="개발자에게 따뜻한 응원이 전달되었습니다. 고맙습니다!"
+                onRecheck={recheck}
+              />
             </section>
           )}
         </aside>

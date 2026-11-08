@@ -20,12 +20,13 @@ async function loadCounts() {
     totalOf(adminApi.members({ size: 1 })),
     totalOf(adminApi.members({ status: 'SUSPENDED', size: 1 })),
     totalOf(adminApi.reports({ size: 1 })),
+    totalOf(adminApi.reports({ status: 'PENDING', size: 1 })),
     totalOf(postApi.list({ size: 1 })),
     totalOf(reviewApi.listAll({ size: 1 })),
     totalOf(movieApi.list({ size: 1 })),
   ]);
-  const [members, suspended, reports, posts, reviews, movies] = entries.map((e) => (e.status === 'fulfilled' ? e.value : null));
-  return { members, suspended, reports, posts, reviews, movies };
+  const [members, suspended, reports, pendingReports, posts, reviews, movies] = entries.map((e) => (e.status === 'fulfilled' ? e.value : null));
+  return { members, suspended, reports, pendingReports, posts, reviews, movies };
 }
 
 const shown = (v) => (v === null ? '-' : formatCount(v));
@@ -56,7 +57,15 @@ export default function AdminDashboardScreen() {
           tone="primary"
           loading={loading}
         />
-        <StatCard label="누적 신고" value={c ? shown(c.reports) : undefined} unit="건" hint="처리 대기 건수 집계는 준비 중" icon={<IconFlag size={18} />} tone="danger" loading={loading} />
+        <StatCard
+          label="누적 신고"
+          value={c ? shown(c.reports) : undefined}
+          unit="건"
+          hint={c && c.pendingReports !== null ? `처리 대기 ${formatCount(c.pendingReports)}건` : undefined}
+          icon={<IconFlag size={18} />}
+          tone="danger"
+          loading={loading}
+        />
         <StatCard label="공개 게시글" value={c ? shown(c.posts) : undefined} unit="개" hint="숨김·삭제 글 제외" icon={<IconFileText size={18} />} loading={loading} />
         <StatCard label="등록 리뷰" value={c ? shown(c.reviews) : undefined} unit="개" hint="공개 영화 기준" icon={<IconMessage size={18} />} loading={loading} />
       </div>

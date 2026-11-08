@@ -1,4 +1,4 @@
-/* AI 자연어 추천·AI 크레딧 (Stitch 13·14번) — 준비 중 화면 공용 */
+/* MoviePick AI 추천·AI 크레딧 (Stitch 13·14번) 공용 */
 
 .page {
   display: flex;
@@ -71,18 +71,32 @@
   gap: 14px;
 }
 
-.sectionHead {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .sectionTitle {
   font-size: var(--mp-fs-h-md);
   line-height: var(--mp-lh-h-md);
 }
 
-/* ---------- 질문 입력 미리보기 ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: var(--mp-radius-lg);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+.panelTitle {
+  font-size: var(--mp-fs-h-sm);
+  line-height: var(--mp-lh-h-sm);
+}
+
+.help {
+  color: var(--mp-text-4);
+  font-size: var(--mp-fs-body-sm);
+}
+
+/* ---------- 질문 입력 ---------- */
 
 .askPanel {
   display: flex;
@@ -94,39 +108,17 @@
   border: 1px solid var(--mp-border);
 }
 
-.askBox {
+.balanceRow {
   display: flex;
-  flex-direction: column;
-  border-radius: var(--mp-radius-md);
-  background: var(--mp-bg);
-  border: 1px dashed var(--mp-border-strong);
-  opacity: 0.6;
-}
-
-.askBox textarea {
-  width: 100%;
-  padding: 18px;
-  color: var(--mp-text-3);
-  font-size: var(--mp-fs-body-lg);
-  resize: none;
-}
-
-.askBox textarea::placeholder {
-  color: var(--mp-text-4);
-}
-
-.askFoot {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 18px 14px;
-  color: var(--mp-text-4);
-  font-size: var(--mp-fs-body-sm);
-}
-
-.askFoot span {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.balanceValue {
+  color: var(--mp-primary-soft);
+  font-family: var(--mp-font-label);
 }
 
 .templates {
@@ -134,7 +126,6 @@
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
-  opacity: 0.7;
 }
 
 .templatesLabel {
@@ -153,6 +144,8 @@
 
 /* 문장이 두 줄로 꺾여도 아이콘은 첫 줄에 둔다 (14px 아이콘, 22px 줄) */
 .askActions .muted {
+  flex: 1;
+  min-width: 240px;
   align-items: flex-start;
   word-break: keep-all;
 }
@@ -160,6 +153,76 @@
 .askActions .muted svg {
   flex-shrink: 0;
   margin-top: 4px;
+}
+
+.errorBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: var(--mp-radius);
+  background: var(--mp-error-tint);
+}
+
+.errorMsg {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--mp-error);
+  font-size: var(--mp-fs-body);
+}
+
+.errorMsg svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* ---------- 추천 결과 ---------- */
+
+.results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.resultCard {
+  display: flex;
+  gap: 16px;
+  height: 100%;
+  padding: 18px;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+  transition: border-color var(--mp-duration) var(--mp-ease);
+}
+
+.resultCard:hover {
+  border-color: var(--mp-border-strong);
+}
+
+.resultPoster {
+  width: 96px;
+  flex-shrink: 0;
+}
+
+.resultBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.resultTitle {
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-body-lg);
+}
+
+.resultReason {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body);
+  word-break: keep-all;
 }
 
 /* ---------- 동작 방식 ---------- */
@@ -208,64 +271,6 @@
   color: var(--mp-text-4);
 }
 
-/* ---------- 결과 자리 ---------- */
-
-.previewLabel {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--mp-text-3);
-  font-size: var(--mp-fs-body);
-  font-weight: 600;
-}
-
-.resultPreview {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  opacity: 0.45;
-}
-
-.resultCard {
-  display: flex;
-  gap: 16px;
-  padding: 18px;
-  border-radius: var(--mp-radius-md);
-  background: var(--mp-surface-1);
-  border: 1px dashed var(--mp-border-strong);
-}
-
-.resultPoster {
-  width: 96px;
-  aspect-ratio: 2 / 3;
-  flex-shrink: 0;
-  border-radius: var(--mp-radius);
-  background: var(--mp-surface-3);
-}
-
-.resultLines {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-top: 6px;
-}
-
-.resultLines span {
-  height: 12px;
-  border-radius: var(--mp-radius-xs);
-  background: var(--mp-surface-3);
-}
-
-.resultLines span:first-child {
-  width: 60%;
-  height: 18px;
-}
-
-.resultLines span:last-child {
-  width: 80%;
-}
-
 /* ---------- 크레딧 ---------- */
 
 .policy {
@@ -304,47 +309,88 @@
   gap: 12px;
 }
 
-.packages {
+/* 충전 상품 (후원 금액 선택과 같은 라디오 카드) */
+.products {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  opacity: 0.5;
 }
 
-.packageCard {
+.product {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   padding: 20px;
   border-radius: var(--mp-radius-md);
   background: var(--mp-surface-1);
-  border: 1px dashed var(--mp-border-strong);
+  border: 1px solid var(--mp-border);
+  cursor: pointer;
+  transition: border-color var(--mp-duration) var(--mp-ease), background-color var(--mp-duration) var(--mp-ease);
 }
 
-.packageIcon {
+.product:hover {
+  border-color: var(--mp-border-strong);
+}
+
+.product input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.product:has(input:focus-visible) {
+  box-shadow: var(--mp-focus-ring);
+}
+
+.productActive,
+.productActive:hover {
+  border-color: var(--mp-primary);
+  background: var(--mp-primary-tint);
+  box-shadow: var(--mp-glow-primary);
+}
+
+.productIcon {
   display: grid;
   place-items: center;
   width: 36px;
   height: 36px;
+  margin-bottom: 4px;
   border-radius: var(--mp-radius);
   background: var(--mp-primary-tint);
   color: var(--mp-primary-soft);
 }
 
-.line {
-  height: 12px;
-  border-radius: var(--mp-radius-xs);
-  background: var(--mp-surface-3);
+.productCredits {
+  color: var(--mp-text-1);
+  font-size: var(--mp-fs-h-sm);
 }
 
-.lineShort {
-  width: 60%;
+.productName {
+  color: var(--mp-text-3);
+  font-size: var(--mp-fs-body-sm);
 }
 
-.packagePrice {
-  margin-top: 6px;
+.productPrice {
+  margin-top: 4px;
   font-family: var(--mp-font-label);
-  color: var(--mp-text-4);
+  font-size: var(--mp-fs-h-sm);
+  font-weight: 700;
+  color: var(--mp-text-1);
+}
+
+.check {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--mp-primary);
+  color: #fff;
 }
 
 .payRow {
@@ -353,6 +399,68 @@
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.payNotes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 이용 내역 */
+.history {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--mp-radius-md);
+  background: var(--mp-surface-1);
+  border: 1px solid var(--mp-border);
+}
+
+.historyRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.historyRow + .historyRow {
+  border-top: 1px solid var(--mp-border);
+}
+
+.historyDate {
+  min-width: 128px;
+  color: var(--mp-text-4);
+  font-family: var(--mp-font-label);
+  font-size: var(--mp-fs-body-sm);
+}
+
+.historyType {
+  flex: 1;
+  color: var(--mp-text-1);
+}
+
+.deltaPlus,
+.deltaMinus,
+.deltaZero {
+  min-width: 40px;
+  text-align: right;
+  font-family: var(--mp-font-label);
+}
+
+.deltaPlus {
+  color: var(--mp-success);
+}
+
+.deltaMinus {
+  color: var(--mp-error);
+}
+
+.deltaZero {
+  color: var(--mp-text-4);
+}
+
+.stale {
+  opacity: 0.6;
 }
 
 /* ---------- CTA ---------- */
@@ -392,7 +500,7 @@
 /* ---------- 반응형 ---------- */
 
 @media (max-width: 1023px) {
-  .packages {
+  .products {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -400,12 +508,23 @@
 @media (max-width: 767px) {
   .steps,
   .statusGrid,
-  .resultPreview {
+  .results,
+  .products {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .askPanel,
+  .panel,
   .cta {
     padding: 18px;
+  }
+
+  .historyRow {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+
+  .historyDate {
+    width: 100%;
   }
 }

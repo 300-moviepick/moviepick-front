@@ -4,33 +4,50 @@ import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useWishlistSet } from '../../hooks/useWishlistSet';
 import { toPageNumber } from '../../lib/format';
-import { Badge } from '../../ui/Badge';
+import { Badge, Chip } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import MovieCard from '../../ui/cards/MovieCard';
 import { IconArrowRight, IconClose, IconFilm, IconSearch, IconSparkles } from '../../ui/icons';
 import Pagination from '../../ui/Pagination';
 import SectionHeader from '../../ui/SectionHeader';
-import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
+import { EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import { useToast } from '../../ui/toast/useToast';
 import styles from './MovieExploreScreen.module.css';
 
 const PAGE_SIZE = 20;
 
-// 영화 탐색·검색 (Stitch 9번). GET /api/movies?keyword&page&size — 제목 검색만 지원, 정렬은 서버 고정(id 내림차순)
+// 백엔드가 받는 sort는 생략(최근 등록순, id 내림차순)과 'releaseDate'(최신 개봉순)뿐이다. 그 밖의 값은 400
+const SORTS = [
+  { value: '', label: '최근 등록순' },
+  { value: 'releaseDate', label: '최신 개봉순' },
+];
+
+/**
+ * 영화 탐색·검색 (Stitch 9번). GET /api/movies?keyword&page&size&sort — 제목 검색 + 정렬 2가지.
+ * 최신 개봉순은 한국 개봉일(없으면 원래 개봉일) 기준이고, 미개봉·개봉일 없는 영화는 빠진다.
+ * 검색어·페이지·정렬은 쿼리스트링에 둔다.
+ */
 export default function MovieExploreScreen() {
   const { user } = useAuth();
   const toast = useToast();
   const [params, setParams] = useSearchParams();
   const keyword = (params.get('keyword') ?? '').trim();
   const page = toPageNumber(params.get('page'));
+  const sort = params.get('sort') === 'releaseDate' ? 'releaseDate' : '';
 
-  const result = useAsync(() => movieApi.list({ keyword: keyword || undefined, page, size: PAGE_SIZE }), [keyword, page]);
+  const result = useAsync(
+    () => movieApi.list({ keyword: keyword || undefined, page, size: PAGE_SIZE, sort: sort || undefined }),
+    [keyword, page, sort],
+  );
   const wish = useWishlistSet(Boolean(user), { onError: toast.error });
 
+  // 바꾸지 않은 값(정렬 등)은 지금 값을 유지한다
   const setQuery = (next) => {
+    const q = { keyword, sort, ...next };
     const sp = new URLSearchParams();
-    if (next.keyword) sp.set('keyword', next.keyword);
-    if (next.page) sp.set('page', String(next.page));
+    if (q.keyword) sp.set('keyword', q.keyword);
+    if (q.page) sp.set('page', String(q.page));
+    if (q.sort) sp.set('sort', q.sort);
     setParams(sp);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -98,10 +115,10 @@ export default function MovieExploreScreen() {
           <strong>
             자연어로 영화를 찾고 싶다면 <Badge tone="tertiary">BETA</Badge>
           </strong>
-          <p>“비 오는 밤에 볼 잔잔한 영화”처럼 물어보는 AI 추천 기능을 준비하고 있습니다.</p>
+          <p>“비 오는 밤에 볼 잔잔한 영화”처럼 물어보면 MoviePick AI 추천이 어울리는 영화를 찾아 드립니다.</p>
         </div>
         <Button to="/ai" variant="secondary" size="sm" iconRight={<IconArrowRight size={14} />} className={styles.aiCta}>
-          AI 추천 보기
+          MoviePick AI 추천 보기
         </Button>
       </section>
 
@@ -109,11 +126,15 @@ export default function MovieExploreScreen() {
       <section className={styles.results} aria-labelledby="explore-results">
         <SectionHeader
           id="explore-results"
-          title={keyword ? '검색 결과' : '새로 들어온 영화'}
+          title={keyword ? '검색 결과' : sort ? '최신 개봉작' : '새로 들어온 영화'}
           action={
-            <span className={styles.sortSoon} title="정렬 기능은 준비 중입니다">
-              정렬: 최근 등록순 <ComingSoon variant="badge" />
-            </span>
+            <div className={styles.sort} role="group" aria-label="정렬">
+              {SORTS.map((s) => (
+                <Chip key={s.value || 'default'} active={sort === s.value} onClick={() => setQuery({ sort: s.value, page: 0 })}>
+                  {s.label}
+                </Chip>
+              ))}
+            </div>
           }
         />
 
@@ -150,7 +171,7 @@ export default function MovieExploreScreen() {
             <Pagination
               page={data.page}
               totalPages={data.totalPages}
-              onChange={(p) => setQuery({ keyword, page: p })}
+              onChange={(p) => setQuery({ page: p })}
               summary={`총 ${total.toLocaleString('ko-KR')}편 중 ${data.page * PAGE_SIZE + 1}–${data.page * PAGE_SIZE + movies.length}`}
             />
           </>

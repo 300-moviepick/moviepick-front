@@ -40,7 +40,8 @@ const UiGalleryScreen = import.meta.env.DEV ? lazy(() => import('./screens/dev/U
 
 /*
  * /oauth2/success, /oauth2/fail 은 백엔드가 리다이렉트하는 고정 경로라 바꾸지 않는다.
- * 백엔드 기능이 없는 화면(AI 추천·크레딧)은 각 화면이 "준비 중"으로 표시한다.
+ * /ai, /ai/credits 는 소개 화면을 겸하므로 로그인 가드 밖에 두고, 각 화면이 로그인 안내를 보여 준다.
+ * 백엔드 AI 기능이 꺼져 있으면(404 PATH_NOT_FOUND) 추천·충전 영역만 각 화면이 "준비 중"으로 표시한다.
  */
 export default function App() {
   const { booting } = useAuth();
