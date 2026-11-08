@@ -7,22 +7,14 @@ import { messageOf } from '../../lib/apiErrors';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import NotificationCard from '../../ui/cards/NotificationCard';
-import { IconArrowRight, IconBell, IconCheck, IconSliders } from '../../ui/icons';
+import { IconArrowRight, IconBell, IconCheck } from '../../ui/icons';
 import Pagination from '../../ui/Pagination';
-import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
-import Tabs from '../../ui/Tabs';
+import { EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import { useToast } from '../../ui/toast/useToast';
 import MyPageHeader from './MyPageHeader';
 import styles from './MyPage.module.css';
 
 const PAGE_SIZE = 20;
-// 현재 알림 종류는 MOVIE_RELEASE(찜한 영화 개봉) 하나뿐이라 분류 탭은 "전체"만 동작한다
-const TABS = [
-  { value: 'all', label: '전체' },
-  { value: 'weekly', label: '주간 취향 추천', disabled: true },
-  { value: 'community', label: '리뷰 및 커뮤니티', disabled: true },
-  { value: 'notice', label: '서비스 공지', disabled: true },
-];
 
 /**
  * 알림 센터 (Stitch 7번).
@@ -88,21 +80,11 @@ export default function NotificationsScreen() {
         badge={unread > 0 && <Badge tone="secondary">읽지 않은 알림 {unread}개</Badge>}
         description="찜한 영화의 개봉 소식을 확인하세요."
         actions={
-          <>
-            <Button variant="secondary" size="sm" icon={<IconCheck size={16} />} onClick={markAll} loading={allBusy} disabled={!hasUnread}>
-              모두 읽음으로 표시
-            </Button>
-            <Button to="/me/notification-settings" variant="ghost" size="sm" icon={<IconSliders size={16} />}>
-              알림 설정
-            </Button>
-          </>
+          <Button variant="secondary" size="sm" icon={<IconCheck size={16} />} onClick={markAll} loading={allBusy} disabled={!hasUnread}>
+            모두 읽음으로 표시
+          </Button>
         }
       />
-
-      <div className={`${styles.toolbar} ${styles.toolbarTabs}`}>
-        <Tabs ariaLabel="알림 분류" items={TABS} value="all" />
-        <ComingSoon variant="badge" />
-      </div>
 
       {list.loading && !data ? (
         <LoadingState variant="list" count={4} />

@@ -3,12 +3,13 @@ import { postApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useGoLogin } from '../../hooks/useGoLogin';
-import { Badge, Chip } from '../../ui/Badge';
+import { toPageNumber } from '../../lib/format';
+import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
 import PostCard from '../../ui/cards/PostCard';
 import { IconClose, IconEdit, IconInfo, IconMessage, IconSearch } from '../../ui/icons';
 import Pagination from '../../ui/Pagination';
-import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
+import { EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import Tabs from '../../ui/Tabs';
 import styles from './Community.module.css';
 
@@ -18,13 +19,6 @@ const SORTS = [
   { value: 'latest', label: '최신순' },
   { value: 'popular', label: '인기순' },
 ];
-// 카테고리 미리보기(백엔드 필드 없음)
-const CATEGORIES = ['심층 비평·해석', '자유 수다·관람 후기', '개봉 예정·영화제 소식', '영화 추천 질문'];
-
-function toPage(value) {
-  const n = Number.parseInt(value ?? '0', 10);
-  return Number.isFinite(n) && n >= 0 ? n : 0;
-}
 
 // 커뮤니티 목록 (Stitch 8번). GET /api/community/posts?q&sort&page&size
 export default function CommunityListScreen() {
@@ -33,7 +27,7 @@ export default function CommunityListScreen() {
   const [params, setParams] = useSearchParams();
   const q = (params.get('q') ?? '').trim();
   const sort = params.get('sort') === 'popular' ? 'popular' : 'latest';
-  const page = toPage(params.get('page'));
+  const page = toPageNumber(params.get('page'));
 
   const list = useAsync(() => postApi.list({ q: q || undefined, sort, page, size: PAGE_SIZE }), [q, sort, page]);
 
@@ -75,16 +69,6 @@ export default function CommunityListScreen() {
           서로 존중하는 대화를 나눠 주세요. 신고된 글과 댓글은 운영자 검토 후 숨김 처리될 수 있습니다.
         </p>
       </section>
-
-      <div className={styles.categoryRow}>
-        <Chip active>전체</Chip>
-        {CATEGORIES.map((c) => (
-          <Chip key={c} disabled title="준비 중인 기능입니다">
-            {c}
-          </Chip>
-        ))}
-        <ComingSoon variant="badge" />
-      </div>
 
       <div className={styles.toolbar}>
         <form className={styles.searchBox} role="search" onSubmit={onSearch} key={q}>

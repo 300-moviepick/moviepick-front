@@ -18,7 +18,7 @@ import styles from './Admin.module.css';
 const PAGE_SIZE = 20;
 const TABS = [
   { value: 'posts', label: '게시글' },
-  { value: 'reviews', label: '한줄평 / 리뷰' },
+  { value: 'reviews', label: '리뷰' },
   { value: 'comments', label: '댓글' },
 ];
 

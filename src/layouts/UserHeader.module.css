@@ -88,16 +88,6 @@
   display: none;
 }
 
-.kbd {
-  font-family: var(--mp-font-label);
-  font-size: var(--mp-fs-label-sm);
-  padding: 1px 6px;
-  border-radius: var(--mp-radius-xs);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--mp-border);
-  color: var(--mp-text-3);
-}
-
 .right {
   display: flex;
   align-items: center;

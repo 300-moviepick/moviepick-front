@@ -71,6 +71,12 @@ export function formatRuntime(minutes) {
   return h ? `${h}시간 ${m}분` : `${m}분`;
 }
 
+// 주소 쿼리의 page 값 → 0 이상의 정수. 없거나 잘못된 값이면 0
+export function toPageNumber(value) {
+  const n = Number.parseInt(value ?? '0', 10);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
 // 닉네임 첫 글자(아바타용)
 export function initialOf(name) {
   if (!name) return '?';

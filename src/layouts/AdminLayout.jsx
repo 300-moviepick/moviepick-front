@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
+import { useLogout } from '../hooks/useLogout';
 import { IconButton } from '../ui/Button';
 import {
-  IconBell,
   IconClose,
   IconDatabase,
   IconExternal,
@@ -12,14 +12,10 @@ import {
   IconGrid,
   IconLogout,
   IconMenu,
-  IconSearch,
-  IconSettings,
-  IconSparkles,
   IconUsers,
 } from '../ui/icons';
 import Logo from '../ui/Logo';
 import { Avatar } from '../ui/Poster';
-import { ComingSoon } from '../ui/StateViews';
 import styles from './AdminLayout.module.css';
 
 const SECTIONS = [
@@ -39,33 +35,19 @@ const SECTIONS = [
       { to: '/admin/movies', label: '영화 데이터 관리', icon: IconDatabase },
     ],
   },
-  {
-    title: 'ADVANCED SERVICES',
-    items: [
-      { label: 'AI & 크레딧 통계', icon: IconSparkles, soon: true },
-      { label: '알림 발송 관리', icon: IconBell, soon: true },
-      { label: '시스템 설정', icon: IconSettings, soon: true },
-    ],
-  },
 ];
 
 // 관리자 화면 공통 틀 (Stitch 15~19번). RequireAdmin 뒤에서 쓴다.
 export default function AdminLayout() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
+  const logout = useLogout();
   const [open, setOpen] = useState(false);
-
-  // 관리자 가드가 /login으로 보내기 전에 메인으로 먼저 이동한다(UserHeader와 같은 이유)
-  const onLogout = async () => {
-    navigate('/', { replace: true });
-    await logout().catch(() => {});
-  };
 
   // 모바일 상단 바에 보여 줄 현재 메뉴 이름 (사이드바가 서랍으로 숨는 폭에서만 보인다)
   const { pathname } = useLocation();
-  const current = SECTIONS.flatMap((s) => s.items)
-    .filter((item) => item.to)
-    .find((item) => (item.end ? pathname === item.to : pathname.startsWith(item.to)));
+  const current = SECTIONS.flatMap((s) => s.items).find((item) =>
+    item.end ? pathname === item.to : pathname.startsWith(item.to),
+  );
 
   return (
     <div className={`mp ${styles.shell}`}>
@@ -83,16 +65,6 @@ export default function AdminLayout() {
               <p className={styles.sectionTitle}>{section.title}</p>
               {section.items.map((item) => {
                 const Icon = item.icon;
-                if (item.soon) {
-                  return (
-                    <span key={item.label} className={`${styles.item} ${styles.disabled}`} aria-disabled="true">
-                      <Icon size={18} /> {item.label}
-                      <span className={styles.soonTag}>
-                        <ComingSoon variant="badge" />
-                      </span>
-                    </span>
-                  );
-                }
                 return (
                   <NavLink
                     key={item.to}
@@ -122,18 +94,13 @@ export default function AdminLayout() {
             <IconMenu size={20} />
           </IconButton>
           {current && <span className={styles.currentMenu}>{current.label}</span>}
-          <div className={styles.search} title="관리자 통합 검색은 준비 중입니다">
-            <IconSearch size={18} />
-            <input type="search" placeholder="관리자 통합 검색" disabled aria-label="관리자 통합 검색 (준비 중)" />
-            <ComingSoon variant="badge" />
-          </div>
           <div className={styles.account}>
             <Avatar name={user?.nickname} size={32} />
             <div className={styles.accountText}>
               <strong>{user?.nickname}</strong>
               <span>{user?.email}</span>
             </div>
-            <IconButton label="로그아웃" size="sm" onClick={onLogout}>
+            <IconButton label="로그아웃" size="sm" onClick={logout}>
               <IconLogout size={18} />
             </IconButton>
           </div>

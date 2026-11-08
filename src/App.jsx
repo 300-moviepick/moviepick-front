@@ -20,7 +20,6 @@ import PostDetailScreen from './screens/community/PostDetailScreen';
 import { PostCreateScreen, PostEditScreen } from './screens/community/PostEditorScreen';
 import HomeScreen from './screens/home/HomeScreen';
 import MyReviewsScreen from './screens/me/MyReviewsScreen';
-import NotificationSettingsScreen from './screens/me/NotificationSettingsScreen';
 import NotificationsScreen from './screens/me/NotificationsScreen';
 import ProfileScreen from './screens/me/ProfileScreen';
 import WishlistScreen from './screens/me/WishlistScreen';
@@ -41,7 +40,7 @@ const UiGalleryScreen = import.meta.env.DEV ? lazy(() => import('./screens/dev/U
 
 /*
  * /oauth2/success, /oauth2/fail 은 백엔드가 리다이렉트하는 고정 경로라 바꾸지 않는다.
- * 백엔드 기능이 없는 화면(AI 추천·크레딧, 알림 설정)은 각 화면이 "준비 중"으로 표시한다.
+ * 백엔드 기능이 없는 화면(AI 추천·크레딧)은 각 화면이 "준비 중"으로 표시한다.
  */
 export default function App() {
   const { booting } = useAuth();
@@ -68,7 +67,6 @@ export default function App() {
               <Route path="wishlist" element={<WishlistScreen />} />
               <Route path="reviews" element={<MyReviewsScreen />} />
               <Route path="notifications" element={<NotificationsScreen />} />
-              <Route path="notification-settings" element={<NotificationSettingsScreen />} />
             </Route>
           </Route>
           <Route path="ai" element={<AiRecommendScreen />} />

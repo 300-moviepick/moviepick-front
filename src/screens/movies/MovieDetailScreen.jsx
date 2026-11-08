@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { ApiError } from '../../api/client';
 import { movieApi } from '../../api/moviepick';
 import { useAuth } from '../../auth/useAuth';
 import { useAsync } from '../../hooks/useAsync';
 import { useGoLogin } from '../../hooks/useGoLogin';
 import { useWishlistSet } from '../../hooks/useWishlistSet';
+import { isNotFound } from '../../lib/apiErrors';
 import { formatCount, formatDate, formatRuntime, releaseDateOf, tmdbImage, yearOf } from '../../lib/format';
 import { Badge } from '../../ui/Badge';
 import Button from '../../ui/Button';
@@ -24,7 +24,6 @@ const SECTIONS = [
   { value: 'md-info', label: '주요 정보' },
   { value: 'md-cast', label: '출연 / 제작' },
   { value: 'md-reviews', label: '리뷰' },
-  { value: 'md-ai', label: 'AI 취향 분석' },
 ];
 
 // 영화 상세 (Stitch 3번). 본문은 GET /api/movies/{movieId}, 확장 정보는 /extras를 따로 불러온다.
@@ -44,7 +43,7 @@ export default function MovieDetailScreen() {
 
   if (!movie) {
     if (detail.error) {
-      const notFound = detail.error instanceof ApiError && (detail.error.status === 404 || detail.error.status === 400);
+      const notFound = isNotFound(detail.error);
       return (
         <div className={`mp-container ${styles.statePage}`}>
           {notFound ? (
@@ -185,15 +184,6 @@ export default function MovieDetailScreen() {
           <section className={styles.section} id="md-cast" aria-labelledby="md-cast-title">
             <SectionHeader id="md-cast-title" title="감독 및 주요 출연진" />
             <CastSection extras={extras} />
-          </section>
-
-          <section className={styles.section} id="md-ai" aria-labelledby="md-ai-title">
-            <SectionHeader id="md-ai-title" title="MoviePick AI 취향 분석" badge={<Badge tone="tertiary">BETA</Badge>} />
-            <ComingSoon
-              variant="banner"
-              title="AI 취향 분석 리포트"
-              description="내 감상 기록을 바탕으로 이 영화와의 취향 일치도를 알려 주는 기능을 준비하고 있습니다."
-            />
           </section>
 
           <ReviewSection

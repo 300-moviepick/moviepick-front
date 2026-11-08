@@ -198,6 +198,10 @@ export default function SupportScreen() {
                 <p>결제는 PortOne 결제창에서 안전하게 진행되며, MoviePick은 카드 정보를 저장하지 않습니다.</p>
               </div>
             </div>
+            {/* PortOne은 배포 후에도 테스트 모드로 운영한다 */}
+            <p className={styles.help}>
+              <Badge tone="secondary">테스트 결제</Badge> 테스트 결제이며 실제로 청구되지 않습니다.
+            </p>
           </section>
 
           <section className={`${styles.panel} ${styles.faqPanel}`} aria-labelledby="support-faq">

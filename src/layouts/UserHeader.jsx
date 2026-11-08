@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
 import { useUnread } from '../hooks/unreadContext';
+import { useLogout } from '../hooks/useLogout';
 import { Badge } from '../ui/Badge';
 import Button, { IconButton } from '../ui/Button';
 import { IconBell, IconChevronDown, IconClose, IconLogout, IconMenu, IconSearch, IconSettings, IconUser } from '../ui/icons';
@@ -18,7 +19,8 @@ const NAV = [
 
 // 메인 홈(Stitch 0번) 헤더 기준의 사용자 공통 헤더
 export default function UserHeader() {
-  const { user, isAdmin, logout } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const logout = useLogout();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -66,12 +68,9 @@ export default function UserHeader() {
     navigate(keyword ? `/movies?keyword=${encodeURIComponent(keyword)}` : '/movies');
   };
 
-  // 먼저 메인으로 이동한 뒤 로그아웃한다. 반대 순서면 로그인 필요 화면(/me 등)의 가드가
-  // 사용자 정보가 비는 순간 /login?redirect=… 로 먼저 보내 버린다.
-  const onLogout = async () => {
+  const onLogout = () => {
     closeAll();
-    navigate('/', { replace: true });
-    await logout().catch(() => {});
+    logout();
   };
 
   return (
@@ -108,7 +107,6 @@ export default function UserHeader() {
             key={params.get('keyword') ?? ''}
             autoComplete="off"
           />
-          <kbd className={styles.kbd}>⌘K</kbd>
         </form>
 
         <Link to="/movies" className={`${styles.bell} ${styles.searchLink}`} aria-label="영화 검색" onClick={closeAll}>

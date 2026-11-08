@@ -100,13 +100,6 @@
   color: var(--mp-primary-soft);
 }
 
-.categoryRow {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
 .toolbar {
   display: flex;
   align-items: center;
@@ -241,13 +234,6 @@
   border-radius: var(--mp-radius-md);
   background: var(--mp-surface-1);
   border: 1px solid var(--mp-border);
-}
-
-.panelHead {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--mp-text-1);
 }
 
 .sideTitle {

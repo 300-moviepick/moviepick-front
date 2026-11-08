@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- MoviePick 로고(src/ui/Logo.jsx)와 같은 모양: 보라색 그라데이션 사각형 + 클랩보드 아이콘 -->
+  <defs>
+    <linearGradient id="mp-favicon-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366f1" />
+      <stop offset="1" stop-color="#4338ca" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="url(#mp-favicon-bg)" />
+  <g transform="translate(4 4)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 10h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" />
+    <path d="M4 10 3.4 6.6a1 1 0 0 1 .8-1.2l13.8-2.4a1 1 0 0 1 1.2.8L19.7 7 4 10z" />
+    <path d="m8.5 4.6 2.3 3.6M13.6 3.7l2.3 3.6" />
+  </g>
+</svg>

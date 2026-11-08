@@ -3,7 +3,15 @@
 // - 응답 본문에 data가 있으면 data, 없으면 본문 전체를 결과로 사용
 // - CSRF / JWT / refresh / 재시도 규칙은 README의 "API 연결부" 참고
 
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080').replace(/\/$/, '');
+// 백엔드 주소
+// - VITE_API_BASE_URL이 있으면 그 값을 쓴다(빈 문자열도 그대로 쓴다).
+// - 값이 없으면 개발 서버는 로컬 백엔드(localhost:8080), 운영 빌드는 빈 값(같은 주소)을 쓴다.
+//   운영에서는 vercel.json이 /api·/oauth2/authorization·/login/oauth2 요청을 백엔드로 중계한다.
+const DEV_API_BASE_URL = 'http://localhost:8080';
+const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const defaultBaseUrl = import.meta.env.DEV ? DEV_API_BASE_URL : '';
+
+export const API_BASE_URL = (configuredBaseUrl ?? defaultBaseUrl).replace(/\/$/, '');
 
 // ---------- 상태 (메모리 전용, localStorage 사용 안 함) ----------
 
@@ -74,7 +82,7 @@ function isPublicGet(method, path) {
   return method === 'GET' && PUBLIC_GET_PATTERNS.some((re) => re.test(pathOnly(path)));
 }
 
-export function unwrap(body) {
+function unwrap(body) {
   if (body && typeof body === 'object' && !Array.isArray(body) && 'data' in body) {
     return body.data;
   }
@@ -178,7 +186,7 @@ export function refreshAccessToken() {
 
 // ---------- 공개 요청 함수 ----------
 
-export async function request(method, path, body) {
+async function request(method, path, body) {
   const withAuth = !NO_AUTH_PATHS.has(pathOnly(path));
 
   if (method !== 'GET' && !csrfToken) {
@@ -230,16 +238,4 @@ export function qs(params) {
   });
   const s = search.toString();
   return s ? `?${s}` : '';
-}
-
-// Spring Page(직접 직렬화 / VIA_DTO)와 PageResponse를 모두 같은 모양으로 맞춘다
-export function toPage(p) {
-  if (!p || typeof p !== 'object') return { content: [], number: 0, totalPages: 0, totalElements: 0 };
-  const meta = p.page && typeof p.page === 'object' ? p.page : p;
-  return {
-    content: p.content ?? [],
-    number: meta.number ?? (typeof p.page === 'number' ? p.page : 0),
-    totalPages: meta.totalPages ?? 0,
-    totalElements: meta.totalElements ?? 0,
-  };
 }
