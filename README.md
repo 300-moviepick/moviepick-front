@@ -40,7 +40,20 @@ AI 추천·크레딧 화면은 백엔드 API와 연결되어 있습니다. 백�
 | TMDB | `TMDB_ACCESS_TOKEN` (관리자 "영화 불러오기"에 필요) |
 | PortOne | `PORTONE_STORE_ID`, `PORTONE_CHANNEL_KEY`(결제창), `PORTONE_API_SECRET`(결제 확인). storeId/channelKey가 비어 있으면 후원 화면에 안내 문구만 나옵니다 |
 | JWT | `JWT_SECRET` |
-| 관리자 계정 | DB에서 회원의 `role`을 `ADMIN`으로 바꿔야 관리자 화면·영화 불러오기가 보입니다 |
+| 관리자 계정 | 백엔드 DB 초기화 때 시드 관리자 계정이 만들어집니다(`role`이 `ADMIN`인 회원만 관리자 화면·영화 불러오기가 보입니다). 운영에서는 배포 직후 비밀번호를 변경합니다 |
+
+## 배포 (Vercel)
+
+| 항목 | 내용 |
+| --- | --- |
+| 주소 | 대표 주소 `https://www.moviepick.kr`. 루트 `moviepick.kr`은 Vercel 도메인 설정에서 www로 이동시킵니다(쿠키·CORS가 www 기준이라 필수) |
+| 연결 | Vercel 프로젝트를 GitHub `moviepick-front` 저장소에 연결합니다. 프레임워크 Vite, 빌드 `npm run build`, 출력 `dist`(자동 인식) |
+| 배포 | `main`에 머지하면 운영에 자동 배포됩니다. 다른 브랜치·PR은 미리보기 주소로 배포됩니다 |
+| 환경변수 | **설정하지 않습니다.** `VITE_API_BASE_URL`이 비어 있으면 같은 주소(상대 경로)로 요청하고, `vercel.json`이 백엔드로 중계합니다 |
+| 백엔드 중계 | `vercel.json`이 `/api/*`, `/oauth2/authorization/*`, `/login/oauth2/*`를 `https://api.moviepick.kr`로 중계하고, 나머지 주소는 `index.html`을 돌려줍니다(새로고침해도 화면 유지). `/oauth2/success`·`/oauth2/fail`은 프론트 화면이라 중계하지 않습니다 |
+| 백엔드 설정 | `APP_FRONTEND_URL`, `APP_FRONTEND_ALLOWED_ORIGINS`를 `https://www.moviepick.kr`로 둡니다. 카카오·구글 콘솔의 Redirect URI는 `https://www.moviepick.kr/login/oauth2/code/{kakao 또는 google}`입니다(백엔드 README 배포 절 참고) |
+
+배포 후 수정: `main`에서 작업 브랜치 → PR → `main` 머지(자동 배포).
 
 ## API 연결부 (`src/api/client.js`)
 

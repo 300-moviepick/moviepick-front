@@ -61,7 +61,7 @@ export default function SupportScreen() {
           <div className={styles.noticeBox}>
             <IconInfo size={18} />
             <p>
-              후원은 서버 운영과 개발을 위한 자발적 기부입니다. <strong>유료 AI 영화 추천 크레딧 구매와는 별개이며, 후원해도 AI 크레딧은 지급되지 않습니다.</strong>
+              후원은 서버 운영과 개발을 위한 자발적 기부입니다. <strong>MoviePick AI 추천 크레딧 구매와는 별개이며, 후원해도 AI 크레딧은 지급되지 않습니다.</strong>
             </p>
           </div>
         </div>
