@@ -1,8 +1,8 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://BACKEND_HOST_PLACEHOLDER/api/$1" },
-    { "source": "/oauth2/authorization/(.*)", "destination": "https://BACKEND_HOST_PLACEHOLDER/oauth2/authorization/$1" },
-    { "source": "/login/oauth2/(.*)", "destination": "https://BACKEND_HOST_PLACEHOLDER/login/oauth2/$1" },
+    { "source": "/api/(.*)", "destination": "https://api.moviepick.kr/api/$1" },
+    { "source": "/oauth2/authorization/(.*)", "destination": "https://api.moviepick.kr/oauth2/authorization/$1" },
+    { "source": "/login/oauth2/(.*)", "destination": "https://api.moviepick.kr/login/oauth2/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
