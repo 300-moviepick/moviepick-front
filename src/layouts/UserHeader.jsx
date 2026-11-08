@@ -13,7 +13,7 @@ import styles from './UserHeader.module.css';
 const NAV = [
   { to: '/movies', label: '영화 탐색' },
   { to: '/community', label: '커뮤니티' },
-  { to: '/ai', label: 'AI 영화 추천', badge: 'BETA' },
+  { to: '/ai', label: 'AI 추천', badge: 'BETA' },
   { to: '/support', label: '후원하기' },
 ];
 

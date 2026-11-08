@@ -142,6 +142,27 @@ export const supportApi = {
   confirm: (paymentId) => api.post(`/api/supports/${enc(paymentId)}/confirm`),
 };
 
+// ---------- AI 추천·크레딧 (로그인 필요) ----------
+// AI가 꺼져 있으면(AI_CHAT_PROVIDER=none) 추천·상품 목록·구매 생성은 404 PATH_NOT_FOUND다. 잔액·내역·confirm은 항상 동작한다.
+
+export const aiApi = {
+  // AiRecommendRequest { prompt(1~500자), requestKey(UUID) } → AiRecommendResponse { requestKey, movies[{ movieId, title, posterUrl, reason }] }
+  recommend: ({ prompt, requestKey }) => api.post('/api/ai/recommendations', { prompt, requestKey }),
+};
+
+export const aiCreditApi = {
+  // AiCreditBalanceResponse { freeAvailable, paidAvailable, totalAvailable }
+  balance: () => api.get('/api/ai/credits'),
+  // PageResponse<{ id, eventType: FREE_GRANT|PURCHASE|USE|COMPLETE|RESTORE, bucket: FREE|PAID, delta, paymentId(결제 PK), requestKey, createdAt }>, 최신순
+  transactions: ({ page = 0, size = 10 } = {}) => api.get(`/api/ai/credits/transactions${qs({ page, size })}`),
+  // [{ productCode, credits, amount, orderName }] — 가격은 이 응답 값만 쓴다
+  products: () => api.get('/api/ai/credits/products'),
+  // { productCode } → 201 { paymentId, amount, orderName, storeId, channelKey } (후원 생성과 같은 모양)
+  purchase: (productCode) => api.post('/api/ai/credits/purchases', { productCode }),
+  // 본문 없음 → { paymentId, status, result: COMPLETED|FAILED|PENDING, message, credits{ freeAvailable, paidAvailable, totalAvailable } }
+  confirm: (paymentId) => api.post(`/api/ai/credits/purchases/${enc(paymentId)}/confirm`),
+};
+
 // ---------- 관리자 (/api/admin/** → ADMIN) ----------
 
 export const adminApi = {

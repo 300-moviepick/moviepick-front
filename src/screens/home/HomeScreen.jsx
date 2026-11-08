@@ -11,7 +11,7 @@ import PostCard from '../../ui/cards/PostCard';
 import { IconArrowRight, IconMessage, IconSearch, IconSparkles, IconStar } from '../../ui/icons';
 import Poster from '../../ui/Poster';
 import SectionHeader from '../../ui/SectionHeader';
-import { ComingSoon, EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
+import { EmptyState, ErrorState, LoadingState } from '../../ui/StateViews';
 import { useToast } from '../../ui/toast/useToast';
 import styles from './HomeScreen.module.css';
 
@@ -58,7 +58,7 @@ export default function HomeScreen() {
             </Button>
           </form>
           <Button to="/ai" variant="secondary" icon={<IconSparkles size={18} />} className={styles.aiLink}>
-            AI 영화 추천 바로가기 <Badge tone="tertiary">BETA</Badge>
+            MoviePick AI 추천 바로가기 <Badge tone="tertiary">BETA</Badge>
           </Button>
         </div>
       </section>
@@ -173,17 +173,16 @@ export default function HomeScreen() {
           )}
         </section>
 
-        {/* AI 소개 (백엔드 없음) */}
+        {/* AI 추천 소개 (/ai) */}
         <section className={styles.aiBanner} aria-labelledby="home-ai">
           <div className={styles.aiText}>
             <Badge tone="tertiary">AI CURATION</Badge>
             <h2 id="home-ai" className={styles.aiTitle}>
-              나만의 영화 취향을 분석하는 <span className={styles.gradient}>AI MoviePick</span>
+              나만의 영화 취향을 분석하는 <span className={styles.gradient}>MoviePick AI 추천</span>
             </h2>
-            <p className={styles.aiDesc}>원하는 분위기를 자연어로 물어보면 맞춤 영화를 추천하는 기능을 준비하고 있습니다.</p>
+            <p className={styles.aiDesc}>원하는 분위기를 자연어로 물어보면 어울리는 영화를 추천합니다.</p>
           </div>
           <div className={styles.aiActions}>
-            <ComingSoon variant="badge" />
             <Button to="/ai" variant="secondary" iconRight={<IconArrowRight size={16} />}>
               자세히 보기
             </Button>

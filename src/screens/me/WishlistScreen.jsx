@@ -98,7 +98,7 @@ export default function WishlistScreen() {
         </span>
         <div className={styles.ctaText}>
           <strong>더 많은 영화를 채워 보고 싶으신가요?</strong>
-          <p>새로 들어온 영화를 둘러보거나 AI 추천 기능 소식을 확인해 보세요.</p>
+          <p>새로 들어온 영화를 둘러보거나 MoviePick AI 추천으로 취향에 맞는 영화를 찾아보세요.</p>
         </div>
         <div className={styles.ctaActions}>
           <Button to="/movies" variant="secondary" size="sm">
