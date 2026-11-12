@@ -1,6 +1,6 @@
 # moviepick-front
 
-MoviePick 백엔드(`../moviepick`)와 연동하는 프론트엔드입니다. 사용자 화면(영화 탐색·상세·리뷰, 커뮤니티, AI 추천·크레딧, 후원), 인증 화면, 마이페이지, 관리자 화면을 제공합니다.
+MoviePick 백엔드(`../moviepick-be`)와 연동하는 프론트엔드입니다. 사용자 화면(영화 탐색·상세·리뷰, 커뮤니티, AI 추천·크레딧, 후원), 인증 화면, 마이페이지, 관리자 화면을 제공합니다.
 AI 추천·크레딧 화면은 백엔드 API와 연결되어 있습니다. 백엔드 AI 기능이 꺼져 있으면(`AI_CHAT_PROVIDER=none`, 추천·상품 API가 404 `PATH_NOT_FOUND`) 추천 입력과 크레딧 충전 영역만 "준비 중"으로 표시하고, 잔액·이용 내역은 그대로 보여 줍니다.
 
 - Vite + React (JavaScript), react-router-dom
@@ -12,7 +12,7 @@ AI 추천·크레딧 화면은 백엔드 API와 연결되어 있습니다. 백�
 
 필요: Node.js `^20.19.0` 또는 `>=22.12.0` (Vite 8 요구 사항)
 
-1. **백엔드를 먼저 실행**합니다. (`../moviepick`, 기본 `http://localhost:8080`)
+1. **백엔드를 먼저 실행**합니다. (`../moviepick-be`, 기본 `http://localhost:8080`)
 2. 의존성 설치
    ```bash
    npm install
@@ -27,7 +27,7 @@ AI 추천·크레딧 화면은 백엔드 API와 연결되어 있습니다. 백�
 
 | 변수 | 내용 |
 | --- | --- |
-| `VITE_API_BASE_URL` | 백엔드 주소. `.env.development`에 로컬 백엔드 주소가 들어 있습니다. 값이 없으면 개발 서버는 `http://localhost:8080`, 운영 빌드는 빈 값(같은 주소, 상대 경로)을 씁니다. 운영에서는 `vercel.json`이 `/api`, `/oauth2/authorization`, `/login/oauth2` 요청을 백엔드로 중계합니다 |
+| `VITE_API_BASE_URL` | 백엔드 주소. `.env.development`에 로컬 백엔드 주소가 들어 있습니다. 값이 없으면 개발 서버는 `http://localhost:8080`, 운영 빌드는 빈 값(같은 주소, 상대 경로)을 씁니다. 운영에서는 같은 주소의 Caddy가 `/api`, `/oauth2/authorization`, `/login/oauth2` 요청을 백엔드로 중계합니다 |
 
 - **`VITE_*` 변수에는 공개해도 되는 값만 넣습니다.** 빌드 결과 JS에 그대로 들어가 누구나 볼 수 있습니다. API 키, 비밀번호, 시크릿은 백엔드 환경변수에만 둡니다.
 
@@ -42,18 +42,30 @@ AI 추천·크레딧 화면은 백엔드 API와 연결되어 있습니다. 백�
 | JWT | `JWT_SECRET` |
 | 관리자 계정 | 백엔드 DB 초기화 때 시드 관리자 계정이 만들어집니다(`role`이 `ADMIN`인 회원만 관리자 화면·영화 불러오기가 보입니다). 운영에서는 배포 직후 비밀번호를 변경합니다 |
 
-## 배포 (Vercel)
+## 배포 (EC2 Caddy)
+
+운영 화면은 백엔드와 같은 EC2에서 Caddy가 제공합니다. 빌드 결과(`dist`)를 서버의 `~/moviepick/front/`에 올리면 Caddy가 `/srv/front`로 읽습니다. 서버 구성은 백엔드 README의 배포 절을 참고합니다.
 
 | 항목 | 내용 |
 | --- | --- |
-| 주소 | 대표 주소 `https://www.moviepick.kr`. 루트 `moviepick.kr`은 Vercel 도메인 설정에서 www로 이동시킵니다(쿠키·CORS가 www 기준이라 필수) |
-| 연결 | Vercel 프로젝트를 GitHub `moviepick-front` 저장소에 연결합니다. 프레임워크 Vite, 빌드 `npm run build`, 출력 `dist`(자동 인식) |
-| 배포 | `main`에 머지하면 운영에 자동 배포됩니다. 다른 브랜치·PR은 미리보기 주소로 배포됩니다 |
-| 환경변수 | **설정하지 않습니다.** `VITE_API_BASE_URL`이 비어 있으면 같은 주소(상대 경로)로 요청하고, `vercel.json`이 백엔드로 중계합니다 |
-| 백엔드 중계 | `vercel.json`이 `/api/*`, `/oauth2/authorization/*`, `/login/oauth2/*`를 `https://api.moviepick.kr`로 중계하고, 나머지 주소는 `index.html`을 돌려줍니다(새로고침해도 화면 유지). `/oauth2/success`·`/oauth2/fail`은 프론트 화면이라 중계하지 않습니다 |
-| 백엔드 설정 | `APP_FRONTEND_URL`, `APP_FRONTEND_ALLOWED_ORIGINS`를 `https://www.moviepick.kr`로 둡니다. 카카오·구글 콘솔의 Redirect URI는 `https://www.moviepick.kr/login/oauth2/code/{kakao 또는 google}`입니다(백엔드 README 배포 절 참고) |
+| 주소 | 대표 주소 `https://www.moviepick.kr`. 루트 `moviepick.kr`은 Caddy가 www로 영구 이동시킵니다(쿠키·CORS가 www 기준이라 필수) |
+| 환경변수 | **설정하지 않습니다.** 운영 빌드는 `.env.development`를 읽지 않으므로 `VITE_API_BASE_URL`이 비어 있고, 같은 주소(상대 경로)로 요청합니다 |
+| 백엔드 중계 | Caddy가 같은 주소에서 `/api/*`, `/oauth2/authorization/*`, `/login/oauth2/*`를 백엔드(app:8080)로 중계하고, 나머지 주소는 `index.html`을 돌려줍니다(새로고침해도 화면 유지). `/oauth2/success`·`/oauth2/fail`은 프론트 화면이라 중계하지 않습니다 |
+| 백엔드 설정 | `APP_FRONTEND_URL`, `APP_FRONTEND_ALLOWED_ORIGINS`를 `https://www.moviepick.kr`로 둡니다. 카카오·구글 콘솔의 Redirect URI는 `https://www.moviepick.kr/login/oauth2/code/{kakao 또는 google}`입니다 |
+| 브랜치 | 작업 브랜치 → PR → `main` 머지 후, `main`에서 빌드해 올립니다(자동 배포 없음) |
 
-배포 후 수정: `main`에서 작업 브랜치 → PR → `main` 머지(자동 배포).
+배포 절차 (PC PowerShell → 서버). 서버 IP와 키 파일 이름은 문서에 적지 않습니다.
+
+```powershell
+# PC PowerShell, 이 저장소 맨 위 폴더에서 실행
+npm run build
+tar -czf "$HOME\front-dist.tar.gz" -C dist .
+scp -i "$HOME\.ssh\<키 파일>" "$HOME\front-dist.tar.gz" ubuntu@<서버 IP>:~/
+```
+```bash
+# 서버에서 실행. Caddy는 다시 시작하지 않아도 됩니다
+cd ~/moviepick && rm -rf front && mkdir front && tar -xzf ~/front-dist.tar.gz -C front
+```
 
 ## API 연결부 (`src/api/client.js`)
 
@@ -62,7 +74,7 @@ AI 추천·크레딧 화면은 백엔드 API와 연결되어 있습니다. 백�
 - **CSRF**: 앱 시작 시 `GET /api/auth/csrf`로 받은 `token`(또는 `data.token`)을 GET이 아닌 모든 요청의 `X-XSRF-TOKEN` 헤더에 넣음. GET이 아닌 요청이 403 `CSRF_INVALID`이면 CSRF를 새로 받아 1회 재시도(권한 부족 등 다른 403은 재시도하지 않음)
 - **JWT**: 로그인 응답의 `data.accessToken`을 메모리에만 저장(localStorage 사용 안 함), `Authorization: Bearer ...`
 - **401**: `POST /api/auth/refresh`로 새 accessToken을 받아 1회 재시도. refresh도 실패하면 로그아웃 상태로 전환
-- **공개 GET이 401**: Authorization 없이 1회 재시도하고, 뒤에서 refresh를 시도 (만료 토큰에 401을 주는 백엔드 문제 우회)
+- **공개 GET이 401**: Authorization 없이 1회 재시도하고, 뒤에서 refresh를 시도. 현재 백엔드는 공개 주소에서 만료·잘못된 토큰을 비로그인으로 처리해 401을 주지 않으므로, 백엔드가 401을 줄 경우를 대비한 처리입니다
 - 회원가입·로그인·로그아웃·CSRF·refresh 요청에는 Authorization을 붙이지 않음
 - 새로고침 시 CSRF → refresh → `GET /api/members/me`로 로그인 상태 복구
 - 목록 응답은 백엔드 `PageResponse { content, page, size, totalElements, totalPages }`를 그대로 사용
@@ -93,7 +105,6 @@ moviepick-front/
 ├─ public/favicon.svg      로고 모양 favicon
 ├─ package.json
 ├─ vite.config.js          포트 5173 고정 (strictPort)
-├─ vercel.json             운영 중계(/api, /oauth2/authorization, /login/oauth2)와 SPA 새로고침 대체 경로
 ├─ .env.development        VITE_API_BASE_URL
 ├─ .gitignore
 └─ src/
