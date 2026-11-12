@@ -6,7 +6,7 @@
 // 백엔드 주소
 // - VITE_API_BASE_URL이 있으면 그 값을 쓴다(빈 문자열도 그대로 쓴다).
 // - 값이 없으면 개발 서버는 로컬 백엔드(localhost:8080), 운영 빌드는 빈 값(같은 주소)을 쓴다.
-//   운영에서는 vercel.json이 /api·/oauth2/authorization·/login/oauth2 요청을 백엔드로 중계한다.
+//   운영에서는 같은 주소(www.moviepick.kr)의 Caddy가 /api·/oauth2/authorization·/login/oauth2 요청을 백엔드로 중계한다.
 const DEV_API_BASE_URL = 'http://localhost:8080';
 const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const defaultBaseUrl = import.meta.env.DEV ? DEV_API_BASE_URL : '';
@@ -209,7 +209,8 @@ async function request(method, path, body) {
   // 401: Authorization을 보냈던 요청만 처리
   if (res.status === 401 && withAuth && res.sentAuth) {
     if (isPublicGet(method, path)) {
-      // 만료 토큰으로 공개 GET이 401이 되는 문제 우회: Authorization 없이 재시도
+      // 대비용 분기: 현재 백엔드는 공개 주소에서 만료·잘못된 토큰을 비로그인으로 처리해 401을 주지 않는다.
+      // 백엔드가 공개 GET에 401을 줄 경우를 대비해 Authorization 없이 재시도한다
       res = await send(method, path, body, false);
       // 다음 요청을 위해 토큰은 뒤에서 갱신
       refreshAccessToken();
