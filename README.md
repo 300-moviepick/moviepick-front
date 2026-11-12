@@ -1,143 +1,87 @@
-# moviepick-front
+<div align="center">
 
-MoviePick 백엔드(`../moviepick-be`)와 연동하는 프론트엔드입니다. 사용자 화면(영화 탐색·상세·리뷰, 커뮤니티, AI 추천·크레딧, 후원), 인증 화면, 마이페이지, 관리자 화면을 제공합니다.
-AI 추천·크레딧 화면은 백엔드 API와 연결되어 있습니다. 백엔드 AI 기능이 꺼져 있으면(`AI_CHAT_PROVIDER=none`, 추천·상품 API가 404 `PATH_NOT_FOUND`) 추천 입력과 크레딧 충전 영역만 "준비 중"으로 표시하고, 잔액·이용 내역은 그대로 보여 줍니다.
+# 🎬 MoviePick Frontend
 
-- Vite + React (JavaScript), react-router-dom
-- 스타일: 디자인 토큰(`src/styles/tokens.css`) + 기본 스타일(`src/styles/base.css`) + 컴포넌트별 CSS Module
-- 결제: `@portone/browser-sdk` (V2)
-- 개발 서버에서만 `/__ui`에서 공통 컴포넌트 미리보기를 볼 수 있습니다(운영 빌드에서는 빠짐)
+**리뷰로 고르고, 커뮤니티로 나누고, AI로 발견하는 영화 추천 플랫폼 MoviePick의 화면입니다.**
 
-## 실행 방법
+<a href="https://www.moviepick.kr"><img src="https://img.shields.io/badge/서비스_바로가기-E50914?style=for-the-badge&logo=googlechrome&logoColor=white" alt="서비스 바로가기"/></a>
+<a href="https://github.com/300-moviepick/moviepick"><img src="https://img.shields.io/badge/Backend_저장소-181717?style=for-the-badge&logo=github&logoColor=white" alt="Backend 저장소"/></a>
 
-필요: Node.js `^20.19.0` 또는 `>=22.12.0` (Vite 8 요구 사항)
+</div>
 
-1. **백엔드를 먼저 실행**합니다. (`../moviepick-be`, 기본 `http://localhost:8080`)
-2. 의존성 설치
-   ```bash
-   npm install
-   ```
-3. 개발 서버 실행 (포트 5173 고정, 사용 중이면 실패)
-   ```bash
-   npm run dev
-   ```
-4. 브라우저에서 http://localhost:5173 접속
+<br>
 
-## 환경변수
+## 1. 화면 구성
+`src/App.jsx` 라우트 기준입니다.
 
-| 변수 | 내용 |
-| --- | --- |
-| `VITE_API_BASE_URL` | 백엔드 주소. `.env.development`에 로컬 백엔드 주소가 들어 있습니다. 값이 없으면 개발 서버는 `http://localhost:8080`, 운영 빌드는 빈 값(같은 주소, 상대 경로)을 씁니다. 운영에서는 같은 주소의 Caddy가 `/api`, `/oauth2/authorization`, `/login/oauth2` 요청을 백엔드로 중계합니다 |
+| 경로 | 화면 | 로그인 필요 |
+|---|---|---|
+| `/` | 홈 | 아니요 |
+| `/movies` | 영화 탐색 | 아니요 |
+| `/movies/:movieId` | 영화 상세·리뷰 | 아니요 (찜·리뷰 작성은 로그인 후) |
+| `/community` | 커뮤니티 목록 | 아니요 |
+| `/community/:postId` | 게시글 상세·댓글 | 아니요 |
+| `/community/new` | 글쓰기 | 예 |
+| `/community/:postId/edit` | 글 수정 | 예 |
+| `/me/profile` | 프로필 | 예 |
+| `/me/wishlist` | 찜 목록 | 예 |
+| `/me/reviews` | 작성한 리뷰 | 예 |
+| `/me/notifications` | 알림 센터 | 예 |
+| `/ai` | AI 추천 | 아니요 (소개 화면 겸용, 추천은 화면 안에서 로그인 안내) |
+| `/ai/credits` | AI 크레딧 충전소 | 아니요 (소개 화면 겸용, 충전은 화면 안에서 로그인 안내) |
+| `/support` | 후원 | 아니요 |
+| `/login`, `/signup` | 로그인, 회원가입 | 아니요 |
+| `/oauth2/success`, `/oauth2/fail` | 소셜 로그인 결과 | 아니요 |
+| `/admin` | 관리자 대시보드 | 관리자 |
+| `/admin/members` | 회원 관리 | 관리자 |
+| `/admin/reports` | 신고 관리 | 관리자 |
+| `/admin/content` | 콘텐츠 관리 | 관리자 |
+| `/admin/movies` | 영화 데이터 관리 | 관리자 |
 
-- **`VITE_*` 변수에는 공개해도 되는 값만 넣습니다.** 빌드 결과 JS에 그대로 들어가 누구나 볼 수 있습니다. API 키, 비밀번호, 시크릿은 백엔드 환경변수에만 둡니다.
+<br>
 
-## 필요한 백엔드 설정
+## 2. 구현 포인트
 
-| 항목 | 내용 |
-| --- | --- |
-| CORS | 허용 주소는 백엔드 설정값 `APP_FRONTEND_ALLOWED_ORIGINS`(없으면 `APP_FRONTEND_URL`, 기본 `http://localhost:5173`). `allowCredentials(true)`, 허용 헤더 `Authorization`, `Content-Type`, `X-XSRF-TOKEN` |
-| 카카오·Google 로그인 | `KAKAO_REST_API_KEY`, `KAKAO_CLIENT_SECRET` 등. 성공 시 `{APP_FRONTEND_URL}/oauth2/success`, 실패 시 `{APP_FRONTEND_URL}/oauth2/fail?reason=…`으로 리다이렉트(백엔드 설정값 `app.frontend.url`) |
-| TMDB | `TMDB_ACCESS_TOKEN` (관리자 "영화 불러오기"에 필요) |
-| PortOne | `PORTONE_STORE_ID`, `PORTONE_CHANNEL_KEY`(결제창), `PORTONE_API_SECRET`(결제 확인). storeId/channelKey가 비어 있으면 후원 화면에 안내 문구만 나옵니다 |
-| JWT | `JWT_SECRET` |
-| 관리자 계정 | 백엔드 DB 초기화 때 시드 관리자 계정이 만들어집니다(`role`이 `ADMIN`인 회원만 관리자 화면·영화 불러오기가 보입니다). 운영에서는 배포 직후 비밀번호를 변경합니다 |
+| 포인트 | 내용 |
+|---|---|
+| Access 토큰 메모리 보관 | 로그인 응답의 Access 토큰을 메모리에만 두고 localStorage에 저장하지 않습니다. 새로고침하면 CSRF → refresh → 내 정보 순서로 로그인 상태를 복구합니다 (`src/api/client.js`, `src/auth/AuthProvider.jsx`) |
+| Refresh 동시 요청 통합 | 401이 동시에 여러 개 와도 재발급 요청은 탭 안에서 하나로 합칩니다(`refreshPromise`). 탭 사이는 Web Locks(`navigator.locks`)로 순서를 맞춰, 서버의 Refresh Token 재사용 감지에 걸리지 않게 합니다 |
+| CSRF 처리 | 앱 시작 시 받은 토큰을 GET이 아닌 모든 요청의 `X-XSRF-TOKEN` 헤더에 넣습니다. 403 `CSRF_INVALID`이면 토큰을 새로 받아 1번만 재시도하고, 권한 부족 같은 다른 403은 재시도하지 않습니다 |
+| PortOne 결제 흐름·모바일 복귀 | 결제 생성 → PortOne 결제창 → 서버 confirm 순서로 진행하고, 브라우저가 보낸 결과는 믿지 않고 서버 조회 결과로 판단합니다. 모바일처럼 리다이렉트로 돌아오면 `?paymentId=…&code=…` 쿼리를 한 번만 처리하고 지운 뒤 결과를 확인합니다 (`src/hooks/usePortonePayment.js`) |
 
-## 배포 (EC2 Caddy)
+<br>
 
-운영 화면은 백엔드와 같은 EC2에서 Caddy가 제공합니다. 빌드 결과(`dist`)를 서버의 `~/moviepick/front/`에 올리면 Caddy가 `/srv/front`로 읽습니다. 서버 구성은 백엔드 README의 배포 절을 참고합니다.
+## 3. 기술 스택
 
-| 항목 | 내용 |
-| --- | --- |
-| 주소 | 대표 주소 `https://www.moviepick.kr`. 루트 `moviepick.kr`은 Caddy가 www로 영구 이동시킵니다(쿠키·CORS가 www 기준이라 필수) |
-| 환경변수 | **설정하지 않습니다.** 운영 빌드는 `.env.development`를 읽지 않으므로 `VITE_API_BASE_URL`이 비어 있고, 같은 주소(상대 경로)로 요청합니다 |
-| 백엔드 중계 | Caddy가 같은 주소에서 `/api/*`, `/oauth2/authorization/*`, `/login/oauth2/*`를 백엔드(app:8080)로 중계하고, 나머지 주소는 `index.html`을 돌려줍니다(새로고침해도 화면 유지). `/oauth2/success`·`/oauth2/fail`은 프론트 화면이라 중계하지 않습니다 |
-| 백엔드 설정 | `APP_FRONTEND_URL`, `APP_FRONTEND_ALLOWED_ORIGINS`를 `https://www.moviepick.kr`로 둡니다. 카카오·구글 콘솔의 Redirect URI는 `https://www.moviepick.kr/login/oauth2/code/{kakao 또는 google}`입니다 |
-| 브랜치 | 작업 브랜치 → PR → `main` 머지 후, `main`에서 빌드해 올립니다(자동 배포 없음) |
+![React](https://img.shields.io/badge/React_19-61DAFB?style=flat-square&logo=react&logoColor=black)
+![React Router](https://img.shields.io/badge/React_Router_7-CA4245?style=flat-square&logo=reactrouter&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite_8-646CFF?style=flat-square&logo=vite&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![CSS Modules](https://img.shields.io/badge/CSS_Modules-000000?style=flat-square&logo=cssmodules&logoColor=white)
+![PortOne](https://img.shields.io/badge/PortOne_Browser_SDK_V2-0052FF?style=flat-square)
+![ESLint](https://img.shields.io/badge/ESLint_10-4B32C3?style=flat-square&logo=eslint&logoColor=white)
 
-배포 절차 (PC PowerShell → 서버). 서버 IP와 키 파일 이름은 문서에 적지 않습니다.
+<br>
 
-```powershell
-# PC PowerShell, 이 저장소 맨 위 폴더에서 실행
-npm run build
-tar -czf "$HOME\front-dist.tar.gz" -C dist .
-scp -i "$HOME\.ssh\<키 파일>" "$HOME\front-dist.tar.gz" ubuntu@<서버 IP>:~/
-```
-```bash
-# 서버에서 실행. Caddy는 다시 시작하지 않아도 됩니다
-cd ~/moviepick && rm -rf front && mkdir front && tar -xzf ~/front-dist.tar.gz -C front
-```
-
-## API 연결부 (`src/api/client.js`)
-
-- 모든 요청에 `credentials: 'include'`
-- 응답 본문에 `data`가 있으면 `data`를, 없으면 본문 전체를 결과로 사용 (ApiResponse로 감싼 응답과 감싸지 않은 응답 모두 지원)
-- **CSRF**: 앱 시작 시 `GET /api/auth/csrf`로 받은 `token`(또는 `data.token`)을 GET이 아닌 모든 요청의 `X-XSRF-TOKEN` 헤더에 넣음. GET이 아닌 요청이 403 `CSRF_INVALID`이면 CSRF를 새로 받아 1회 재시도(권한 부족 등 다른 403은 재시도하지 않음)
-- **JWT**: 로그인 응답의 `data.accessToken`을 메모리에만 저장(localStorage 사용 안 함), `Authorization: Bearer ...`
-- **401**: `POST /api/auth/refresh`로 새 accessToken을 받아 1회 재시도. refresh도 실패하면 로그아웃 상태로 전환
-- **공개 GET이 401**: Authorization 없이 1회 재시도하고, 뒤에서 refresh를 시도. 현재 백엔드는 공개 주소에서 만료·잘못된 토큰을 비로그인으로 처리해 401을 주지 않으므로, 백엔드가 401을 줄 경우를 대비한 처리입니다
-- 회원가입·로그인·로그아웃·CSRF·refresh 요청에는 Authorization을 붙이지 않음
-- 새로고침 시 CSRF → refresh → `GET /api/members/me`로 로그인 상태 복구
-- 목록 응답은 백엔드 `PageResponse { content, page, size, totalElements, totalPages }`를 그대로 사용
-
-## 화면별 확인 순서
-
-요청 순서는 브라우저 개발자 도구의 네트워크 탭에서 확인합니다.
-
-1. **/signup → /login** — 회원가입(이메일, 비밀번호 8자 이상, 닉네임) → 로그인. 헤더에 닉네임이 보이는지, 요청이 `csrf → login → members/me` 순서인지 확인
-2. **새로고침** — 로그인 상태가 유지되는지(`csrf → refresh → members/me`)
-3. **카카오·Google로 로그인** — `/oauth2/success`에서 보안 토큰 준비 → 로그인 세션 확인 → 회원 정보 불러오기 단계가 차례로 표시되고 원래 화면으로 돌아가는지
-4. **/movies** — 목록·검색·페이지 이동
-5. **/movies/:id** — 로그아웃 상태에서도 상세·리뷰 목록이 보이는지. 로그인 후 출연진·OTT, 찜, 리뷰 작성(평점 0.5~5.0)·수정·삭제·공감, 정렬 변경
-6. **/community** — 목록·검색·정렬, 글쓰기(`/community/new`)
-7. **/community/:id** — 수정, 삭제, 좋아요, 신고, 댓글 작성·수정·삭제·좋아요·신고. 버튼은 작성자 여부에 따라 보임
-8. **/me/** — 프로필(닉네임 변경·회원 탈퇴), 찜 목록, 작성한 리뷰, 알림 센터
-9. **/admin** (관리자) — 대시보드, 회원 관리(정지 해제), 신고 관리(승인/거절), 콘텐츠 관리(숨김·삭제), 영화 데이터 관리(TMDB 영화 수집)
-10. **/support** — 3000/6000/9000원 선택 → 후원 생성 → PortOne 결제창(테스트 채널, 실제 청구 없음) → 결제 확인 결과(COMPLETED/FAILED/PENDING)
-11. **/ai/credits** — 잔액(무료·유료·합계)과 이용 내역, 상품 선택 → 구매 생성 → PortOne 결제창(테스트 결제) → 결제 확인 후 잔액 갱신
-12. **/ai** — 질문 입력(최대 500자) → 추천 결과(포스터·제목·추천 이유) → 잔액 차감. 크레딧이 없으면 충전소 안내
-13. **토큰 만료 확인** — 30분 뒤(또는 백엔드에서 access 만료 시간을 줄여) 요청하면 `401 → refresh → 재시도` 순서로 요청이 나가는지
-
-## 파일 구조
+## 4. 폴더 구조
 
 ```
-moviepick-front/
-├─ index.html              title, description, og 메타, favicon 연결
-├─ public/favicon.svg      로고 모양 favicon
-├─ package.json
-├─ vite.config.js          포트 5173 고정 (strictPort)
-├─ .env.development        VITE_API_BASE_URL
-├─ .gitignore
-└─ src/
-   ├─ main.jsx             Router + AuthProvider 연결
-   ├─ App.jsx              라우트 (사용자 / 인증 / 마이페이지 / 관리자)
-   ├─ api/
-   │  ├─ client.js         fetch 래퍼: CSRF, JWT, refresh, 재시도, 응답 unwrap
-   │  └─ moviepick.js      백엔드 API 함수 (인증·회원·영화·리뷰·찜·알림·커뮤니티·후원·관리자)
-   ├─ auth/
-   │  ├─ AuthProvider.jsx  로그인 사용자 상태, 시작 시 복구, 로그인/로그아웃
-   │  ├─ authContext.js    AuthContext
-   │  └─ useAuth.js        useAuth 훅
-   ├─ hooks/               useAsync, 찜 목록, 안 읽은 알림 수, 로그인 이동, 로그아웃
-   ├─ layouts/             사용자(헤더·푸터) / 인증 / 마이페이지 / 관리자 레이아웃
-   ├─ lib/                 형식 변환, API 오류 판단·문구, 로그인 후 돌아갈 주소
-   ├─ screens/             화면 (home, movies, community, ai, support, auth, me, admin, dev)
-   ├─ styles/
-   │  ├─ tokens.css        디자인 토큰 (--mp- 변수)
-   │  └─ base.css          문서·.mp 기본 스타일
-   └─ ui/                  공통 컴포넌트 (Button, Badge, Field, Modal, Tabs, 카드, 상태 표시, 토스트 등)
+src/
+├─ main.jsx        Router + AuthProvider 연결
+├─ App.jsx         라우트 (사용자 / 인증 / 마이페이지 / 관리자)
+├─ api/            fetch 래퍼(CSRF·JWT·refresh·재시도), 백엔드 API 함수
+├─ auth/           로그인 상태, 시작 시 복구
+├─ hooks/          useAsync, 찜·알림 수, PortOne 결제 흐름 등
+├─ layouts/        사용자 / 인증 / 마이페이지 / 관리자 레이아웃
+├─ lib/            형식 변환, API 오류 문구, 로그인 후 돌아갈 주소
+├─ screens/        화면 (home, movies, community, ai, support, auth, me, admin)
+├─ styles/         디자인 토큰, 기본 스타일
+└─ ui/             공통 컴포넌트 (Button, Modal, Tabs, 토스트 등)
 ```
 
-## 개선 예정
+<br>
 
-| 항목 | 내용 |
-| --- | --- |
-| 이용약관·개인정보처리방침 | 페이지를 만들고 푸터 링크를 연결합니다(지금은 푸터에 텍스트만 있음) |
-| 관리자 화면 제목 | 영어로 된 메뉴 구역 이름과 부제를 한국어로 바꿉니다 |
-| AI 추천 피드백 | 추천 결과에 좋아요·싫어요(`PUT`·`DELETE /api/ai/feedback/{movieId}`)를 연결합니다 |
-| AI 추천 결과 재조회 | 서버가 추천을 완료한 뒤 응답이 끊기면, 같은 키 재전송 시 `ALREADY_FINALIZED`만 받고 결과를 다시 볼 수 없습니다(크레딧은 사용됨). 완료된 추천 결과를 다시 조회하는 API가 필요합니다 |
-| 공통 검색 폼 | 여러 화면에 반복된 검색 폼 처리를 정리합니다 |
-| 영화 장르·연도 필터 | 백엔드 필터 API가 생기면 영화 탐색 화면에 다시 추가합니다 |
-| 커뮤니티 카테고리 | 게시글 카테고리 필드가 생기면 목록·작성 화면에 추가합니다 |
-| 알림 설정 | 알림 종류별 수신 설정 API가 생기면 마이페이지에 화면을 추가합니다 |
-| 관리자 통합 검색·회원 검색 | 검색 API가 생기면 관리자 상단과 회원 관리 화면에 추가합니다 |
-| 신고 유형 필터 | 신고 목록 유형(게시글·댓글·리뷰) 필터 API가 생기면 신고 관리 화면에 추가합니다 |
+## 5. 더 보기
+
+- 전체 구조·트러블슈팅·성능: [백엔드 README](https://github.com/300-moviepick/moviepick)
+- 로컬 실행·환경변수·배포·API 연결 규칙: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
